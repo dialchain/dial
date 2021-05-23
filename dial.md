@@ -1,88 +1,168 @@
 # Distributed Immutable Assertions Log (DIAL)
-DIAL is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__.
+The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__.
 
 # Abstract
-A declaration can only be inserted into the log by a __validator__. Each validator is responsible for the declarations it inserts into the log. Because some declarations can contradict each order, validation of declarations must be performed by the inserting validator prior to the insertion of those declarations into the log.
+A declaration can only be inserted into the log by a __validator__. Each validator is responsible for declarations it inserts into the log. But because the effect of a declaration can conflict with the effect of another declaration, validation of declarations must be performed prior to their insertion into the log.
 
-Our __Proof of Guaranntee Concensus__ ensures the validator can cover damages caused by conflicting declarations. If for example Paul has a balance of 5 dial and Paul sends 3 dials to miriam, and then Paul sends 3 dials to Anton, the validator of the last declaration (Paul sends 3 dials to Anton) will cover the onne dolar negative ballance.
+Our __Proof of Guaranntee Consensus__ ensures that the validator, if required, can cover damages caused by the insertion of the conflicting declaration.
 
-Our __Signature Chain Premisse__ defines a strict ordering premisse that requires all signatures performed by a participant to be linked with each order into a strictly ordered signature chain. In this same rationale, all spending transactions performed by a wallet are linked with each order. With this strict order of declarations, there is no way double spending can be achieved on a DIAL chain as each spending transactionn references the latest spending transaction of the wallet.
-
-DIAL does not require any addiitional consensus for the finality of a declaration, as the responsibility if bore by the inserting validator.
-
-__Finality__: finality is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__.
+Further, __Finality__ is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__. All declarations of a closed time window are final, immutable assertions and non conflicting with each order.
 
 # Terms
 
 ## Declaration
-A __declaration__ is a formal or explicit statement or announcement. Depending on its intent, a declaration can be signed by Zero, One or Many participants. Event the process of inserting into a log is a declaration.
+A __declaration__ is a formal or explicit statement or announcement. Depending on its intent, a declaration can be signed by Zero, One or Many participants. Even the process of inserting a file into the DialChain log is a declaration.
+
+Signatures of a declaration can be embedded into the same declaration file, or provided in external signature files. Our __Incremental Signature Design__ allows multiple parties to sequentially sign the same file.
 
 ## Assertion
 An __assertion__ is a confident and forceful statement of fact or belief. It is our foundation of trust. Once finalized, a declaration becomes an __immutable assertion__.
 
+## Finality
+__Finality__ is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__. 
+
+With our __Proof of Guarantee__ consensus, consumer of the declaration (e.g. payee) will not need to wait for the finality of the transaction. A simple __Counter Proof of Insertion__ into the log will provide the necessary trust to proceed forward with the transaction.
+
 ## Participant
 A participan is an entity that controls a private key. This private key will be used to sign declarations.
 
-## Validator
-A validator is a participant that can insert a declaration into the log by the mean of signing the __publishing declaration__ and sharing it with all other validators.
+## Account
+An account is an entity that controlls a certain association. An account can controll a monetary stream (balance), another acccount can controll an email address, a phone number.
 
-## Decentralized Autonomous Organizations
-Non signing participant governed by other participants. An organization defines tokens that are held by other participants and defines decision rules (quota. e.g. >X%, n of m tokens). The ownership of a token is defined by the public key of the participant holding the token at the moment of the declaration.
+An account can be controlled by more than one participant, in which case the account is called an organization.
+
+## Organization
+An organization is an account controlled by zero or more participants. An organization defines procedures and associated deccision (signature) rules.
+
+## Validator
+A validator is a participant that can insert a declaration into the DialChain log by the mean of signing the __publishing declaration__ and sharing the file with all other validators.
+
+## Service Provider
+Beside validators, the DialChain will define many other type of service providers.
+
+## Service Record
+Service providers publish their service records in the DialChain log, including their service addresses and prices.
 
 # Economics
 
-## Rewarding Work Performed
-Every single service performed in the DIAL chain is remunerated with DialCoins. This is how the DIAL economy rewards validators for the work they perform. The price of each service is left to the discretion of the servicce provider (validator).
+## Monetary Policy
+The DialChain economy does not print money. Value is generated by providing services agains fees. 
 
-## Permissionless Treasury
-A treasury is a DAO responsible of emiting money against deposit of participants. Each participant can acquire native currencies by :
-- depositing into the account of the corresponding DAO,
-- having a validator publish the declaraton of deposition
+## Dial Treasury
+The Dial Treasury is an automatic and permissionless service that maintains accounts used to hold common monetary values of the Dial Network. The Dial Treasury does not print money. All money emited by the Dial Treasury is backed by external assets.
 
+## Value Generation
+Every single service performed by a service provider in the Dial Network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider.
+
+## Value Added Tax (VAT)
+In order to provide for sustainability, the Dial Network must make sure every present operation is priced with future cost it incures. For example:
+
+- Each file inserted in the DialChain Log will have to be maintained for a substantial amount of time (we presume 50 earth years).
+- Each monetary value held by the Dial Network will maintain a sound relationship to the corresponding external miror. For example, the BTC account held by the Dial Treasury will have to maintain a relationship to the corresponting wallets in the BitCoin network.
+
+The cost of maintaining those assets (log entries, currencies) is paid by the originating participant at the moment of insersion of the asset producing declaration in the log. This revenue is spent by the Dial Treasury during the life time of that asset.
+
+Therefore, a VAT will be applied on each service performed and the retained ammount will be held by the Dial Treasury. For each day of maintenance of an asset, the corresponding maintenance fee will be distributed to the service providers of the netwrok based on predefined distribtion keys (we pesume proportion of revenue generated during that day)
+
+# Liquidity Service
+The liquidity service of the DialChain is a service provided by the Dial Treasury that allows the mapping of external monetary values into the Dial Network. Those values are generally denominated L-XXX, where XXX is the denomination known in the world outside of Dial. E.g.: L-BTC, L-ETH. Beside fees collected by the Dial Treasury for the maintenance of those underlying records, the value of an L-BTC (Liquid BitCoin) is a one to one mapping of the value of a BitCoin.
+
+## Exposing an External Monetary Asset (Liquid-Asset)
+In order to expose an external monetary asset, the Dial Treasury creates an account with the asset realm. e.g.: The Dial Treasury will maintain a wallet in the BitCoin Network.
+
+### Depositing of Liquid-Assets
+If we take the BTC as an example, any participant will simply emit L-BTC by depositing corresponding BTC amount the BitCoin Account of the Dial Treasury. The purpose code of the transaction will reference the DialChain account of the depositing participant.
+
+The participant will then have to:
+- monitor the BitCoin network to make sure the transaction is in a block,
+- send a declaration of deposition to a DialChain validator that supports the BitCoin connectivity service.
+
+The DialChain validator will upon receiving the service request:
+- verify the availability of fund in the BitCoin network,
+- credit the DialChain account of the depositing participant with the corresponding L-BTC amount (minus service fees)
+- publish this declaration of deposition to the DialChain Log. 
+
+At closing, each validator receiving the operation will verify availability of funds in the BitCoin Network in the process of validating the closing declaration of the publishing validator.
+
+### Withdrawal of Liquid-Assets
+Taking the BTC example, the withdrawal of L-BTC occurs by simply sending a declaration of withdrawal to a validator.
+
+The declaration of withdrawal will carry :
+- the target BTC address
+- the hash value of a secret
+
+The validator upon reception of the service request will 
+- Initiate the Bitcoin transaction
+- HTLC the bitcoin transactionn with the provided hash value
+- propagate the BTC transaction to algorithmically selected validators for counter signature (multisig)
+- Upon reaching the required multisig quota, last validator will publish the treasury spending transaction to the bitcoin network.
+
+If at closing the withdrawal hapens to be conflicting, the treasury will be automatically compensated from the account of siging validators.
+
+### Sample Treasury Accounts
 Well known treasury acccounts will be:
 
-### L-BTC
+#### L-BTC
 A treasury emiting L-BTC agains BTC deposit.
 
-### L-ETH
-A treasury emiting L-ETH against ETH deposit
+#### L-ETH
+A treasury emiting L-ETH against ETH deposit.
 
-### DIAL
-A treasury emiting DIAL against a basket of deposited crypto curencies like L-BTC, L-ETH, L-MATIC.
+## Exception Case : Central Bank Currencies
+Unlike digital currencies like BTC, ETH, central bank currenccies do not offer permissionless access to their network. The following process describes how to support a central bank currency in the example of the USD.
 
-The DIAL exchange rate at the moment of deposit is defined by a bastket holding the 5 most valuable crypto currencies in BTC market capitalization on the 5 most liquid decentralized exchanges.
+To support a central bank currency, following rules and cooperations are necessary:
+- Publication of transactions occcuring in the central bank account. E.g.: the US Treasury will have to either:
+  - expose a DialChain bank account with permissionless access to part of the transactions (deposit amount, date, purpose code), or
+  - maintain a known DialChain client node that publishes those transactions to the DialChain network.
+- Authoritative processing of withdrawals generated by the DialChain network. 
 
-Oracles responsible for the provisionning of those reference values will be determined at the moment of deployment.
+### Depositing L-USD
+A participant will simply emit L-USD by depositing corresponding USD ammount in the DialChain account at the US Treasury with the account public identifier in the purpose code field.
+
+### Withdrawal of L-USD
+The withdrawal of L-USD will occur by simply issuing a declaration of withdrawal that will be published inside a time window. The declaration of withdrawal will carry a hash code built out of :
+- the IBAN of the withdrawer,
+- a generated nonce value.
+
+The US Treasury will present a web service allowing the withdrawer to collect the fund upon the presentation of
+- the IBAN
+- the nonce
+- the declaration identifier
+
+## Alternative to Central Banks
+A participant can decide to offer a USD-Service. This will be a bit different from the institutional USD service. In this case, the participant will have to:
+- hold deposit acccount at the treasury whose average value is constantly balanced to the total L-X-USD emited.
+- expose access to the bank account holding the amount of USD emited
+- provide a service for the publication of transactions to the network
+- provide a service for the withdrawal
+In the network, the L-X-USD will be handled as a stable liquid curency, but different from the official L-USD.
+
+## DIAL
+The DialChain Treasury will be emiting L-DIAL against a basket of deposited crypto curencies like L-BTC, L-ETH, L-MATIC.
+
+The L-DIAL exchange rate at the moment of deposit is defined by a bastket holding the 5 most valuable crypto currencies in market capitalizations (in BTC) on the 5 most liquid decentralized exchanges.
+
+Oracles responsible for the provisioning of the DialChain with reference values will be determined at the moment of deployment.
 
 Reference values are allway valid for the duration of a time window.
 
-### CBDC
-A central bak can decide to emit proper currency on the DIAL network by having all validators:
-- identify and validate the account of the central bank DAO
-- publish a central bank reserve account that will be the counterparty of all deposiits registered in the log
-- provide an API that can allow validators to check participants declarations against the central bank directory
-
-The excahnge rate of the L-CBDC to any oder L-Currency will be determined by that central bank. The acceptance of the L-CBDC will be at the discretion of each participant.
-
-Central banks will increase aceptance of their currencies by publicly holding reserves in form of a basket of other digital assets.
-
-## Monetary Policy
-The DIAL economy does not print money. Value is generated by providing services agains fees. The inflationary character of DIAL and L-X currencies will be directly linked to the nature of underlying currencies.
-
-The money emmission service itself might be performed against fees to generate reserves used to keep native currencies less dependent on fluctuations of basic currencies.
-
 # Genesis
+
+## Initial Validators
+Initial validators are a group of participants which initialize the log:
+- they setup the initial treasury
+- they deposit initial liquidities
+- they validate each other in a ring by making sure each validator publishes the initial service record of all other validators
 
 ## Validator Registration
 In order to qualify as a validator, a participant must:
-- register the publishing organization (including declaration of publishing key pair)
-- pay for participation fees to the DIAL treasury
-- wait for the next time winndow to publish service records.
+- pay for basic deposit to the DialChain treasury
+- register the publishing organization, by publishing the registration record through an existing validator
+- wait for the next time winndow to publish the initial service record
+- wait for the next time winndow to start providing services
 
-## Initial Validators
-Initial validators are a group of participants which initialize the log
-- They validate each order in a ring by making sure each validator publishes the declaration of all other validators
-- They setup the initial treasuries
+This is, it takes like 3 time windows to have a new service provider up and running.
 
 # Log Structure
 
@@ -90,64 +170,84 @@ Initial validators are a group of participants which initialize the log
 A log entry is a file considered part of the log. A log entry respects following rationales:
 - contains one or many declarations, eventually from different private keys.
 - contains exactly one __publishing declaration__. This asserts the insertion of the file by the force of the signature of the publishing __validator__.
-- the publishing assertion contains the antecedent block's hash. This is the proof that the validator consents with the validity of the antecedent block.
+- the publishing declaration contains the antecedent block's hash. This is the proof that the validator consents with the validity of the antecedent block.
 - A participant shall never acccept a log entry that contains the wrong antecedent block hash.
 
 ## Time Window (Block)
-A time window can be any sort of time reference (e.g. an earth minute, hour, day or month). For the DIAL chain, we will select the __EARTH DAY__ as the reference time window. Time zone synchronized, the time window will start at 00:00:00:000 UTC and end at 23:59:59:999 UTC.
-
-
-## Sample Participant Scenrio
-- Alice create a declaration to transfer 100,000.00 dial to Bob
-- Alice requests a validator of her choice (in this case COINEX) to insert the declaration in the log.
-  - Alice is offering 100.00 dial to COINEX for the insertion in the log.
-  - COINEX verifies that Alice dial account can spend the stated amount (100,100.00 dial) and therefore produces the log entry. By producing this log entry, COINEX locks a proper 100,000.00 of value for the duration of the time window.
-  - COINEX returns the log entry to Alice.
-- Alice sends the log entry to Bob.
-- Bob has the responsibility of validating that Alice's payment is final
-  - Bob sends the entry (wrapped in a validation request) to validator COINVAL
-  - The validation request contains a service fee of 10.00 dial 
-  - COINVAL pulls the log entries and verify the guaranty produced by COINEX.
-- If after the closing window the declaration is not included (because of it's invalidity), the COINEX locked amount is automatically credited to Bob in the subsequent window.
-- If after the closing of the window the payment is valid, the amount locked is released COINEX.
-
-## Monetary Value of an Assertion
-The monetary value of the assertion is an aggreement between the service requestor and the log service provider. In some cases, the value will be inherent to the assertion (e.g.: monetary transaction). In other cases, the value will be arbitrary to the purpose of the assertion (e.g: proof of possession of a network address).
+A time window can be any sort of time reference (e.g. an earth minute, hour, day or month). For the DialChain, we will select the __EARTH DAY__ as the reference time window. Time zone synchronized, the time window will start at 00:00:00:000 UTC and end at 23:59:59:999 UTC.
 
 ## Finality
-The finality of an assertion is provided when the block containing the enclosing log entry is closed, as after closing all validators can compute the same block hash. This computed block hash is used in each publishing assertion of the subsequent window.
+The finality of a declaration is provided when the block containing the log entry containing that declaration is closed, as after closing all validators can compute the same block hash. This computed block hash is used in each publishing declaration of the subsequent block. The finality transforms each declaration into an assertion.
 
-## Closing Assertion
-A closing assertion is a merkle tree root of all publishing assertions produced by a single validator in that time window. The closing assertion can be used by another validator to validate possession of all records produced by the signing validator.
+## Opening Declaration
+An opening declaration is produced by each validator as a proof of joining the new block. An opening declaration is a merkle root of all closing assertions produced by all validators in the antecedent block (a.k.a antecedent block hash). This hash is the consent that the publishing validator accepts the antecedant block. This also means the validator aknowledges reception of all log entries of that antecedant block, and that the validator has verified the validity of every single log entry of that antecedant block.
+
+Missing of an opening declaration indicates either of following unavailability states:
+- the validator is not active in the current time window,
+- the validator has nothing to publish yet,
+- the validator has left the network  
+
+## Closing Declaration
+A closing declaration is a merkle root of all declarations published by a single validator in that time window. The closing declaration can be used by another validator to validate possession of all records produced by the signing validator.
+
+### Joining and Leaving a Block
+A validator can join and leave the current DialChain block any time withing the current time window. In order to leave the DialChain block, a validator must publish his closing declaration. 
+
+### Missing Closing Declaration
+Validator will be punished for not publishing the closing declaration, as there will be no way to validate assertions it published. If the network is missing the closing declaration of a validator, a deterministic algorithmic election process automiatically choses 3 __alternative validators__ to revalidate all affected declarations and publish the __Alternative Closing Declaration__. If the valiidation of any entry fails, it is excluded from the closing entry and from the block. All liabilities resulting from exclusion of failed entries are covered by the original validator. 
+
+If the opening declaration are all computed with the alternative closing declaration, revenue earned for the revalidated entries will be redistributed to the 3 alternative validators.
+
+### Provisional Closing Declaration
+Provisional closing declarations allow validator to synchronize their state with other validators during the time window. If for example the time window is an earth day, a validator can share a provisional closing declaration every 12 earth hours, 6 earth hours, every earth hour or every earth minute. A provisionnal closing declaration can also be shared whennever the validator thinks it is necessary to secure revenue generated sofar from an eventual crash.
+
+If at the end of a time window, a validator closing declaration is missing, his last provisional declaration will be used instead. Only transaction produced by that validator and not part of the last provisional closing declaration will need to be revalidated.
+
+### Inncremental Validation
+Provisional closing declarations also help with inncremental validation of entries produced by other validators, as a validator can not present an entry anterior to a provisional closing declaration.
 
 ## Block Hash
-The block hash is the merkel tree root of all available closing assertions of the former block.
+The block hash is the merkel root of all available closing assertions of that block.
 
 ### Synchronization Window
-Each validator has the responsibility to publish their closing record inside the synchronization window. As the computation algorithm allows for an incremental computation of the closing merkel root, there is no special extra time needed to compute the closing assertion.
+Each validator has the responsibility to publish it's closing record inside the synchronization window. As the computation algorithm allows for an incremental computation of the closing merkel root, there is no special extra time needed to compute the closing assertion.
 
 - The time to compute the closing assertion shall be bellow a minute after the last milisecond of the time window, independent of the number of entries.
 - For a reference time window of __ONE EARTH DAY__, the synnchronization window can be __ONE EARTH MINUTE__.
 
-### Missing Validator
-If at the end of a block some validators are missing, available validators will generate and share a subsidiary closing records for the missing validators. Available validators will synchronized each order till they have all the same view for each missing validator.
+### Recovery Window (Missing Validator)
+If at the end of a block some validators are missing, algorithmic selected available validators will generate alternatiive closing records inside the recovery window. For a reference time window of __ONE EARTH DAY__, the recovery window can be __ONE EARTH MINUTE__.
 
-### Resigning Missing Records
+## Resigning Missing Records
 In general published declarations are allways distributed as:
 - participant allways receives the publishing declaration as a return to the service call.
-- participant will share the record with another participant (in the context of a transation)
+- participant can share the record with another participant (in the context of a transation)
 - receiving participant will generally have the record validated by another node (validator or observer).
 
 This is why we assume we will generally bearely miss those records.
 
-Nevertheless, rejoining the network, a validator will have to resign all entries missing in the antecedant log and publish them in the current log.
+Nevertheless, rejoining the network, a validator will have to resign all entries missing in the antecedant block and re-publish them in the current block.
 
-Not being available at the closing is a sign of non reliability of validator. This can be very damaging to the validator as the proof of non availability will never be removed from the log and will lead to participants not using the publishing service of this validator.
+# Proof of Guarantee Consensus (PoG)
+The PoG consensus is only needed for the current time window. After the time window is closed, all validators are unanimous on the state of all declarations inserted in the log.
 
-## Opening Assertion
-The opening assertion is produced by each validator as a proof of joining the new block. The missing of an opening assertion is a signal that the validator is not active in the current time window (validator might be done or have nothing to publish yet).
+The PoG consensus allows the validator to cover the value of validated declarations with an equivalent monetary value. The validator deposit will be used repair damages caused by those validated declarations if at the closing of the time window conflicting declarations are discovered.
 
-The opening assertion contains the antecedent block hash. This hash is the consent that the producing validator accepts the antecedant block. This nevertheless does not mean the validator is in possession of all log entries of that block, as the computation of the opening assertion only involves closing assertions. Nevertheless, including those closign assertions into the block is a declaration that all assertion of the corresponding validator have been verified.
- 
-The opening assertion is always the first assertion sent by a validator in the block.
+During the time window, a validator can not cover for more than his own deposit. If a validator occurs to have exhausted his deposit inside a time window, that validator will have to delegate further publication requests to validators with available deposit. A single declaration can also be covered by many validators in case the declaration monetary value exeeds the capacity of a single declaration.
 
+## Guarantee Use Case
+If for example Paul has a balance of 5 dial, Paul sepends 3 dial in a transaction, and Paul spends 3 dial again in a subsequent transaction, this subsequent transaction will be declared conflicting by the network at closing of the block and will be fixed with an automatic transfer of 1 dial from the validator's garantee deposit to Paul's account to cover the negative balance. This fix is therefore only necessary if by the time of block closing no other positive transaction to Paul's account can help cover the damage.
+
+## Monetary Value of a Declaration
+The monetary value of a declaration is an aggreement between the service requestor and the validator. In some cases, the value will be inherent to the declaration (e.g.: monetary transaction). In other cases, the value will be arbitrary to the purpose of the assertion (e.g: proof of possession of a network address).
+
+# Treasury Operations
+The DialChain Treasury is controlled by all validators. 
+
+## Withdrawal Transactions
+Treasury withdrawals are constrained by the nature of the external realm.
+- A withdrawal of USD will be validated by all validators as the withdrawal transaction will wait for the closing of the window to be effective.
+- The withdrawal of a digital currency will generally require a quota of signatures required by the multisig wallet.
+
+## Sharing maintenance fees to Validators
+The sharing of VAT to validators occurs automatically, in the subsequent time window. As each validator knows their earnings, and the total earning, algorithmically selected validator will run the accounting and create the earninng records for defined set of validators.
