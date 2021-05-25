@@ -1,47 +1,49 @@
 # Distributed Immutable Assertions Log (DIAL)
-The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__.
+The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol__ (__DETOX__).
 
 # Abstract
-A declaration can only be inserted into the log by a __validator__. Each validator is responsible for declarations it inserts into the log. But because the effect of a declaration can conflict with the effect of another declaration, validation of declarations must be performed prior to their insertion into the log.
+A declaration can only be inserted into the log by a __validator__. Each validator is responsible for declarations it inserts into the log. But because the effect of a declaration can conflicts with the effect of another declaration, validation of declarations must be performed prior to their insertion into the DialChain log.
 
-Our __Proof of Guaranntee Consensus__ ensures that the validator, if required, can cover damages caused by the insertion of the conflicting declaration.
+Our __Proof of Guarantee Consensus__ ensures that the validator, if required, can cover damages caused by the insertion of a conflicting declaration.
 
-Further, __Finality__ is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__. All declarations of a closed time window are final, immutable assertions and non conflicting with each order.
+Further, __Finality__ is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__. All declarations of a closed time window are final and non-conflicting with each order. Finality turns each declaration into an __immutable assertion__.
+
+The DialChain is unique in its kind of offering an unlimited block size and a deterministic ordering and execution protocol. This might sound negligeable at first but will later be proven essential for the sustainability of blockchain networks and the adoption of blockchain technology by other industries.
 
 # Terms
 
 ## Declaration
-A __declaration__ is a formal or explicit statement or announcement. Depending on its intent, a declaration can be signed by Zero, One or Many participants. Even the process of inserting a file into the DialChain log is a declaration.
-
-Signatures of a declaration can be embedded into the same declaration file, or provided in external signature files. Our __Incremental Signature Design__ allows multiple parties to sequentially sign the same file.
+A declaration is a formal or explicit statement or announcement. Depending on its intent, a declaration can be signed by zero, one or many participants. Even the process of inserting a file into the DialChain log is a declaration.
+Many signatures of the same declaration can be embedded into the same file or provided by external signature files. Our __Universal Data Block Identifier__ makes it easy to reshuffle signed data blocks. This allows for signatures of declarations to occur sequentially or parallelly. 
 
 ## Assertion
-An __assertion__ is a confident and forceful statement of fact or belief. It is our foundation of trust. Once finalized, a declaration becomes an __immutable assertion__.
+An assertion is a confident and forceful statement of fact or belief. It is our foundation of trust. Once finalized, a declaration becomes an immutable assertion.
 
 ## Finality
-__Finality__ is achieved by ensuring that each inserted declaration is propagated to all __validators__ within a defined time frame called __Time Window__. 
+Finality is achieved by ensuring that each inserted declaration is propagated to all validators within a defined time frame called __Time Window__. 
 
-With our __Proof of Guarantee__ consensus, consumer of the declaration (e.g. payee) will not need to wait for the finality of the transaction. A simple __Counter Proof of Insertion__ into the log will provide the necessary trust to proceed forward with the transaction.
+With our __Proof of Guarantee__ consensus, consumer of the declaration (e.g., payee) will not need to wait for the finality of the transaction. A simple __Counter Proof of Publication__ into the log will provide the necessary trust to proceed forward with the transaction.
 
 ## Participant
-A participan is an entity that controls a private key. This private key will be used to sign declarations.
-
-## Account
-An account is an entity that controlls a certain association. An account can controll a monetary stream (balance), another acccount can controll an email address, a phone number.
-
-An account can be controlled by more than one participant, in which case the account is called an organization.
+A participant is a [decentralized identifier](https://www.w3.org/TR/did-core/) registered with the DialChain. Despite other blockchain networks, presenting a public key is not sufficient to represent an identity on the DialChain.
 
 ## Organization
-An organization is an account controlled by zero or more participants. An organization defines procedures and associated deccision (signature) rules.
+An organization is a DID controlled by zero or more participants. An organization defines procedures and associated decision (signature) rules.
+
+## Account
+An account is a DID that holds an asset. An account can be controlled by either a participant or an organization.
 
 ## Validator
-A validator is a participant that can insert a declaration into the DialChain log by the mean of signing the __publishing declaration__ and sharing the file with all other validators.
+A validator is an organization that can insert a declaration into the DialChain log by the mean of signing the __publishing declaration__ and sharing the file with all other validators.
 
 ## Service Provider
-Beside validators, the DialChain will define many other type of service providers.
+Beside validators, the DialChain will define many other types of service providers.
 
 ## Service Record
 Service providers publish their service records in the DialChain log, including their service addresses and prices.
+
+## Intent Request
+An intent request is generally sent by a participant to a service provider to enquire on the price of a service. The response of an intent request is binding for the service provider.
 
 # Economics
 
@@ -49,205 +51,199 @@ Service providers publish their service records in the DialChain log, including 
 The DialChain economy does not print money. Value is generated by providing services agains fees. 
 
 ## Dial Treasury
-The Dial Treasury is an automatic and permissionless service that maintains accounts used to hold common monetary values of the Dial Network. The Dial Treasury does not print money. All money emited by the Dial Treasury is backed by external assets.
+The Dial Treasury is an automatic and permissionless service that maintains accounts used to hold common monetary values of the Dial Network. The Dial Treasury does not print money. All money emitted by the Dial Treasury is backed by external assets.
 
 ## Value Generation
-Every single service performed by a service provider in the Dial Network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider.
+Every single service performed by a service provider in the Dial Network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider. An __intent request__ allows a requestor to collect prices and other execution conditions from differents service providers.
 
 ## Value Added Tax (VAT)
-In order to provide for sustainability, the Dial Network must make sure every present operation is priced with future cost it incures. For example:
+In order to provide for sustainability, the Dial Network must make sure every present operation is priced with future costs it incurs. For example:
 
-- Each file inserted in the DialChain Log will have to be maintained for a substantial amount of time (we presume 50 earth years).
-- Each monetary value held by the Dial Network will maintain a sound relationship to the corresponding external miror. For example, the BTC account held by the Dial Treasury will have to maintain a relationship to the corresponting wallets in the BitCoin network.
+- Each file inserted in the DialChain log will have to be maintained for a substantial amount of time (we presume 50 earth years).
+- Each monetary value held by the Dial Network will maintain a sound relationship to the corresponding external asset. For example, the BTC account held by the Dial Treasury will have to maintain a relationship to the corresponding wallets in the Bitcoin network.
 
-The cost of maintaining those assets (log entries, currencies) is paid by the originating participant at the moment of insersion of the asset producing declaration in the log. This revenue is spent by the Dial Treasury during the life time of that asset.
-
-Therefore, a VAT will be applied on each service performed and the retained ammount will be held by the Dial Treasury. For each day of maintenance of an asset, the corresponding maintenance fee will be distributed to the service providers of the netwrok based on predefined distribtion keys (we pesume proportion of revenue generated during that day)
+The cost of maintaining those assets (log entries, currencies) is paid by the originating participant at the moment of publication of the asset producing declaration into the DialChain log. The Dial Treasury will retain this amount from the revenue of the service provider (in the form of a VAT). This retained revenue will be spent by the Dial Treasury during the lifetime of that asset to pay for the maintenance of that asset. For each block of maintenance of an asset, the corresponding maintenance fee will be distributed to the service providers of the network based on predefined distribution keys; sample key is the proportion of revenue generated during the block (e.g. earth day).
 
 # Liquidity Service
-The liquidity service of the DialChain is a service provided by the Dial Treasury that allows the mapping of external monetary values into the Dial Network. Those values are generally denominated L-XXX, where XXX is the denomination known in the world outside of Dial. E.g.: L-BTC, L-ETH. Beside fees collected by the Dial Treasury for the maintenance of those underlying records, the value of an L-BTC (Liquid BitCoin) is a one to one mapping of the value of a BitCoin.
+The liquidity service of the DialChain is a service provided by the Dial Treasury that allows the mapping of external monetary values into the Dial Network. Those values are generally denominated L-XXX, where XXX is the denomination known in the world outside of Dial. E.g.: L-BTC, L-ETH. Beside fees collected by the Dial Treasury for the maintenance of those underlying records, the value of an L-BTC (Liquid Bitcoin) is a one-to-one mapping of the value of a Bitcoin.
 
 ## Exposing an External Monetary Asset (Liquid-Asset)
-In order to expose an external monetary asset, the Dial Treasury creates an account with the asset realm. e.g.: The Dial Treasury will maintain a wallet in the BitCoin Network.
+In order to expose an external monetary asset to the Dial Network, the Dial Treasury creates an account with the asset realm. e.g.: The Dial Treasury will maintain a wallet in the Bitcoin Network.
 
 ### Depositing of Liquid-Assets
-If we take the BTC as an example, any participant will simply emit L-BTC by depositing corresponding BTC amount the BitCoin Account of the Dial Treasury. The purpose code of the transaction will reference the DialChain account of the depositing participant.
+If we take the BTC as an example, any participant will simply emit L-BTC by depositing corresponding BTC amount the Bitcoin wallet of the Dial Treasury. The purpose code of the transaction will reference the DialChain account of the depositing participant.
 
 The participant will then have to:
-- monitor the BitCoin network to make sure the transaction is in a block,
-- send a declaration of deposition to a DialChain validator that supports the BitCoin connectivity service.
+- monitor the Bitcoin network to make sure the transaction is in a block,
+- send a declaration of deposition to a DialChain validator that supports the Bitcoin connectivity service.
 
 The DialChain validator will upon receiving the service request:
-- verify the availability of fund in the BitCoin network,
+- verify the availability of fund in the Bitcoin network,
 - credit the DialChain account of the depositing participant with the corresponding L-BTC amount (minus service fees)
-- publish this declaration of deposition to the DialChain Log. 
+- publish this declaration of deposition to the DialChain log.
 
-At closing, each validator receiving the operation will verify availability of funds in the BitCoin Network in the process of validating the closing declaration of the publishing validator.
+At closing, each validator receiving the operation will verify availability of funds in the Bitcoin Network in the process of validating the closing declaration of the publishing validator.
 
 ### Withdrawal of Liquid-Assets
 Taking the BTC example, the withdrawal of L-BTC occurs by simply sending a declaration of withdrawal to a validator.
 
-The declaration of withdrawal will carry :
+The declaration of withdrawal will carry:
 - the target BTC address
 - the hash value of a secret
 
 The validator upon reception of the service request will 
 - Initiate the Bitcoin transaction
-- HTLC the bitcoin transactionn with the provided hash value
+- prepare the bitcoin transaction with the provided hash value
 - propagate the BTC transaction to algorithmically selected validators for counter signature (multisig)
 - Upon reaching the required multisig quota, last validator will publish the treasury spending transaction to the bitcoin network.
 
-If at closing the withdrawal hapens to be conflicting, the treasury will be automatically compensated from the account of siging validators.
+If at closing the withdrawal happens to be conflicting, the treasury will be automatically compensated from the account of signing validators.
 
 ### Sample Treasury Accounts
-Well known treasury acccounts will be:
+Well known treasury accounts will be:
 
 #### L-BTC
-A treasury emiting L-BTC agains BTC deposit.
+A treasury emitting L-BTC against BTC deposit.
 
 #### L-ETH
-A treasury emiting L-ETH against ETH deposit.
+A treasury emitting L-ETH against ETH deposit.
 
-## Exception Case : Central Bank Currencies
-Unlike digital currencies like BTC, ETH, central bank currenccies do not offer permissionless access to their network. The following process describes how to support a central bank currency in the example of the USD.
-
-To support a central bank currency, following rules and cooperations are necessary:
-- Publication of transactions occcuring in the central bank account. E.g.: the US Treasury will have to either:
-  - expose a DialChain bank account with permissionless access to part of the transactions (deposit amount, date, purpose code), or
-  - maintain a known DialChain client node that publishes those transactions to the DialChain network.
-- Authoritative processing of withdrawals generated by the DialChain network. 
-
-### Depositing L-USD
-A participant will simply emit L-USD by depositing corresponding USD ammount in the DialChain account at the US Treasury with the account public identifier in the purpose code field.
-
-### Withdrawal of L-USD
-The withdrawal of L-USD will occur by simply issuing a declaration of withdrawal that will be published inside a time window. The declaration of withdrawal will carry a hash code built out of :
-- the IBAN of the withdrawer,
-- a generated nonce value.
-
-The US Treasury will present a web service allowing the withdrawer to collect the fund upon the presentation of
-- the IBAN
-- the nonce
-- the declaration identifier
-
-## Alternative to Central Banks
-A participant can decide to offer a USD-Service. This will be a bit different from the institutional USD service. In this case, the participant will have to:
-- hold deposit acccount at the treasury whose average value is constantly balanced to the total L-X-USD emited.
-- expose access to the bank account holding the amount of USD emited
-- provide a service for the publication of transactions to the network
-- provide a service for the withdrawal
-In the network, the L-X-USD will be handled as a stable liquid curency, but different from the official L-USD.
+#### L-USDC
+A treasury emitting USDC against USD.
 
 ## DIAL
-The DialChain Treasury will be emiting L-DIAL against a basket of deposited crypto curencies like L-BTC, L-ETH, L-MATIC.
+The DialChain Treasury will be emitting L-DIAL against a basket of deposited crypto currencies like L-BTC, L-ETH, L-MATIC.
 
-The L-DIAL exchange rate at the moment of deposit is defined by a bastket holding the 5 most valuable crypto currencies in market capitalizations (in BTC) on the 5 most liquid decentralized exchanges.
+The L-DIAL exchange rate at the moment of deposit is defined by a basket holding the 5 most valuable crypto currencies in BTC market capitalizations on the 5 most liquid decentralized exchanges.
 
 Oracles responsible for the provisioning of the DialChain with reference values will be determined at the moment of deployment.
 
-Reference values are allway valid for the duration of a time window.
+Reference values are always valid for the duration of a block.
 
 # Genesis
 
 ## Initial Validators
 Initial validators are a group of participants which initialize the log:
 - they setup the initial treasury
-- they deposit initial liquidities
+- they deposit initial liquidity
 - they validate each other in a ring by making sure each validator publishes the initial service record of all other validators
 
 ## Validator Registration
 In order to qualify as a validator, a participant must:
 - pay for basic deposit to the DialChain treasury
-- register the publishing organization, by publishing the registration record through an existing validator
-- wait for the next time winndow to publish the initial service record
-- wait for the next time winndow to start providing services
+- register the publishing organization, by sending the registration record for publication to existing validators
+- wait for the next block to publish the initial service record
+- wait for the next block to start providing services
 
-This is, it takes like 3 time windows to have a new service provider up and running.
+This is, it takes like 3 blocks to have a new service provider up and running.
 
-# Log Structure
+# DialChain Log Structure
 
-## Log Entry
-A log entry is a file considered part of the log. A log entry respects following rationales:
+## DialChain Log Entry (DCLE)
+DCLE is a file considered part of the DialChain log. A DCLE respects following rationales:
 - contains one or many declarations, eventually from different private keys.
 - contains exactly one __publishing declaration__. This asserts the insertion of the file by the force of the signature of the publishing __validator__.
 - the publishing declaration contains the antecedent block's hash. This is the proof that the validator consents with the validity of the antecedent block.
-- A participant shall never acccept a log entry that contains the wrong antecedent block hash.
+- A participant shall never accept a log entry that contains the wrong antecedent block hash.
 
 ## Time Window (Block)
 A time window can be any sort of time reference (e.g. an earth minute, hour, day or month). For the DialChain, we will select the __EARTH DAY__ as the reference time window. Time zone synchronized, the time window will start at 00:00:00:000 UTC and end at 23:59:59:999 UTC.
 
+The DialChain block has an unlimited block size. There is no disadvantage to validators as valiidators are paid for every DCLE inserted in the log.
+
 ## Finality
-The finality of a declaration is provided when the block containing the log entry containing that declaration is closed, as after closing all validators can compute the same block hash. This computed block hash is used in each publishing declaration of the subsequent block. The finality transforms each declaration into an assertion.
+The finality of a declaration is provided when the block containing the enclosing DCLE is closed, as after closing all validators can compute the same block hash. This computed block hash is used in each publishing declaration of the subsequent block. The finality transforms each declaration into an assertion.
 
 ## Opening Declaration
-An opening declaration is produced by each validator as a proof of joining the new block. An opening declaration is a merkle root of all closing assertions produced by all validators in the antecedent block (a.k.a antecedent block hash). This hash is the consent that the publishing validator accepts the antecedant block. This also means the validator aknowledges reception of all log entries of that antecedant block, and that the validator has verified the validity of every single log entry of that antecedant block.
+An opening declaration is produced by each validator as a proof of joining the new block. An opening declaration is a merkle root of all closing assertions produced by all validators in the antecedent block (a.k.a antecedent block hash). This hash is the consent that the publishing validator accepts the antecedent block. This also means the validator acknowledges reception of all log entries of that antecedent block, and that the validator has verified the validity of every single log entry of that antecedent block.
 
 Missing of an opening declaration indicates either of following unavailability states:
-- the validator is not active in the current time window,
+- the validator is not active in the current block,
 - the validator has nothing to publish yet,
 - the validator has left the network  
 
 ## Closing Declaration
-A closing declaration is a merkle root of all declarations published by a single validator in that time window. The closing declaration can be used by another validator to validate possession of all records produced by the signing validator.
+A closing declaration is a merkle root of all declarations published by a single validator in that block. The closing declaration can be used by another validator to validate possession of all records produced by the signing validator.
 
 ### Joining and Leaving a Block
-A validator can join and leave the current DialChain block any time withing the current time window. In order to leave the DialChain block, a validator must publish his closing declaration. 
+A validator can join and leave the current DialChain block any time within the current time window. In order to leave the DialChain block, a validator must publish his closing declaration. 
 
 ### Missing Closing Declaration
-Validator will be punished for not publishing the closing declaration, as there will be no way to validate assertions it published. If the network is missing the closing declaration of a validator, a deterministic algorithmic election process automiatically choses 3 __alternative validators__ to revalidate all affected declarations and publish the __Alternative Closing Declaration__. If the valiidation of any entry fails, it is excluded from the closing entry and from the block. All liabilities resulting from exclusion of failed entries are covered by the original validator. 
+Validator will be punished for not publishing the closing declaration, as there will be no way to validate declarations it published. If the network is missing the closing declaration of a validator, a deterministic and algorithmic election process will automatically choose __3 alternative validators__ to revalidate all affected declarations and publish an __Alternative Closing Declaration__. If the validation of any entry fails, it is excluded from the closing entry and from the block. All liabilities resulting from the exclusion of failed entries are covered by the original validator.
 
 If the opening declaration are all computed with the alternative closing declaration, revenue earned for the revalidated entries will be redistributed to the 3 alternative validators.
 
 ### Provisional Closing Declaration
-Provisional closing declarations allow validator to synchronize their state with other validators during the time window. If for example the time window is an earth day, a validator can share a provisional closing declaration every 12 earth hours, 6 earth hours, every earth hour or every earth minute. A provisionnal closing declaration can also be shared whennever the validator thinks it is necessary to secure revenue generated sofar from an eventual crash.
+Provisional closing declarations allow validators to synchronize their state with other validators during the time window. If for example the time window is an earth day, a validator can share a provisional closing declaration every 12 earth hours, 6 earth hours, every earth hour or every earth minute. A provisional closing declaration can also be shared whenever the validator thinks it is necessary to secure revenue generated so far from an eventual crash.
 
-If at the end of a time window, a validator closing declaration is missing, his last provisional declaration will be used instead. Only transaction produced by that validator and not part of the last provisional closing declaration will need to be revalidated.
+If at the end of a time window, a validator closing declaration is missing, his last provisional declaration will be used instead. Only transactions produced by that validator and not part of the last provisional closing declaration will need to be revalidated.
 
 ### Inncremental Validation
-Provisional closing declarations also help with inncremental validation of entries produced by other validators, as a validator can not present an entry anterior to a provisional closing declaration.
+Provisional closing declarations also help with incremental validation of entries produced by other validators, as a validator cannot present an entry anterior to a provisional closing declaration.
 
 ## Block Hash
 The block hash is the merkel root of all available closing assertions of that block.
 
 ### Synchronization Window
-Each validator has the responsibility to publish it's closing record inside the synchronization window. As the computation algorithm allows for an incremental computation of the closing merkel root, there is no special extra time needed to compute the closing assertion.
+Each validator has the responsibility to publish its closing record inside the synchronization window. As the computation algorithm allows for an incremental computation of the closing merkel root, there is no special extra time needed to compute the closing assertion.
 
-- The time to compute the closing assertion shall be bellow a minute after the last milisecond of the time window, independent of the number of entries.
-- For a reference time window of __ONE EARTH DAY__, the synnchronization window can be __ONE EARTH MINUTE__.
+- The time to compute the closing assertion shall be below a minute after the last millisecond of the time window, independent of the number of entries.
+- For a reference time window of __ONE EARTH DAY__, the synchronization window can be __ONE EARTH MINUTE__.
 
 ### Recovery Window (Missing Validator)
-If at the end of a block some validators are missing, algorithmic selected available validators will generate alternatiive closing records inside the recovery window. For a reference time window of __ONE EARTH DAY__, the recovery window can be __ONE EARTH MINUTE__.
+If at the end of a block some validators are missing, algorithmic selected available validators will generate alternative closing records inside the recovery window. For a reference time window of __ONE EARTH DAY__, the recovery window can be __ONE EARTH MINUTE__.
 
 ## Resigning Missing Records
-In general published declarations are allways distributed as:
-- participant allways receives the publishing declaration as a return to the service call.
-- participant can share the record with another participant (in the context of a transation)
-- receiving participant will generally have the record validated by another node (validator or observer).
+In general, published declarations are always distributed as:
+- participant always receives the publishing declaration as a return to the service call.
+- participant can share the record with another participant (in the context of a transaction)
+- receiving participant will generally have the record validated by another validator. We call this act __Counter Proof of Publication__.
 
-This is why we assume we will generally bearely miss those records.
+This is why we assume we will generally barely miss published records, even if the validator is down at the closing of the block.
 
-Nevertheless, rejoining the network, a validator will have to resign all entries missing in the antecedant block and re-publish them in the current block.
+Rejoining the network, a validator will have to resign all entries missing in the antecedent block and re-publish them in the current block.
 
 # Proof of Guarantee Consensus (PoG)
 The PoG consensus is only needed for the current time window. After the time window is closed, all validators are unanimous on the state of all declarations inserted in the log.
 
-The PoG consensus allows the validator to cover the value of validated declarations with an equivalent monetary value. The validator deposit will be used repair damages caused by those validated declarations if at the closing of the time window conflicting declarations are discovered.
+The PoG consensus allows the validator to cover the monetary value of validated declarations with an equivalent deposit. The validator deposit will be used repair damages caused by those validated declarations if at the closing of the time window conflicting declarations are discovered.
 
-During the time window, a validator can not cover for more than his own deposit. If a validator occurs to have exhausted his deposit inside a time window, that validator will have to delegate further publication requests to validators with available deposit. A single declaration can also be covered by many validators in case the declaration monetary value exeeds the capacity of a single declaration.
+During the current time window, a validator cannot cover for more than his own deposit. If a validator occurs to have exhausted his deposit inside a time window, that validator will have to delegate further publication requests to validators with available deposit. A single declaration can also be covered by many validators in case the declaration monetary value exceeds the capacity of a single declaration.
 
 ## Guarantee Use Case
-If for example Paul has a balance of 5 dial, Paul sepends 3 dial in a transaction, and Paul spends 3 dial again in a subsequent transaction, this subsequent transaction will be declared conflicting by the network at closing of the block and will be fixed with an automatic transfer of 1 dial from the validator's garantee deposit to Paul's account to cover the negative balance. This fix is therefore only necessary if by the time of block closing no other positive transaction to Paul's account can help cover the damage.
+If for example Paul has a balance of 5 dials, Paul spends 3 dials in a transaction, and Paul spends 3 dials again in a subsequent transaction, this subsequent transaction will be declared conflicting by the network at closing of the block and will be fixed with an automatic transfer of 1 dial from the validator's guarantee deposit to Paul's account to cover the negative balance. This fix is therefore only necessary if by the time of block closing no other positive transaction to Paul's account can help cover the damage.
 
 ## Monetary Value of a Declaration
-The monetary value of a declaration is an aggreement between the service requestor and the validator. In some cases, the value will be inherent to the declaration (e.g.: monetary transaction). In other cases, the value will be arbitrary to the purpose of the assertion (e.g: proof of possession of a network address).
+If for example Paul has a balance of 5 dials, Paul spends 3 dials in a transaction, and Paul spends 3 dials again in a subsequent transaction, this subsequent transaction will be declared conflicting by the network at closing of the block and will be fixed with an automatic transfer of 1 dial from the validator's guarantee deposit to Paul's account to cover the negative balance. This fix is therefore only necessary if by the time of block closing no other positive transaction to Paul's account can help cover the damage.
 
 # Treasury Operations
 The DialChain Treasury is controlled by all validators. 
 
 ## Withdrawal Transactions
-Treasury withdrawals are constrained by the nature of the external realm.
-- A withdrawal of USD will be validated by all validators as the withdrawal transaction will wait for the closing of the window to be effective.
-- The withdrawal of a digital currency will generally require a quota of signatures required by the multisig wallet.
+Treasury withdrawals are constrained by the nature of the external realm. Major crypto currency network will support multisig wallets. A deterministic algorithm will select a validator ring that sign a withdrawal transaction to the target beneficiary account.
 
 ## Sharing maintenance fees to Validators
-The sharing of VAT to validators occurs automatically, in the subsequent time window. As each validator knows their earnings, and the total earning, algorithmically selected validator will run the accounting and create the earninng records for defined set of validators.
+The sharing of fees to validators occurs automatically, in the subsequent time window. As each validator knows their earnings, and the total earning, algorithmically selected validator will run the accounting and create the earning records for defined set of validators.
+
+# DETOX
+Our deterministic transaction ordering and execution protocol helps reduce hazard and opportunistic behavior of market participants, in particular validators.
+- With the __unlimited block size__, there is a guarantee each valid declaration will be considered part of the intended time window (block).
+- The __publication intent request__ allows a participant to obtain following data from many validators ahead of sending the declaration publication request:
+  - a binding publication price,
+  - a submission timestamp,
+  - an open declaration coverage amount
+## Parallel Publication
+A participant can decide to have the same declaration parallelly published by many validators, as long as the participant is ready to pay the service fees to each validator. 
+
+Parallel insertion of the same declaration:
+  - won't change the effect of that declaration on the DialChain, but
+  - will increase the publication chances of the declaration (reducing opportunistic behavior of validators).
+
+
+## Market Transparency
+DETOX increases market transparency and helps mitigate MEV risks. Where MEV stands for [Miner Extractable Value or Maximal Extractable Value](https://blog.chain.link/what-is-miner-extractable-value-mev/).
+- Because the price and time of submission is known beforehand, submitting participant can have a certain level of assurance that declaration will be published.
+- Sending the intent request to many validators creates competition among validators and helps autoregulate the market. Validator with too many pub lication requests or lesser coverage budget in the current time window might increase their prices. Higher prices will in turn incentivize and attract new validators.
+
+## Front Running Declaration
+The intent request to many validators creates competition among validators and helps autoregulate the market. Validator with too many publication requests or lesser coverage budget in the current time window might increase their prices. Higher prices will in turn incentivize and attract new validators.
