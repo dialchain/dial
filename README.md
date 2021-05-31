@@ -13,14 +13,14 @@ The DialChain is unique in its kind of offering an unlimited block size and a de
 More on the architecture of the DialChain can be found [here](./dial.md)
 
 # Rationales
-The architecture of current blockchain technologies make them suitable for defined use cases, but unappropriated for others. The bitcoin network is a great settlement platform for transactions with high monetary value. Following is a non-exhaustive list of reasons why we are going for a new DialChain architecture:
+The architecture of current blockchain technologies make them suitable for defined use cases, but unappropriated for others. The bitcoin network is for example a great settlement platform for transactions with high monetary value. Following is a non-exhaustive list of reasons why we are going for a new DialChain architecture:
 
 ## Deterministic Ordering of Transactions
 No transaction recording/execution system will work at scale, if it cannot provide a guarantee for the time of and order of execution of submitted transactions.
 
-Traditional market maker (banks, brokers, ...) are known to exploit this asymmetry to capitalize on arbitration opportunities.
+Traditional market maker (banks, brokers, ...) are known to exploit existing asymmetry of information and thereby capitalize on arbitration opportunities.
 
-Despite the decentralized nature of blockchain networks, we are still faced with the situation where a selected miner (or validator) decides on which transactions will be included into block being sealed.
+Despite the decentralized nature of blockchain networks, we are still faced with the situation where a selected miner (or validator) decides on which transactions will be included into block being sealed. Leading to the phenomena known as MEV (Miner Extractable Value).
 
 Our __DETOX__ (deterministic ordering and execution protocol) guarantees that a submitted declaration will be included within the requested time frame.
 
@@ -29,7 +29,7 @@ The DialChain is built on top of a fundamental spam resistance system that makes
 
 In order to protect validators (or service provider in general), the DialChain defines a fix price to pay for each service intent request. Recall that the service intent request also returns a binding offer to the requesting participant.
 
-In order to protect the DialChain, each validator can only guarantee publications (inside a block or time window) up to the amount of the validator’s deposit
+In order to protect the DialChain, each validator can only guarantee publications (inside a block or time window) up to the amount of the validator’s deposit.
 
 The price paid by a participant to publish a declaration has a minimum cap, a file size factor and a validation effort factor. This price is generally substantial enough to have a significant impact on the wallet of a participant generating spammy declarations.
 
@@ -44,7 +44,7 @@ Traditional blockchain networks do not reflect on the future cost of current ope
 As the DialChain does not plan with future appreciation of the DIAL, reserves needed to maintain a declaration during the lifetime of that declaration is collected from the issuing participant with the publication of that declaration. The collected revenue is held in the DIAL Treasury and distributed to validators for each day of relevance of the concerned record.
 
 ## Deterministic Conflict Resolution
-In the DialChain network, validators are responsible for declarations they verify and publish to the DialChain. Inside the time window, responsibility is solely backed up with the deposit of the validator. A closing, we assume all validators verify all declarations published during that time window. After closing, any residual validator mistake is the common responsibility of all validators. 
+In the DialChain network, validators are responsible for declarations they verify and publish to the DialChain. Inside the time window, responsibility is solely backed up with the deposit of the validator. At closing, we assume all validators are verifying all declarations published during that time window. After closing, any residual validator mistake is the common responsibility of all validators. 
 
 Incremental validation is essential to have all validators validate all declarations by the end of the time window. For that purpose, validators also publish a synchronization hash every 10 minutes or on the request of another validator (Sealing what they have done so far).  
 
@@ -59,11 +59,16 @@ The DialChain requires each validator to have following verifiable properties:
 - have three custodians who hold secrets used to operate validator nodes
 - required 2 of three signatures to spend values held by the validator treasury
 
+These security properties will allow to keep validator infrastructure simple but solid enough against malicious attacks. As validators make the fundament of the DialChain.
+
 ## Validator Diversification
-Because of the simplicity of the no-race validation protocol, operating validator node:
+Because of the simplicity of the no-racing validation protocol, operating validator node:
 - will not require special hardware components (like ASICS)
 - will not require unusual data center skills
+
 This simplicity shall lead to the largest spreading of validators around the world.
+
+Nevertheless, the maintenance cost reimbursed to validators by the DIAL Treasury will be a factor of the revenue brought by the validator during that time window.
 
 ## No Validator Dominance
 Validator dominance cannot occur as:
@@ -82,6 +87,6 @@ As our block time is an Earth Day (Time Window), earning participant might want 
 The DialChain validation logic requires declarations issued by the same participant to be chained. Allowing, while still inside the time window, for quick access to the last validator of a spending declaration inside the time window.
 
 ## Programmer Adoption
-The integration of the DialChain with existing business applications (like enterprise resource planning systems) is an essential goal toward the mass adoption of the DialChain. With this respect, the DialChain is built on the top of the simplest most use ccomputer idioms like [JSON](https://datatracker.ietf.org/doc/html/rfc8259), [JWS](https://datatracker.ietf.org/doc/html/rfc7515), [DID Core](https://www.w3.org/TR/did-core/).
+The integration of the DialChain with existing business applications (like enterprise resource planning systems) is an essential goal toward the mass adoption of the DialChain. With this respect, the DialChain is built on the top of the simplest most use computer idioms like [JSON](https://datatracker.ietf.org/doc/html/rfc8259), [JWS](https://datatracker.ietf.org/doc/html/rfc7515), [DID Core](https://www.w3.org/TR/did-core/).
 
 The DialChain will later introduce TypeScript based code automates to allow for programable declarations.
