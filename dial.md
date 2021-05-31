@@ -8,7 +8,7 @@ __Finality__ turns each declaration into an immutable assertion. Finality is ach
 
 The DialChain uses an __earth day__ to contain a block, meaning that one would have to wait for the end of the day to achieve finality. 
 
-Our __Proof of Guarantee__ consensus ensures that a validator, during the day will covers damages caused by its publication of a conflicting declaration. At the end of the day, any residual conflict is jointly covered by all validators.
+Our __Proof of Guarantee (PoG)__ consensus ensures that a validator, during the day will covers damages caused by its publication of a conflicting declaration. At the end of the day, any residual conflict is jointly covered by all validators. With __PoG__, consumer of a declaration (e.g., payee) will not need to wait for the finality of that declaration.
 
 The DialChain is unique in its kind of offering an unlimited block size and a deterministic ordering and execution protocol. This might sound negligeable at first but will later be proven essential for the sustainability of blockchain networks and the adoption of blockchain technology by other industries.
 
@@ -24,10 +24,10 @@ An assertion is a confident and forceful statement of fact or belief. It is our 
 ## Finality
 Finality is achieved by ensuring that each inserted declaration is propagated to all validators within a defined time frame called __Time Window__. 
 
-With our __Proof of Guarantee__ consensus, consumer of the declaration (e.g., payee) will not need to wait for the finality of the transaction. A simple __Counter Proof of Publication__ into the log will provide the necessary trust to proceed forward with the transaction.
+With our __Proof of Guarantee__ consensus, consumer of a declaration (e.g., payee) will not need to wait for the finality of that declaration. A simple __Counter Proof of Publication__ will provide the necessary trust to proceed forward with the transaction.
 
 ## Participant
-A participant is a [decentralized identifier](https://www.w3.org/TR/did-core/) registered with the DialChain. Despite other blockchain networks, presenting a public key is not sufficient to represent an identity on the DialChain.
+A participant is a [decentralized identifier (DID)](https://www.w3.org/TR/did-core/) registered with the DialChain. Despite other blockchain networks, presenting a public key is not sufficient to represent an identity on the DialChain.
 
 ## Organization
 An organization is a DID controlled by zero or more participants. An organization defines procedures and associated decision (signature) rules.
@@ -36,44 +36,44 @@ An organization is a DID controlled by zero or more participants. An organizatio
 An account is a DID that holds an asset. An account can be controlled by either a participant or an organization.
 
 ## Validator
-A validator is an organization that can insert a declaration into the DialChain log by the mean of signing the __publishing declaration__ and sharing the file with all other validators.
+A validator is an organization that can publish a declaration to the DialChain by the mean of signing the __declaration__ and sharing the file with all other validators.
 
 ## Service Provider
 Beside validators, the DialChain will define many other types of service providers.
 
 ## Service Record
-Service providers publish their service records in the DialChain log, including their service addresses and prices.
+Service providers publish their service records to the DialChain, including their service addresses and prices.
 
 ## Intent Request
 An intent request is generally sent by a participant to a service provider to enquire on the price of a service. The response of an intent request is binding for the service provider.
 
 # Economics
-An economy is denominated by a set of service providers that together co-lock a certain amount of external securities in the treasury of that economy. The total value locked by that ecconomy is so balanced that:
+An economy is denominated by a set of service providers that together co-lock a certain amount of external securities in the treasury of that economy. The total value locked by that economy is so balanced that:
 - No (group of) service provider can abandon the economy with an amount higher than their deposit.
-- Revenue retained by the treasury and redistributed to service providers for future activities grows substantially enougth to discourage any abandonment of the economy.
+- Revenue retained by the treasury and redistributed to service providers for future activities grows substantially enough to discourage any abandonment of the economy.
 
 ## Multiple Economies
-The Dial Network can operate multiple economies. What distinguishes economies from each order is the nature of external securities transfered into the economy.
+The Dial Network can operate multiple economies. What distinguishes economies from each other is the nature of external securities transferred into the economy.
 - An economy will allow only established digital currencies to be deposited against native currencies
-- Another economy will allow fiduciaries properties to be locked to back emmission of native currencies
-- A gouvernment might start an economy by providing a bridge to the government's treasury, so native curency can be generated/burned agains deposit/withdrawal of fiat currency in that account.
+- Another economy will allow fiduciaries properties to be locked to back emission of native currencies
+- A government might start an economy by providing a bridge to the government's treasury, so native currency can be generated/burned against deposit/withdrawal of fiat currency in that account.
 
-## Opennes of an Economy
-The nature of the economy might (for example governmennt initiated) reduce the openes of the economy. If for example a government condition the deposition of validator initial guaranty, they will have controll on who can act as a valiidator in that economy.
+## Openness of an Economy
+The nature of the economy might (for example government initiated) reduce the openness of the economy. If for example a government condition the deposition of validator initial guaranty, they will have control on who can act as a validator in that economy.
 
 # The Dial Economy
-The Dial Native economy is the first one operated by the Diail Network. It is designed to serve as the model economy. It is open and permissionless.
+The Dial Native economy is the first one operated by the DIAL Network. It is designed to serve as the model economy. It is open and permissionless.
 
 ## Monetary Policy
 The Dial economy does not print money. 
 - Money emission occurs as counter value to deposited external securities.
-- Value is generated by providing services agains fees. 
+- Value is generated by providing services against fees. 
 
 ## Dial Treasury
 The Dial Treasury is an automatic and permissionless service that maintains accounts used to hold common monetary values of the Dial Network. The Dial Treasury does not print money. All money emitted by the Dial Treasury is backed by external assets.
 
 ## Value Generation
-Every single service performed by a service provider in the Dial Network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider. An __intent request__ allows a requestor to collect prices and other execution conditions from differents service providers.
+Every single service performed by a service provider in the Dial Network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider. An __intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
 
 ## Value Added Tax (VAT)
 In order to provide for sustainability, the Dial Network must make sure every present operation is priced with future costs it incurs. For example:
@@ -261,7 +261,7 @@ Parallel insertion of the same declaration:
 ## Market Transparency
 DETOX increases market transparency and helps mitigate MEV risks. Where MEV stands for [Miner Extractable Value or Maximal Extractable Value](https://blog.chain.link/what-is-miner-extractable-value-mev/).
 - Because the price and time of submission is known beforehand, submitting participant can have a certain level of assurance that declaration will be published.
-- Sending the intent request to many validators creates competition among validators and helps autoregulate the market. Validator with too many pub lication requests or lesser coverage budget in the current time window might increase their prices. Higher prices will in turn incentivize and attract new validators.
+- Sending the intent request to many validators creates competition among validators and helps autoregulate the market. Validator with too many publication requests or lesser coverage budget in the current time window might increase their prices. Higher prices will in turn incentivize and attract new validators.
 
 ## Front Running Declarations
 The intent request to many validators creates competition among validators and helps autoregulate the market. Validator with too many publication requests or lesser coverage budget in the current time window might increase their prices. Higher prices will in turn incentivize and attract new validators.
