@@ -10,7 +10,7 @@ Further, __Finality__ is achieved by ensuring that each inserted declaration is 
 
 The DialChain is unique in its kind of offering an unlimited block size and a deterministic ordering and execution protocol. This might sound negligeable at first but will later be proven essential for the sustainability of blockchain networks and the adoption of blockchain technology by other industries.
 
-More on the architecture of the DialChain can be found [here](./dial.md)
+More on the architecture of the DialChain can be found under [DialChain white paper](./dial.md)
 
 # Rationales
 The architecture of current blockchain technologies make them suitable for defined use cases, but unappropriated for others. The bitcoin network is for example a great settlement platform for transactions with high monetary value. Following is a non-exhaustive list of reasons why we are going for a new DialChain architecture:
