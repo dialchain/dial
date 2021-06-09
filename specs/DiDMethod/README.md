@@ -14,30 +14,43 @@ A declaration is the principal element of the DialChain. Following sections intr
 The producer of a declaration will generally attach a signature to that declaration. As the proof is not part of the signed payload, many signers can parallely provide signatures to be embedded into that declaration file. This means, I can use a tool to produce a declaration, send it to legitimate signers. Each signer can return the signature, and I will merge all signatures into the multisigned declaration file.
 ```json
 {
-    "declaration": {
-        "id": "declaration-uuid-multibase",
-        "entries": [
-            {
-                "type": "ref",
-                "cid": "cid-value-0"
-            },
-            {
-                "type": "declaration-type",
-                "string-field": "value",
-                "list-field": [],
-                "object-field": {}
-            }
-        ]
-    },
+    "id": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+    "type": "Declaration",
+    "declaration": [
+        {
+            "type": "Participant",
+            "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+            "created": "2021-06-09T03:42:26.317366Z",
+            "controller": [
+                "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj"
+            ],
+            "verificationMethod": [
+                {
+                    "type": "Ed25519VerificationKey2021",
+                    "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#key-0",
+                    "publicKeyMultibase": "zEHwiDynVvinC6jjzH5RR4MwgxYPq4xiRagfksAyUPyjv"
+                }
+            ],
+            "assertionMethod": [
+                {
+                    "type": "Signature",
+                    "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0",
+                    "verificationMethod": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#key-0"
+                }
+            ]
+        }
+    ],
     "proof": [
         {
-            "declaration": "declaration-uuid-multibase",
-            "issuer": "issuer-id-multibase",
-            "created": "2020-11-20T07:30:00Z",
-            "type": "JcsBase64Ed25519Signature2020",
-            "assertionMethod": ["issuer-id-multibase#timestamp#am-0"],
-            "signatureValue": "fWcozEsDGwJO2WeYb9DH_yjcinLGhd-pTXBADiaFE2C-A6iSKAYbjD8YCu7DP3SAZFAFIHBzumetTKVY0bBCAA",
-            "nonce": "b40a4e02-af7a-40dd-b4a7-b89e897d10b7"
+            "document": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+            "issuer": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+            "created": "2021-06-09T03:42:26.317366Z",
+            "type": "JcsBase64Ed25519Signature2021",
+            "assertionMethod": [
+                "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0"
+            ],
+            "signatureValue": "o_Nna_q_skVE7-5r3mj8HMAvPBSo1LIiJxbbjT0AWWLJnOWGThWxLLU7-t5_fH0yiv0pd1OyfwjLLU3sUAfeBQ",
+            "nonce": "38aab536-9433-47c9-ba17-259bb40a2cad"
         }
     ]
 }
@@ -48,13 +61,15 @@ If the declaration file is published to the log before all signers provide their
 {
     "proof": [
         {
-            "declaration": "declaration-uuid-multibase",
-            "issuer": "issuer-id-multibase",
-            "created": "2020-11-20T07:30:00Z",
-            "type": "JcsBase64Ed25519Signature2020",
-            "assertionMethod": ["issuer-id-multibase#timestamp#am-0"],
-            "signatureValue": "fWcozEsDGwJO2WeYb9DH_yjcinLGhd-pTXBADiaFE2C-A6iSKAYbjD8YCu7DP3SAZFAFIHBzumetTKVY0bBCAA",
-            "nonce": "b40a4e02-af7a-40dd-b4a7-b89e897d10b7"
+            "document": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+            "issuer": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+            "created": "2021-06-09T03:42:26.317366Z",
+            "type": "JcsBase64Ed25519Signature2021",
+            "assertionMethod": [
+                "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0"
+            ],
+            "signatureValue": "o_Nna_q_skVE7-5r3mj8HMAvPBSo1LIiJxbbjT0AWWLJnOWGThWxLLU7-t5_fH0yiv0pd1OyfwjLLU3sUAfeBQ",
+            "nonce": "38aab536-9433-47c9-ba17-259bb40a2cad"
         }
     ]
 }
@@ -81,55 +96,102 @@ A publication is the act of a validator signing the file and sharing with to ord
 
 ```json
 {
-    "declaration": {
-        "id": "declaration-uuid",
-        "entries": [{"...":"..."}]
+    "id": "mZGMyMzljMmItZWM2Yy00MjJjLWI2YTQtNjM0MTk5YzdhMzFm",
+    "type": "Publication",
+    "document": {
+        "id": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+        "type": "Declaration",
+        "declaration": [
+            {
+                "type": "Participant",
+                "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+                "created": "2021-06-09T03:42:26.317366Z",
+                "controller": [
+                    "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj"
+                ],
+                "verificationMethod": [
+                    {
+                        "type": "Ed25519VerificationKey2021",
+                        "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#key-0",
+                        "publicKeyMultibase": "zEHwiDynVvinC6jjzH5RR4MwgxYPq4xiRagfksAyUPyjv"
+                    }
+                ],
+                "assertionMethod": [
+                    {
+                        "type": "Signature",
+                        "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0",
+                        "verificationMethod": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#key-0"
+                    }
+                ]
+            }
+        ],
+        "proof": [
+            {
+                "document": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+                "issuer": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+                "created": "2021-06-09T03:42:26.317366Z",
+                "type": "JcsBase64Ed25519Signature2021",
+                "assertionMethod": [
+                    "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0"
+                ],
+                "signatureValue": "o_Nna_q_skVE7-5r3mj8HMAvPBSo1LIiJxbbjT0AWWLJnOWGThWxLLU7-t5_fH0yiv0pd1OyfwjLLU3sUAfeBQ",
+                "nonce": "38aab536-9433-47c9-ba17-259bb40a2cad"
+            }
+        ]
     },
-    "proof": [{"...":"..."}],
     "twindow": {
-        "start": "2020-11-12T00:00:00Z",
-        "end": "2020-11-12T23:59:59Z",
-        "a_hash": "2ZSF5H6MLUKFLDMBDCX55JQ7MSEITFPXPZJ734OWO2SFDDEDW3U7H4YDUK6SXXGHRT4LZHP66ONNHGMZ7RUXJTBUZRJLQESSF4GY5PY"
+        "start": "2021-06-09T00:00:00Z",
+        "end": "2021-06-10T00:00:00Z"
     },
-    "publication": [
+    "proof": [
         {
-            "issuer": "did:sw:gs:bmdpernypoeoxcc4mj54sycfsl5yg6",
-            "created": "2020-11-12T09:12:00Z",
-            "type": "JcsBase64Ed25519Signature2020",
-            "assertionMethod": ["did:sw:sp:bmcbmhkfxb3ezudwhvceraeeyp4g24#am-0", "did:sw:pt:bmdpernypoeoxcc4mj54sycfsl5yg6#am-3"],
-            "signatureValue": "aDby05Axtn1ECKt3xgjjgFP8iL8SdlarR1ac6pMeMLA6wxpSVO017X7A9LBKez5OzDKQDsuitMFaRhPLP5L9Dg",
-            "nonce": "43bdb2b7-a6c2-40c5-a41c-67d6b8b6c718"
+            "document": "mZGMyMzljMmItZWM2Yy00MjJjLWI2YTQtNjM0MTk5YzdhMzFm",
+            "issuer": "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm",
+            "created": "2021-06-09T03:42:26.777072Z",
+            "type": "JcsBase64Ed25519Signature2021",
+            "assertionMethod": [
+                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
+                "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm#2021-06-09T03:42:26.697626Z#am-0"
+            ],
+            "signatureValue": "VXbCZedoiIsDirPLaKnRcZb89eO_rZ9J8T7fHEym4bsqLVr8JMyBFy60YGBlDsaHIHaqRPn0Al2AZ_Iv-CFUCg",
+            "nonce": "78fc6596-dbbe-4649-8d5a-a062d0561da1"
         },
         {
-            "issuer": "did:sw:sp:bmbjqebz6fhhjqfkdthyiubynrwk5g",
-            "created": "2020-11-12T09:14:10Z",
-            "type": "JcsBase64Ed25519Signature2020",
-            "assertionMethod": ["did:sw:sp:bmcbmhkfxb3ezudwhvceraeeyp4g24#am-0", "did:sw:pt:bmbjqebz6fhhjqfkdthyiubynrwk5g#am-3"],
-            "signatureValue": "Lm8MA4X7VGerun1BOldu_JPBpsUgyEzsZ3-N07ENNfm6tTFSiXkoV09YITurfPQIuAkNDk4lxHTdCXk-lQfUAA",
-            "nonce": "bea26c23-b90e-44bb-843e-993b35cbf056"
+            "document": "mZGMyMzljMmItZWM2Yy00MjJjLWI2YTQtNjM0MTk5YzdhMzFm",
+            "issuer": "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx",
+            "created": "2021-06-09T03:42:26.777072Z",
+            "type": "JcsBase64Ed25519Signature2021",
+            "assertionMethod": [
+                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
+                "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx#2021-06-09T03:42:26.701615Z#am-0"
+            ],
+            "signatureValue": "dEl1pl0GNjGS1SZm7JoEP16sv5cLkBXoMC5zbckj5xnEk51qHvltiCoS2HrEwS9jchvJx4jD5qBYPQ8Q_cr5BQ",
+            "nonce": "b8eef027-5540-413e-85bc-48617620a3f7"
         }
-
     ]
 }
 ```
 
-The publication entries are allways attached. The signature data is everything else in the file except the __"publication"__ entry itself. Single publication entries can be produced paralelly.
+The publication entries are allways attached. The signature data is everything else in the file except the __top level "proof"__ entry itself. Single proofs entries can be produced paralelly.
 
-## "publication"."assertionMethod", "proof"."assertionMethod"
+## "proof"."assertionMethod"
 In the default configuration, a publication will be signed by two of three members of the validator organization, reducing the risk of verification mistakes and the risk of spam publications due to the lost a validator node's private key.
 
-- The first entry in the list of assertionMethods references the signature rule defined in the DiD declaration of the validator organization.
-- The second entry references the assertionMethods defined in the DiD document of the validator node (member).
+- The first entry in the list of assertionMethods references the signature rule defined in the idenntity declaration of the validator organization.
+- The second entry references the assertionMethod defined in the identity declaration of the validator node (member).
 
 In the following expression:
 ```json
 {
-    "assertionMethod": ["did:sw:sp:bmcbmhkfxb3ezudwhvceraeeyp4g24#am-0", "did:sw:pt:bmbjqebz6fhhjqfkdthyiubynrwk5g#am-3"]
+    "assertionMethod": [
+        "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
+        "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx#2021-06-09T03:42:26.701615Z#am-0"
+    ]
 }
 ```
 
-- __did:sw:sp:bmcbmhkfxb3ezudwhvceraeeyp4g24#am-0__ is the asertionMethod as defined in the organization declaration file.
-- __did:sw:pt:bmbjqebz6fhhjqfkdthyiubynrwk5g#am-3__ is the assertionMethod as defined in the node declaration file.
+- __mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0__ is the asertionMethod as defined in the organization declaration file.
+- __mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx#2021-06-09T03:42:26.701615Z#am-0__ is the assertionMethod as defined in the node declaration file.
 
 ### Validation Rule DECL0001
 The last element in the list of assertionMethod must allways be the assertion method of a simple participant.
