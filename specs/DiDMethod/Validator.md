@@ -6,32 +6,46 @@ An organization is a participant that relies on the vote of it members (particip
 The following json document displays the example of a simple declaration of organization (that can be used by a validator).
 ```json
 {
-    "id": "mMTM0MGRkNTItNzVlMy00YjY3LWFmMDEtZjE0MzhjZDY1YzMy",
+    "id": "mZGE0N2QwZjQtMmZjZi00ZmQ4LThlMzAtYTIzMDVhNmFlNjQw",
     "type": "Declaration",
     "declaration": [
         {
             "type": "Organization",
-            "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1",
-            "created": "2021-06-09T03:42:26.705853Z",
+            "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj",
+            "created": "2021-06-19T19:32:06.145319Z",
             "controller": [
-                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1"
+                "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj"
+            ],
+            "account": [
+                {
+                    "network": "org.bitcoin.production",
+                    "address": "34twR8mKvijuNg2eHXMhPS7GoKH34YuP8k",
+                    "control": {
+                        "quorum": 2,
+                        "verificationMethod": [
+                            "mMGExY2RjMDAtNjA1MC00OGJiLTlmMzEtMTIxNDVhMjJlMmM3#2021-06-19T19:32:05.602146Z#key-1",
+                            "mYjJiZGI1MGQtNjJhOC00YWFhLWI2M2YtZGMwMmFhYzZlMjI2#2021-06-19T19:32:06.124560Z#key-1",
+                            "mNDcyOTYzMjUtYjczZi00ZWE3LWIwNjAtNjI4NjA2YTMxMDlk#2021-06-19T19:32:06.133235Z#key-1"
+                        ]
+                    }
+                }
             ],
             "assertionMethod": [
                 {
                     "type": "Vote",
-                    "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
+                    "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0",
                     "quorum": 2,
                     "member": [
                         {
-                            "id": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
+                            "id": "mMGExY2RjMDAtNjA1MC00OGJiLTlmMzEtMTIxNDVhMjJlMmM3",
                             "shares": 1
                         },
                         {
-                            "id": "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm",
+                            "id": "mYjJiZGI1MGQtNjJhOC00YWFhLWI2M2YtZGMwMmFhYzZlMjI2",
                             "shares": 1
                         },
                         {
-                            "id": "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx",
+                            "id": "mNDcyOTYzMjUtYjczZi00ZWE3LWIwNjAtNjI4NjA2YTMxMDlk",
                             "shares": 1
                         }
                     ]
@@ -40,94 +54,109 @@ The following json document displays the example of a simple declaration of orga
             "service": [
                 {
                     "type": "PublisherService",
-                    "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#PublisherService-0",
+                    "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#PublisherService-0",
                     "serviceEndpoint": "https://node0.first-dial-validator.io/publisher",
-                    "assertionMethod": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0"
+                    "assertionMethod": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0"
                 },
                 {
                     "type": "PublisherService",
-                    "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#PublisherService-1",
+                    "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#PublisherService-1",
                     "serviceEndpoint": "https://node1.first-dial-validator.io/publisher",
-                    "assertionMethod": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0"
+                    "assertionMethod": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0"
                 },
                 {
                     "type": "PublisherService",
-                    "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#PublisherService-2",
+                    "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#PublisherService-2",
                     "serviceEndpoint": "https://node2.first-dial-validator.io/publisher",
-                    "assertionMethod": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0"
+                    "assertionMethod": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0"
                 },
                 {
                     "type": "LookupService",
-                    "id": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#LookupService-0",
+                    "id": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#LookupService-0",
                     "serviceEndpoint": "https://open.first-dial-validator.io/lookup",
-                    "assertionMethod": "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0"
+                    "assertionMethod": "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0"
                 }
             ]
         }
     ],
     "proof": [
         {
-            "document": "mMTM0MGRkNTItNzVlMy00YjY3LWFmMDEtZjE0MzhjZDY1YzMy",
-            "issuer": "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj",
-            "created": "2021-06-09T03:42:26.754921Z",
+            "document": "mZGE0N2QwZjQtMmZjZi00ZmQ4LThlMzAtYTIzMDVhNmFlNjQw",
+            "issuer": "mMGExY2RjMDAtNjA1MC00OGJiLTlmMzEtMTIxNDVhMjJlMmM3",
+            "created": "2021-06-19T19:32:14.815489Z",
             "type": "JcsBase64Ed25519Signature2021",
             "assertionMethod": [
-                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
-                "mN2I3NTM2MTItMDhlNi00OWU5LWFkMTItMWJlMjRmYWI5Mjlj#2021-06-09T03:42:26.317366Z#am-0"
+                "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0",
+                "mMGExY2RjMDAtNjA1MC00OGJiLTlmMzEtMTIxNDVhMjJlMmM3#2021-06-19T19:32:05.602146Z#am-0",
+                "mMGExY2RjMDAtNjA1MC00OGJiLTlmMzEtMTIxNDVhMjJlMmM3#2021-06-19T19:32:05.602146Z#key-0"
             ],
-            "signatureValue": "H5vF6u7jMeBm0QS5KPDjZt_hb-Gdh5X4oWMS-rV3BzzsIReBb_1Tr0Z8HyubiZ5xQV34t7Y7VuiK44uysjH7Bg",
-            "nonce": "dfea6186-b710-46a5-8451-64185c9af1d8"
+            "signatureValue": "yokTqDatzGLBkDBHIlepNxdtldALQep-XZvMPqaM86QrAaU5oTEAJSXNPeQZpQvR4M50uXsyTUr4LpyKZJcPAw",
+            "nonce": "fb03d487-f415-4daf-b693-f4aebecf69be"
         },
         {
-            "document": "mMTM0MGRkNTItNzVlMy00YjY3LWFmMDEtZjE0MzhjZDY1YzMy",
-            "issuer": "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm",
-            "created": "2021-06-09T03:42:26.767556Z",
+            "document": "mZGE0N2QwZjQtMmZjZi00ZmQ4LThlMzAtYTIzMDVhNmFlNjQw",
+            "issuer": "mYjJiZGI1MGQtNjJhOC00YWFhLWI2M2YtZGMwMmFhYzZlMjI2",
+            "created": "2021-06-19T19:32:14.825683Z",
             "type": "JcsBase64Ed25519Signature2021",
             "assertionMethod": [
-                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
-                "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm#2021-06-09T03:42:26.697626Z#am-0"
+                "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0",
+                "mYjJiZGI1MGQtNjJhOC00YWFhLWI2M2YtZGMwMmFhYzZlMjI2#2021-06-19T19:32:06.124560Z#am-0",
+                "mYjJiZGI1MGQtNjJhOC00YWFhLWI2M2YtZGMwMmFhYzZlMjI2#2021-06-19T19:32:06.124560Z#key-0"
             ],
-            "signatureValue": "jngrOrEwZSCx-lHKUfhwHipjnNal6vk2Wv0_fDmhGNRfxuBStERuutiS_vsXe24sdhVdxATsfJtxQt5ggSucBA",
-            "nonce": "94f8f4c0-cf44-4b31-9245-ee50f3a2e693"
+            "signatureValue": "ptYLE8oW89qDBinaukO0caz-hUs-cZKqe9Os2XOVjQvEJupUZtJyMA3kQ-dEHBV1axGV8D3MkI1ZeL_JCOhqBQ",
+            "nonce": "d1272d23-fa77-4788-a244-b0046dd7a1d7"
         },
         {
-            "document": "mMTM0MGRkNTItNzVlMy00YjY3LWFmMDEtZjE0MzhjZDY1YzMy",
-            "issuer": "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx",
-            "created": "2021-06-09T03:42:26.773016Z",
+            "document": "mZGE0N2QwZjQtMmZjZi00ZmQ4LThlMzAtYTIzMDVhNmFlNjQw",
+            "issuer": "mNDcyOTYzMjUtYjczZi00ZWE3LWIwNjAtNjI4NjA2YTMxMDlk",
+            "created": "2021-06-19T19:32:14.831698Z",
             "type": "JcsBase64Ed25519Signature2021",
             "assertionMethod": [
-                "mZWYyYzE1MjItMjU2NS00MzAwLWExNGQtMGYwODNlMzMyMzk1#2021-06-09T03:42:26.705853Z#am-0",
-                "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx#2021-06-09T03:42:26.701615Z#am-0"
+                "mNWYwMWU5ZTUtMjBlNS00OGE5LWE3ZDYtOWM1NjI2ZDBiYjhj#2021-06-19T19:32:06.145319Z#am-0",
+                "mNDcyOTYzMjUtYjczZi00ZWE3LWIwNjAtNjI4NjA2YTMxMDlk#2021-06-19T19:32:06.133235Z#am-0",
+                "mNDcyOTYzMjUtYjczZi00ZWE3LWIwNjAtNjI4NjA2YTMxMDlk#2021-06-19T19:32:06.133235Z#key-0"
             ],
-            "signatureValue": "VvUwUBUM9pl9vT_sLP6Gosnb4g4rWGvG3vrm8ON_5jzeSwI3H12pndaWqUXakjl1ITLt8C1WQUFwxBOFc0JJDQ",
-            "nonce": "f1b0ede0-4015-4fad-9b1b-407d0e300010"
+            "signatureValue": "k6-3HpuAf9pm_6WX2NWKWy7INlgVttnbXL9oIgLe2ggR-jeps3e4Oxws2hVaQ6xtczba87nexKh_RMvPQvDFCw",
+            "nonce": "2e6f882b-f57d-454e-8da8-18e4c58ad2ce"
         }
     ]
 }
 ```
-## "declaration"."type":"Vote"
-This is a reference to the data structure used in the assertionMethod subelement.
+## General Items
+The structure of this document is very similar to the one defined in [Participant](./Participant.md). Therefor similar elements will not be explained here.
 
-## "declaration"."assertionMethod"."id"
+## [declaration][i][type]
+The type of this declaration.
+
+## [declaration][i][account][address]
+Despite the case of the single particcipant, this organization bitcoin address is a multisig acount, that requires 2  of 3 signatures to spend.
+
+## [declaration][i][account][control]
+References the verificcation methods to be used by members to spend from this account. Corresponding members public keys are loccated in the declaration files that can be found derefencing the verification method ids.
+
+## [declaration][i][type]
+This is a reference to the data structure used in the assertionMethod subelement. In this case a Vote.
+
+## [declaration][i][assertionMethod][id]
 This is the identifiier of this assertion method. A declaration can contain many assertion methods.
 
-## "declaration"."assertionMethod"."member"
+## [declaration][i][assertionMethod][member]
 Members entries reference other participants (simple or organization) that can vote to the extend of shares they hold.
 
-## "declaration"."assertionMethod"."member"."shares"
+## [declaration][i][assertionMethod][member][shares]
 States the number of shares assigned to this member.
 
-### Validation Rule PTP0002
+### Validation Rule DIAL00101
 Shares value must be a natural number higher than zero.
 
-## "declaration"."assertionMethod"."quorum"
+## [declaration][i][assertionMethod][quorum]
 The quorum defines the number of shares needed for a valid assertion.
 
-### Validation Rule PTP0003
+### Validation Rule DIAL00102
 The quorum must be natural number higher zero and less or equals the total of shares listed in the member subelement.
 
-## "declaration"."service"
+## [declaration][i][service]
 A service record describes a service provided by an organization. In the case above, the validator exposes three PublisherServices and one LookupService.
 
-## "proof"
+## [proof]
 As the example above displays, the declaration of an organization must provide a valid assertion of each member.

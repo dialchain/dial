@@ -113,7 +113,7 @@ Declares an account associated with this declaration.
 DLT network hosting this account. For the case above, "org.bitcoin.production" is the main net of bitcoin.
 
 ## [declaration][i][account][address]
-The address of this account as known to the network. E.g. bc1qdnlhfq2jhll0ntsa36es6uxldczeu23q4cvqv8 is the P2PKH address of this accounnt in the bitcoin's mainnet.
+The address of this account as known to the network. E.g. bc1qdnlhfq2jhll0ntsa36es6uxldczeu23q4cvqv8 is the P2WPKH address of this accounnt in the bitcoin's mainnet.
 
 ## [declaration][i][account][control]
 Optional definition of rules cotroling operations on the enclosing account in the given network.
