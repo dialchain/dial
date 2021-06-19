@@ -1,15 +1,54 @@
 # Publication
 A publication is the act of a validator adding a file to a DialChain. For this purpose, a validator  must expose a publisher service.
 
-## Initial Self Publication of a Validator
-At the bootstraping of the DialChain, each validator will publish their own genesis reccord to the chain. This consists of:
+## Structure of a Publication
+The following file shows the template of a publication:
+```json
+{
+    "id": "mZGMyMzljMmItZWM2Yy00MjJjLWI2YTQtNjM0MTk5YzdhMzFm",
+    "type": "Publication",
+    "document": {
+        "id": "mYzRiZGIzMTItNmUxOC00ZDE1LThjNmYtMDgxYWE4YTY5Yzk1",
+        "type": "Declaration",
+        "declaration": [],
+        "proof": []
+    },
+    "twindow": {
+        "start": "2021-06-09T00:00:00Z",
+        "end": "2021-06-10T00:00:00Z",
+        "a_closing": "2021-06-08T00:00:00Z",
+        "a_hash": "S3DUV3H7G5MY3T3D75JQMWXAAAC4UHL4UBS2OJA2JLCCY6NRN4SVDP5HTZ7E54UXKIUMAFIIA6FQBUYEDTHUAFTNCD7WZN5T3DJZCSI",
+    },
+    "proof": [
+        {
+            "issuer": "mZjQwN2ZiMGMtMGQxMi00ZjQ3LWEwZDQtZmIwYzM0ODg4NzNm"
+        },
+        {
+            "issuer": "mZmRlNzEwMDgtZjQxMC00OTMwLTkyMWEtY2ZmMTdkN2RjMGIx"
+        }
+    ]
+}
+```
+### "type": "Publication"
+Indicates that this document is a publication.
 
-- The declaration record of all 3 nodes
-- The declaration record of the validator
+### "document"
+This is the document being published.
 
-We will therefore be dealing with four files per validators. These files will be exposed on a bootstrap server, exposed in the project source repository.
+### "document"."proof"
+Issuer of the document have their signature in the embedded "proof" block.
 
-The following file shows  the sample publication for one of the nodes.
+### "twindow"
+This indicates the twindow in which this document is published.
+
+#### "twindow"."a_hash"
+This is the hash of the anntecedant block. This is an attestation that the validator aggrees with the state of the antecedant block.
+
+### "proof"
+This block documents the signature of nodes of this validator. In the simplest case, 2 of 3 nodes have to sign each declaration for it to be considered valid by the network.
+
+## Sample Publications
+The following file shows the sample publication for one of the nodes.
 ```json
 {
     "id": "mZGMyMzljMmItZWM2Yy00MjJjLWI2YTQtNjM0MTk5YzdhMzFm",
@@ -88,7 +127,7 @@ The following file shows  the sample publication for one of the nodes.
 }
 ```
 
-The next file show the sample publication for the validator organization.
+The next file shows the sample publication for the validator organization.
 ```json
 {
     "id": "mNWVkYzJmYTAtNDcxNy00Y2MyLWJkY2MtZTAwMTJhNDYyZDc0",
@@ -224,3 +263,15 @@ The next file show the sample publication for the validator organization.
     ]
 }
 ```
+# Genesis Publications
+At the bootstraping of the DialChain, each validator will publish their own genesis record to the chain. Genesis records consist of consists of:
+
+- The declaration record of all 3 nodes
+- The declaration record of the validator
+- The declaration of the DIAL treasury
+
+These files will be exposed on a bootstrap server, exposed in the project source repository.
+
+Genesis files will not have antecedant hashes.
+
+## Dial Treasury
