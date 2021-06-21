@@ -123,7 +123,7 @@ The following json document displays the example of a simple declaration of orga
 }
 ```
 ## General Items
-The structure of this document is very similar to the one defined in [Participant](./Participant.md). Therefor similar elements will not be explained here.
+The structure of this document is very similar to the one defined in [Participant](./Participant.md). Therefore similar elements will not be explained here.
 
 ## [declaration][i][type]
 The type of this declaration.
