@@ -1,5 +1,5 @@
 # Participant
-A participant is the atomic unit of decision (Entity) in the DialChain. Each participant is represented by a deccentralized identifier.
+A participant is the atomic unit of decision (Entity) in the DialChain. Each participant is represented by a decentralized identifier.
 
 # Simple Participant
 A simple participant is one that can express a cryptographic signature. The following document shows the declaration of a simple participant record.

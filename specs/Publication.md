@@ -2,7 +2,15 @@
 A publication is the act of a validator adding a file to a DialChain. For this purpose, a validator  must expose a publisher service.
 
 ## Structure of a Publication
-The following file shows a genesis self publication of a validator.
+A publication contains a declaration file produced and signed by one or many other participants. The validator will:
+- make sure that declation submitted for publication do not conflict with the current state of the DialChain.
+- wrap file into a new file
+- add a publication proof to the file.
+
+The following json file displays a publication. Following element added to the file:
+- a twindow entry identifying the block in which the file is inserted
+- a proof sub element containing signature of the publishinng organization's validator node.
+
 ```json
 {
     "id": "mMDYzN2VjMzktMjhhOC00MjU5LWFkYmEtNGMwNTkzYTAyYmI1",
@@ -70,3 +78,4 @@ The list of identifiers included in he assertion method block represent the chai
 - the second entry mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#am-0 is tthe assertion mehod of the member entry
 - the thrid entry mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#key-0 is the corresponding verification method of the member entry. This directly references the public key used by the member to produce the proof.
 
+# Publisher Service
