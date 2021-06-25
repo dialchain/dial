@@ -5,24 +5,23 @@ A participant is the atomic unit of decision (Entity) in the DialChain. Each par
 A simple participant is one that can express a cryptographic signature. The following document shows the declaration of a simple participant record.
 ```json
 {
-    "id": "mZjliODYxNGMtNjJmYS00OTdiLWI4OTUtZWQ5NWM1NzkzYzk0",
     "type": "Declaration",
     "declaration": [
         {
             "type": "Participant",
-            "id": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5",
-            "created": "2021-06-16T20:39:15.429685Z",
+            "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
             "controller": [
-                "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5"
+                "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6"
             ],
             "account": [
                 {
                     "network": "org.bitcoin.production",
-                    "address": "bc1qdnlhfq2jhll0ntsa36es6uxldczeu23q4cvqv8",
+                    "address": "bc1qsnkmknavy85xqvya8p4hykpuwaf2kx77w402rq",
                     "control": {
                         "quorum": 1,
                         "verificationMethod": [
-                            "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-1"
+                            "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-1"
                         ]
                     }
                 }
@@ -30,54 +29,56 @@ A simple participant is one that can express a cryptographic signature. The foll
             "verificationMethod": [
                 {
                     "type": "Ed25519VerificationKey2021",
-                    "id": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-0",
-                    "publicKeyMultibase": "z8oVsDfgnTUwr2MRsLdcP7mGmezM6z1k9Js6ZGz9rRVXr"
+                    "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0",
+                    "publicKeyMultibase": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6"
                 },
                 {
                     "type": "Secp256k1VerificationKey2021",
-                    "id": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-1",
-                    "publicKeyMultibase": "z3GsP69NzBnAZg4W3WM5Dc5MYkn8rgSMi68bZ7dYVwiBPKvGW2r1CSvGm2Tp6MnYdroqayz5W9YzjzBeRoHwRXrAU"
+                    "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-1",
+                    "publicKeyMultibase": "z5NQ1z6E3S6rVbbfTWxT8VX4NUAYsD2Y6p9EMkZjdov4wEpoWXceM7vY5fZTdkPJt6kKEpVu9TLMExCqoCj1T5mT6"
                 }
             ],
             "assertionMethod": [
                 {
                     "type": "Signature",
-                    "id": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#am-0",
-                    "verificationMethod": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-0"
+                    "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#am-0",
+                    "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0"
                 }
             ]
         }
     ],
     "proof": [
         {
-            "document": "mZjliODYxNGMtNjJmYS00OTdiLWI4OTUtZWQ5NWM1NzkzYzk0",
-            "issuer": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5",
-            "created": "2021-06-16T20:39:15.429685Z",
+            "issuer": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
             "proofPurpose": "PoP",
             "type": "JcsBase64Ed25519Signature2021",
-            "verificationMethod": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-0",
-            "signatureValue": "F3ouXdRHl5xVDbuimXu1zNG3NUbzs5AIXWb9W1dZ8rz_eRY_9yfoANUEJ_nH_0-0CmaPxHYrNMHSafBWv4i5CA",
-            "nonce": "4c03739d-2840-4d2d-b7ff-920cb2f72d0a"
+            "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0",
+            "signatureValue": "NJlKbI7fqMzkm_PWpfd4jCPdVghxaH3gYw3tH22Ht29xen6DW0anTpsb_1Cw0lid37aEiDdte1SCbvc6BQsYAg",
+            "nonce": "43102c83-c20f-4e38-bfe0-b805bf54c6e2"
         },
         {
-            "document": "mZjliODYxNGMtNjJmYS00OTdiLWI4OTUtZWQ5NWM1NzkzYzk0",
-            "issuer": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5",
-            "created": "2021-06-16T20:39:15.429685Z",
+            "issuer": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
             "proofPurpose": "PoP",
             "type": "JcsBase64Secp256k1Signature2021",
-            "verificationMethod": "mMGY3ZmZkZmMtM2E5MS00MjM1LTg0MjQtZjBlYzNjODVhMDA5#2021-06-16T20:39:15.429685Z#key-1",
-            "signatureValue": "Zsux1wa3-d1U8EGoo6RYXUAhLAdUyrtS82hj-5WmEKdxZNuvgSVxL4otNkYQJ4vr9DJWSRLuiJFpZEipwhJVHQ",
-            "nonce": "4935aafa-395b-4362-9a3e-4c20a995ad2f"
+            "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-1",
+            "signatureValue": "b5yQFpG7wSD87PzO1cElBWx-IXKhS8Ad-s-cE2vBpUsRjFOm-fDakZ6rs5M1CFh-LPkmdEdCpsPKPHGTNp5Ptg",
+            "nonce": "097d3da2-95f8-47d3-8961-8fee21f7dd48"
         }
     ]
 }
 ```
 
-## [id]
-Identifier of __DIAL file__.
+## Content Identifier
+A declation is performed in a declaration file. A declaration file can contain many declarations. Each file is identified by it's ipfs content identifier (In this version: v1 raw sha256 base58). The v1 cid of the file above is.
+```json
+"B7NChg31x9cAYMU68RBZNG5opUkZJEVsxZfCSikWsGma3JM4KqMaZ3kyv67NNNf4pqv3bVPmJ2XLfKVTdehmd33gwqSt"
+```
+This content identifier will be used to reference the file in publications.
 
 ### Validation Rule DIAL00001:
-Each dial file has a unique identifier held in the top level element named __id__.
+Each dial file can be referenced using its content identifier.
 
 ## [type]
 Type of the dial file. In this case a declaration.
@@ -92,13 +93,19 @@ This top level element holds the list of declarations included in this DIAL file
 Defines a single decclaration entry.
 
 ## [declaration][i][type]
-Type of the declaration entry.
+Type of the declaration entry. In this case "Participant"
 
 ## [declaration][i][id]
 The unique identifier of the declaration. If this is a participant declaration, [id] will be the unique identifier of the participant. This shall be unique as the DialChain does not allow for duplicate declarations. A new declaratation with the same [id] is considered a modification of the existing declaration. 
 
+The id is always a public key in base58. The producer of this declaration mus innclude the corresponding verification method in the declaration file and a proof (signature) with the purpose "PoP", proving access to the corresponding private key.
+
+The key used produce the id of this declaration can (but must not be) the one later used to produce assertions.
+
 ### Validation Rule DIAL00003
-Each declaration ha a unique identifier. The submission of a new declaration carrying this same [id] is understood  by the network as a modification request. Validator will make sure modificator prooves conntrol of the document as defined by the controller block of the latest version of this declaration.
+Each declaration ha a unique identifier. The submission of a new declaration carrying this same [id] is understood  by the network as a modification request. Validator will make sure modificator proves conntrol of the document as defined by the controller block of the latest version of this declaration.
+
+If the producer of a declaration file can not prove possession of the corresponding private key, the declaration will be deemed invalide.
 
 ## [declaration][controller]
 Rules that authorize changes made on this declaration.
@@ -131,13 +138,13 @@ Declaration of public keys associated with this declaration. In this case public
 The producer of a verification method, must proove possession of the verification method inside the same  declaration file.
 
 ## [declaration][i][verificationMethod][type]
-Specifies how to use the declare verification method. For example: __Ed25519VerificationKey2021__ describes how to read and consume the ed25519 public key included in this block.
+Specifies how to use the declared verification method. For example: __Ed25519VerificationKey2021__ describes how to read and consume the ed25519 public key included in this sub element.
 
 ## [declaration][i][verificationMethod][id]
 Networkwide unique identifier used to reference this veriification method inside this declaration file and outside this declaration file.
 
 ### Valdidation Rule DIAL00006
-This identifier of a verification method must allways be prefixed with the identifier of the enclosing deccclaration entity (participant, validator, ...). Dereferencing the verificcation method identifier (string before the first #) returns the identifier of the enclosing declaration entiry.
+This identifier of a verification method must allways be prefixed with the identifier of the enclosing declaration entity (participant, validator, ...). Dereferencing the verificcation method identifier (string before the first #) returns the identifier of the enclosing declaration entiry.
 
 ## [declaration][i][verificationMethod][publicKeyMultibase]
 The multibase representation of the public key of this verificcation method.
@@ -155,10 +162,10 @@ Networkwide unique identifier used to reference this assertion method inside thi
 Reference to the verification method used to perform this assertion method.
 
 ## [proof]
-Collects proofs associated with declarations being submitted. For a simple participant declaration, the proof allows the validation of the declared  verificationMethod (or public key).
+Collects proofs associated with declarations being submitted.
 
 ## [proof][i][document]
-References the document subject of this proof. In this case the id of the ccontaining DIAL file.
+References the document subject of this proof. In this case the id of the containing DIAL file.
 
 ## [proof][i][issuer]
 Identifier of the declaration entity issuing this proof. In this case the id of the participant.

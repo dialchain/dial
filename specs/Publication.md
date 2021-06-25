@@ -9,73 +9,75 @@ A publication contains a declaration file produced and signed by one or many oth
 
 The following json file displays a publication. Following element added to the file:
 - a twindow entry identifying the block in which the file is inserted
-- a proof sub element containing signature of the publishinng organization's validator node.
+- a proof sub element containing the assertion of the publishinng organization (signature of validator nodes).
 
 ```json
 {
-    "id": "mMDYzN2VjMzktMjhhOC00MjU5LWFkYmEtNGMwNTkzYTAyYmI1",
     "type": "Publication",
-    "document": {
-        "id": "mODI4ZTFkMjAtY2NkMC00YjBjLWFjNjUtMDVjMzRkNTg4NGJm",
-        "type": "Declaration",
-        "declaration": [ "content of the organization declaration, including voting rules."],
-        "proof": ["assertions (signatures) of all members of the organization."]
-    },
-    "twindow": {
-        "start": "2021-06-20T00:00:00Z",
-        "end": "2021-06-21T00:00:00Z",
-        "missing": "a_closinng & a_hash are not available in the genesis records, as these are the first records."
-    },
+    "cid": [
+        "B7NCdnaDQvwipw4YLV58MHb1yCkW6rTamgwCXwVNHtqijxRroN6wDa86LG1myQCthekWsf3sNLJrU1M4YNa61hQXdYBz"
+    ],
     "proof": [
         {
-            "document": "mMDYzN2VjMzktMjhhOC00MjU5LWFkYmEtNGMwNTkzYTAyYmI1",
-            "issuer": "mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl",
-            "created": "2021-06-20T00:04:36.462561Z",
+            "issuer": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.457066Z",
             "type": "JcsBase64Ed25519Signature2021",
             "assertionMethod": [
-                "mNGI5YjBmNTgtODBmMy00NmQwLTk5YmMtNTUwNWI0MTJiZWJh#2021-06-20T00:04:31.742503Z#am-0",
-                "mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#am-0",
-                "mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#key-0"
+                "zGCPM1TZZdBTdH1LUrP1u38Y3L89wVj94Y8iBXCLEeMqZ#2021-06-24T21:36:03.422792Z#am-0",
+                "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#am-0"
             ],
-            "signatureValue": "QPtPQVqQmFJLaImsXe1QOZfStmcvP6NZ2N7cbIU35jSX2ShbFKcTu6vMnFeIZmv9r9JdOsacwQMzQwwq3WEeDg",
-            "nonce": "68dc7243-655c-4521-bdfb-6c6b83718981"
+            "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0",
+            "signatureValue": "nU81rjImBqm4sAilkHJbqWDZO8Hm0P_JviHQemr7jvhmSEcU6oOZTQN_WkZzmNhwXuIpP7Y0pO5Yo5vLio_sCg",
+            "nonce": "33019ed2-99a9-4feb-984b-adfcaf0b2b39"
         },
         {
-            "document": "mMDYzN2VjMzktMjhhOC00MjU5LWFkYmEtNGMwNTkzYTAyYmI1",
-            "issuer": "mNDA5MTVkNzMtZDU3Mi00YzgwLWI3OWEtMDFjZDI4NGNlNGU0",
-            "created": "2021-06-20T00:04:36.462561Z",
+            "issuer": "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt",
+            "created": "2021-06-24T21:36:03.457066Z",
             "type": "JcsBase64Ed25519Signature2021",
             "assertionMethod": [
-                "mNGI5YjBmNTgtODBmMy00NmQwLTk5YmMtNTUwNWI0MTJiZWJh#2021-06-20T00:04:31.742503Z#am-0",
-                "mNDA5MTVkNzMtZDU3Mi00YzgwLWI3OWEtMDFjZDI4NGNlNGU0#2021-06-20T00:04:31.731667Z#am-0",
-                "mNDA5MTVkNzMtZDU3Mi00YzgwLWI3OWEtMDFjZDI4NGNlNGU0#2021-06-20T00:04:31.731667Z#key-0"
+                "zGCPM1TZZdBTdH1LUrP1u38Y3L89wVj94Y8iBXCLEeMqZ#2021-06-24T21:36:03.422792Z#am-0",
+                "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#am-0"
             ],
-            "signatureValue": "mBv7BNpY9-ZD1thqglMmTK_oRu1MjXZ6GGxDe-T8UFto7Uki4soMoaFVIoeVEG3QcoCrjzltjot2B5J4OoVeBQ",
-            "nonce": "0ac6719e-fa3f-4a9d-bf9b-f4a069b7e612"
+            "verificationMethod": "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#key-0",
+            "signatureValue": "USD8oFoBTtIo4Js1EPGe7OohjE1FFJU0QMFR4MiBdvNxWBd7RNlK8qWIEKFoYTw86u8RfQXf-VaBzCMXtNOfDw",
+            "nonce": "41179231-bf1f-4399-827f-50b9ebaa61bf"
         }
     ]
 }
 ```
-## General Items
-The structure of this document is very similar to the one defined in [Participant](./Participant.md). Therefore similar elements will not be explained here.
+## Content Identifier
+```json
+"B7NCdGj9RF7x5AHWbMGPtPLtw4UDgVr4knpKb49Fa44vUUonFxiJCme5fouGyyn5cdjKi1Shwa53Rh2QWSXa4BH3cMTx"
+```
+
+## Publication File
+Each publication is a file, identified by its content identifier.
 
 ## [type]
-The DIAL file type. "Publicationn" means it indicates that this document is a publication.
+The DIAL file type. "Publication" means it indicates that this document is a publication.
 
-## [document]
-The declaration file is embedded in the document element of this publicattion file.
+## [cid]
+Reference to documents verified by this validator and part of this publication. A validator ca use a single publication to publish many unrelated declaration files.
 
 ## [twindow]
 This indicates the time window (block) in which this document is published. For the genesis publication, antecedant information are missing, as we are dealing with the first publication.
 
-## [proof]
-This element documents the signature of nodes of this validator. In the simplest case, 2 of 3 nodes have to sign each publication for it to be considered valid by other validators of the network.
+## [proof][i]
+A publication will be signed by 2 of 3 nodes of the same validator.
 
-## [proof][assertionMethod]
+## [proof][i][issuer]
+Identity of the node signing the publication.
+
+## [proof][i][created]
+Signature timestamp. This is an essential timestamp as it determines the time window (block) in which to put the publication. For this association, the timestamp of the youngest proof entry is used.
+
+## [proof][i][assertionMethod]
 The list of identifiers included in he assertion method block represent the chain of delegation:
 
-- the first entry mNGI5YjBmNTgtODBmMy00NmQwLTk5YmMtNTUwNWI0MTJiZWJh#2021-06-20T00:04:31.742503Z#am-0 representts the assertionn method of the signing organization.
-- the second entry mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#am-0 is tthe assertion mehod of the member entry
-- the thrid entry mY2VlZjZjOTItYzM5Yi00MzBlLTljMGMtMjI0MjZiMTY0Yzdl#2021-06-20T00:04:31.723188Z#key-0 is the corresponding verification method of the member entry. This directly references the public key used by the member to produce the proof.
+- the first entry "zGCPM1TZZdBTdH1LUrP1u38Y3L89wVj94Y8iBXCLEeMqZ#2021-06-24T21:36:03.422792Z#am-0" representts the assertionn method of the signing organization.
+- the second entry "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#am-0" is the assertion mehod of the signing member entry
+
+## [proof][i][verificationMethod]
+The verification method associated with the last assertion method entry in the list of assertionn methods. "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#key-0" is the corresponding verification method of the member entry. This directly references the public key used by the member to produce the proof.
 
 # Publisher Service

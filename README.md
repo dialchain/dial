@@ -35,11 +35,11 @@ In order to protect the DialChain, each validator can only guarantee publication
 
 The price paid by a participant to publish a declaration has a minimum cap, a file size factor and a validation effort factor. This price is generally substantial enough to have a significant impact on the wallet of a participant generating spammy declarations.
 
-These three factors (a) payment for intent request, (b) payment for publication and (c) limitation of publication coverage to the deposit of the validator’s deposit, all together constitute an effective spam resistance mechanism.
+These three factors (a) payment for intent request, (b) payment for publication and (c) limitation of publication coverage to the amount of the validator’s deposit, all together constitute an effective spam resistance mechanism.
 
 ## Sustainability Incentive
 Traditional blockchain networks do not reflect on the future cost of current operations. Most blockchain networks are built on the speculation that the appreciation of the underlying crypto currency will motivate miners (validators) to stay in business. This is a risky approach as:
-- This __appreciation theory__ does not give miners the necessary accounting tools to legally build provisions for the future maintenance of those files.
+- This __currency appreciation based theory__ does not give miners the necessary accounting tools to legally build provisions for the future maintenance of those files.
 - Letting a miner build a position in the miner's balance sheet does not prevent the miner from quitting when yield gets unattractive (due to increase of competition in the networks and among networks).
 - Further, the massive growth of the blockchain size (block history) might make the entrance of new validators economically unattractive.
 
