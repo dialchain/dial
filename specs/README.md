@@ -4,7 +4,7 @@
 This is a set of files documenting declarations. These files are grouped and chained together into blocks.
 
 ## DIAL Network
-The DIAL Network is a group of participants that all aggree on the same state of the DialChain. 
+The DIAL Network is a group of participants that all agree on the same state of the DialChain. 
 
 ## Participant
 A [participant](./Participant.md) is an entity that has a representation in the DialChain. A computer in the network, an app on the user's mobile phone can be seen as participants if they are given a unique identifier.
@@ -15,7 +15,7 @@ A participant asserts by the mean of generating digital signatures of some decla
 An organization is a participant composed out of other participants. The assertion of an organization is generally a member vote. Introducing the notion of an organization is essential to bridge the path to real word business cases.
 
 ## Validator Organization
-A [validator](Validator.md) is a organization that can publish entries to the log. DIAL requires each validator to have atleast 3 physically separated validator nodes. This way, the assertion of a validator allways contains two signatures.
+A [validator](Validator.md) is an organization that can publish entries to the log. DIAL requires each validator to have at least 3 physically separated validator nodes. This way, the assertion of a validator always contains two signatures.
 
 # DiD Method DIAL
 The DialChain borrows the schema design of [DiD Core](https://www.w3.org/TR/did-core/) to define its organizational structure.
@@ -24,14 +24,15 @@ The DialChain borrows the schema design of [DiD Core](https://www.w3.org/TR/did-
 A proof is the vehicle we use to document the signature of a declaration. A proof has the following structure:
 - It is a JWS detached signature
 - The signature payload is file content without the proof subelement.
-- The JWS protected header field will be the base64 encoded, canonicalize content of the __"proof"__ block without the __"signatureValue"__ element. 
+- The JWS protected header field will be the base64 encoded, canonicalized content of the __"proof"__ block without the __"signatureValue"__ element. 
 
-To produce a signature, 
-1- drop the proof subelement, cannonicalize the remaining json file, and compute the base64url encoded string to for the "payload" string.
-2- construct a proof object without the signatureValue, cannonicalize the json and use the base64url encoded string as "header" string.
+To produce a signature,
+
+- drop the proof subelement, canonicalize the remaining json file, and compute the base64 urlencoded string for the "payload" string.
+- construct a proof object without the signatureValue, canonicalize the json and use the base64 urlencoded string as "header" string.
 Use the provided private key to sign the String "header.payload"
 
-Do nnot add the alg to the header as signature algorithm is specified in "proof"."type" 
+Do not add the algorithm to the header as signature algorithm is specified in "proof"."type" 
 
 # Declaration
 A declaration is the principal element of the DialChain. Following sections introduce the generic schema of the DialChain:
@@ -103,7 +104,7 @@ The producer of a declaration will generally attach a signature to that declarat
     ]
 }
 ```
-This declarationn file can be found in the ipfs under the address 
+This declaration file can be found on the IPFS Network under the address 
 ```json
 "B7NCfE8n7A7h5jYzLRHyzwavpsraT3PogzSJx22P9JYcXMCBifMnbNTh4SaS1mJH76rtPBB3RLBjrw2sqeBPS1boHFsj"
 ```
@@ -147,6 +148,6 @@ A publication is the act of a validator signing the file and sharing with to ord
 ```
 Signatures production relies on the same principles as described above.
 1- Remove the proof block
-2- Produce a new proof and add to the list of proofs and put the proof block bacck into the document.
+2- Produce a new proof and add to the list of proofs and put the proof block back into the document.
 
-Publication only references the declaration file. This way many validators can paralelly publish the same declaration file, each as a proof they validated declarations included in the file.
+Publication only references the declaration file. This way many validators can simultaneously publish the same declaration file, each as a proof they validated declarations included in the file.
