@@ -2,7 +2,7 @@
 The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol__ (__DETOX__).
 
 # Abstract
-A declaration can only be published to the log by a validator. Each validator is responsible for declarations it publishes to the log. But because the effect of a declaration can conflict with the effect of another declaration, validation of declarations must be performed prior to their publication into the DialChain log.
+A declaration can only be published to the DialChain log by a validator. Each validator is responsible for declarations it publishes to the log. But because the effect of a declaration can conflict with the effect of another declaration, validation of declarations must be performed prior to their publication into the DialChain log.
 
 __Finality__ turns each declaration into an immutable assertion. Finality is achieved by ensuring that each published declaration is propagated to all validators within a defined time frame called __Time Window (Block)__. All declarations of a closed time window are final and non-conflicting with each other. 
 
@@ -90,7 +90,7 @@ The liquidity service of the DialChain is a service provided by the Dial Treasur
 In order to expose an external monetary asset to the Dial Network, the Dial Treasury creates an account with the asset realm. e.g.: The Dial Treasury will maintain a wallet in the Bitcoin Network.
 
 ### Depositing of Liquid-Assets
-If we take the BTC as an example, any participant will simply emit L-BTC by depositing corresponding BTC amount the Bitcoin wallet of the Dial Treasury. The purpose code of the transaction will reference the DialChain account of the depositing participant.
+If we take the BTC as an example, any participant will simply emit L-BTC by depositing corresponding BTC amount to the Bitcoin wallet of the Dial Treasury. The purpose code of the transaction will reference the DialChain account of the depositing participant.
 
 The participant will then have to:
 - monitor the Bitcoin network to make sure the transaction is in a block,
@@ -225,7 +225,7 @@ Rejoining the network, a validator will have to resign all entries missing in th
 # Proof of Guarantee Consensus (PoG)
 The PoG consensus is only needed for the current time window. After the time window is closed, all validators are unanimous on the state of all declarations inserted in the log.
 
-The PoG consensus allows the validator to cover the monetary value of validated declarations with an equivalent deposit. The validator deposit will be used repair damages caused by those validated declarations if at the closing of the time window conflicting declarations are discovered.
+The PoG consensus allows the validator to cover the monetary value of validated declarations with an equivalent deposit. The validator deposit will be used to repair damages caused by those validated declarations if at the closing of the time window conflicting declarations are discovered.
 
 During the current time window, a validator cannot cover for more than his own deposit. If a validator occurs to have exhausted his deposit inside a time window, that validator will have to delegate further publication requests to validators with available deposit. A single declaration can also be covered by many validators in case the declaration monetary value exceeds the capacity of a single declaration.
 

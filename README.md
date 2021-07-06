@@ -8,7 +8,7 @@ __Finality__ turns each declaration into an immutable assertion. Finality is ach
 
 The DialChain uses an __earth day__ to contain a block, meaning that one would have to wait for the end of the day to achieve finality. 
 
-Our __Proof of Guarantee__ consensus ensures that a validator, during the day will covers damages caused by its publication of a conflicting declaration. At the end of the day, any residual conflict is jointly covered by all validators.
+Our __Proof of Guarantee__ consensus ensures that a validator, during the day covers damages caused by its publication of a conflicting declaration. At the end of the day, any residual conflict is jointly covered by all validators.
 
 The DialChain is unique in its kind of offering an unlimited block size and a deterministic ordering and execution protocol. This might sound negligeable at first but will later be proven essential for the sustainability of blockchain networks and the adoption of blockchain technology by other industries.
 
@@ -18,9 +18,9 @@ More on the architecture of the DialChain can be found under [DialChain white pa
 The architecture of current blockchain technologies make them suitable for defined use cases, but unappropriated for others. The bitcoin network is for example a great settlement platform for transactions with high monetary value. Following is a non-exhaustive list of reasons why we are going for a new DialChain architecture:
 
 ## Deterministic Ordering of Transactions
-No transaction recording/execution system will work at scale, if it cannot provide a guarantee for the time of and order of execution of submitted transactions.
+No transaction recording/execution system will work at scale, if it cannot provide a guarantee for the time and order of execution of submitted transactions.
 
-Traditional market maker (banks, brokers, ...) are known to exploit existing asymmetry of information and thereby capitalize on arbitration opportunities.
+Traditional market makers (banks, brokers, ...) are known to exploit existing asymmetry of information and thereby capitalize on arbitration opportunities.
 
 Despite the decentralized nature of blockchain networks, we are still faced with the situation where a selected miner (or validator) decides on which transactions will be included into block being sealed. Leading to the phenomena known as MEV (Miner Extractable Value).
 
@@ -51,7 +51,7 @@ In the DialChain network, validators are responsible for declarations they verif
 Incremental validation is essential to have all validators validate all declarations by the end of the time window. For that purpose, validators also publish a synchronization hash every 10 minutes or on the request of another validator (Sealing what they have done so far).  
 
 A validator that fails to synchronize for 10 minutes will lose all revenue earned during those 10 minutes.
-If a validator fails to synchronize the las 10 minutes of a time window (because of a crash), all assertions known from that validator but not part of his last sync will be revalidated by other validators and a deterministic algorithm will accept 3 propositions. Those three will then collect the payment associated with those declarations.
+If a validator fails to synchronize the last 10 minutes of a time window (because of a crash), all assertions known from that validator but not part of his last sync will be revalidated by other validators and a deterministic algorithm will accept 3 propositions. Those three will then collect the payment associated with those declarations.
 
 ## Security of Validator Nodes
 The DialChain requires each validator to have following verifiable properties:
