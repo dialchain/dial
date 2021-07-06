@@ -1,7 +1,7 @@
 # Validator
-A validator is a form of organization supported in the dial chain.
+A validator is a form of organization supported in the DialChain.
 
-An organization is a participant that relies on the vote of it members (participants) for the production of declarations. Therefore, an organization assert with votes. 
+An organization is a participant that relies on the vote of its members (participants) for the production of declarations. Therefore, an organization assert with votes. 
 
 The following json document displays the example of a simple declaration of organization (that can be used by a validator).
 ```json
@@ -143,27 +143,27 @@ The cid of this organization declaration file is
 The structure of this document is very similar to the one defined in [Participant](./Participant.md). Therefore similar elements will not be explained here.
 
 ## [declaration][i][type]
-The type of this declaration. In this case "Organnization"
+The type of this declaration. In this case "Organization"
 
 ## [declaration][i][id]
-The unique identifier of this declaration. If this is ann organization declaration, [id] will be the unique identifier of the organization. This shall be unique as the DialChain does not allow for duplicate declarations. A new declaratation with the same [id] is considered a modification of the existing declaration. 
+The unique identifier of this declaration. If this is an organization declaration, [id] will be the unique identifier of the organization. This shall be unique as the DialChain does not allow for duplicate declarations. A new declaratation with the same [id] is considered a modification of the existing declaration. 
 
-The id is always a public key in base58. The producer of this declaration mus include the corresponding verification method in the declaration file and a proof (signature) with the purpose "PoP", proving access to the corresponding private key.
+The id is always a public key in base58. The producer of this declaration must include the corresponding verification method in the declaration file and a proof (signature) with the purpose "PoP", proving access to the corresponding private key.
 
 The key used produce the id of this declaration shall not be the one used by a member for proper assertions.
 
 ### Validation Rule DIAL00100
-Each declaration ha a unique identifier. The submission of a new declaration carrying this same [id] is understood  by the network as a modification request. Validator will make sure modificator proves conntrol of the document as defined by the controller block of the latest version of this declaration.
+Each declaration has a unique identifier. The submission of a new declaration carrying this same [id] is understood  by the network as a modification request. Validator will make sure modificator proves control of the document as defined by the controller block of the latest version of this declaration.
 
 If the producer of a declaration file can not prove possession of the corresponding private key, the declaration will be deemed invalide.
 
-The key used for an orginization identifier shall not be the same as a key used by a member. The correspondinng private key can destroyed after the production of the PoP proof as, futher modification of the declaration will be controlled by the assertionMethod block.
+The key used for an organization identifier shall not be the same as a key used by a member. The corresponding private key can be destroyed after the production of the PoP proof as, further modification of the declaration will be controlled by the assertionMethod block.
 
 ## [declaration][i][account][address]
 Despite the case of the single participant, this organization bitcoin address is a multisig acount, that requires 2  of 3 signatures to spend.
 
 ## [declaration][i][account][control]
-References the verificcation methods to be used by members to spend from this account. Corresponding members public keys are loccated in the declaration files that can be found derefencing the verification method ids.
+References the verification methods to be used by members to spend from this account. Corresponding members public keys are located in the declaration files that can be found derefencing the verification method ids.
 
 ## [declaration][i][type]
 This is a reference to the data structure used in the assertionMethod subelement. In this case a Vote.
@@ -172,7 +172,7 @@ This is a reference to the data structure used in the assertionMethod subelement
 This is the identifiier of this assertion method. A declaration can contain many assertion methods.
 
 ## [declaration][i][assertionMethod][member]
-Members entries references other participants (simple or organization) that can vote to the extend of shares they hold.
+Member entries reference other participants (simple or organization) that can vote to the extend of shares they hold.
 
 ## [declaration][i][assertionMethod][member][shares]
 States the number of shares assigned to this member.

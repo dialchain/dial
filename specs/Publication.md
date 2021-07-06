@@ -1,15 +1,15 @@
 # Publication
-A publication is the act of a validator adding a file to a DialChain. For this purpose, a validator  must expose a publisher service.
+A publication is the act of a validator adding a file to the DialChain log. For this purpose, a validator must expose a publisher service.
 
 ## Structure of a Publication
-A publication contains a declaration file produced and signed by one or many other participants. The validator will:
-- make sure that declation submitted for publication do not conflict with the current state of the DialChain.
+A publication contains a reference to a declaration file produced and signed by one or many other participants. The validator will:
+- make sure that declarations submitted for publication do not conflict with the current state of the DialChain.
 - wrap file into a new file
 - add a publication proof to the file.
 
 The following json file displays a publication. Following element added to the file:
 - a twindow entry identifying the block in which the file is inserted
-- a proof sub element containing the assertion of the publishinng organization (signature of validator nodes).
+- a proof sub element containing the assertion of the publishing organization (signature of validator nodes).
 
 ```json
 {
@@ -57,10 +57,10 @@ Each publication is a file, identified by its content identifier.
 The DIAL file type. "Publication" means it indicates that this document is a publication.
 
 ## [cid]
-Reference to documents verified by this validator and part of this publication. A validator ca use a single publication to publish many unrelated declaration files.
+Reference to documents verified by this validator and part of this publication. A validator can use a single publication to publish many unrelated declaration files.
 
 ## [twindow]
-This indicates the time window (block) in which this document is published. For the genesis publication, antecedant information are missing, as we are dealing with the first publication.
+This indicates the time window (block) in which this document is published. For the genesis publication, antecedent information are missing, as we are dealing with the first publication.
 
 ## [proof][i]
 A publication will be signed by 2 of 3 nodes of the same validator.
@@ -72,12 +72,12 @@ Identity of the node signing the publication.
 Signature timestamp. This is an essential timestamp as it determines the time window (block) in which to put the publication. For this association, the timestamp of the youngest proof entry is used.
 
 ## [proof][i][assertionMethod]
-The list of identifiers included in he assertion method block represent the chain of delegation:
+The list of identifiers included in the assertion method block represents the chain of delegation:
 
-- the first entry "zGCPM1TZZdBTdH1LUrP1u38Y3L89wVj94Y8iBXCLEeMqZ#2021-06-24T21:36:03.422792Z#am-0" representts the assertionn method of the signing organization.
-- the second entry "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#am-0" is the assertion mehod of the signing member entry
+- the first entry "zGCPM1TZZdBTdH1LUrP1u38Y3L89wVj94Y8iBXCLEeMqZ#2021-06-24T21:36:03.422792Z#am-0" represents the assertion method of the signing organization.
+- the second entry "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#am-0" is the assertion method of the signing member entry
 
 ## [proof][i][verificationMethod]
-The verification method associated with the last assertion method entry in the list of assertionn methods. "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#key-0" is the corresponding verification method of the member entry. This directly references the public key used by the member to produce the proof.
+The verification method associated with the last assertion method entry in the list of assertion methods. "zAo7AYWYkFH2cPfmfq4LEzwGk7UTJYePDbqGozztnK8Kt#2021-06-24T21:36:03.415619Z#key-0" is the corresponding verification method of the member entry. This directly references the public key used by the member to produce the proof.
 
 # Publisher Service
