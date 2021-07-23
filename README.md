@@ -82,11 +82,22 @@ Validator dominance cannot occur as:
 Beside structural modifications like the extension of the DialChain with additional functions, no other procedure of the DialChain requires voting or decision. When voting is required, all identified DialChain participants are eligible to vote (not only validators). A representative democracy will allow participants to delegate their vote to chain representatives that can carry the vote on their behaves.
 
 ## Double Spending
-A spending declaration is one that spends or reserves an amount held by the issuing participant. If the declaration is part of a closed block (time window), the earning participant can consider that declaration verified by all participants and final (assertion).
+All declarations in the DialChain are non fungible in that each declaration has a unnique identifier. Once existent, the modification of a declaration must obei the rules defined in the controller  block of that declaration. This way, there is no difference between an identity declaration and a coin declaration in the DialChain. Both are non fungible assets controlled by the controller block of each declaration.
 
-As our block time is an Earth Day (Time Window), earning participant might want to have a faster confirmation (in the next second). Against a lesser fee, earning participant can have a published transaction counter-validated by one or many other validators. This counter-validation will specify a coverage amount (ranging from the fees paid to the total transaction amount).
+### Spendingn a Coin
+Spending a coin occurs by the act of the current controller of the Coin declaration issuing a modificationn of the Coin declaration in which the new controller is the public key that now conntrols the coin.
 
-The DialChain validation logic requires declarations issued by the same participant to be chained. Allowing, while still inside the time window, for quick access to the last validator of a spending declaration inside the time window.
+### Transfering a Non Fungible Asset
+Any other non fungible asset with a representation in the DialChain can be transfered the same way the DialChain deals with coin transactions.
+
+### Checkinng agains Double Spending
+Checking against double spending is done by making sure  the a declaration can only be modified by the current controller. This can simply be done by making sure each declaration published is known to all participants. This is what hapens at the closing of a time window.
+
+As our block time is an __Earth Day (Time Window)__, earning participant might want to have a faster confirmation (in the next second). In order to allow for faster connfirmation of the publication:
+- Validator of a declaration will insure the declared monetary value of the declaration (Proof of Guaranty).
+- Against a lesser fee, earning participant can have a published transaction counter-validated by one or many other validators. This counter-validation will specify a coverage amount (ranging from the fees paid to the total transaction amount).
+- Our __NeighbourWatch (Neighbourhood Watch Protocol)__ makes sure each published declaration is known to a deterministic subset of validators right away. These validators are called Neighbours. A deterministic computation algorithm allow the validator to discover the closest neighbour of the declaration and spread the modification to them, get them couter check against eventual conflict that could arise innside the time winndow. This way, double spend can only occur if neighbours allow it to happen.
+
 
 ## Programmer Adoption
 The integration of the DialChain with existing business applications (like enterprise resource planning systems) is an essential goal toward the mass adoption of the DialChain. With this respect, the DialChain is built on the top of the simplest most use computer idioms like [JSON](https://datatracker.ietf.org/doc/html/rfc8259), [JWS](https://datatracker.ietf.org/doc/html/rfc7515), [DID Core](https://www.w3.org/TR/did-core/).
