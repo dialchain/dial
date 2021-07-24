@@ -1,11 +1,15 @@
 # DialChain White Paper
 
 # Abstract
-The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding state of __tokens__. Tokens can be used to represennt a digital coin, a person, an organization or even a physical building, in short everything addressable and therefore non fungible (__NFT__).
+The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding state of __tokens__. Tokens can be used to represent a digital coin, a person, an organization or even a physical building, in short everything addressable and therefore non fungible (__NFT__).
 
-The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__, despite it fully open and permissionless chraracter. This capability is achieved by accepting all valid declarations submited during a period of time (epoch or simplier time window). Instead of having a single validator building limited size blocks (PoW, PoS), the validators spread declarations into neighborhood small enough to ensure synchronous modifications of those declarations inside the current time window. The neighborhood consensus and guaranty protocol is sufficient to provide each declaration with an instant finality.
+The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submited during a period of time (a.k.a epoch or time window). 
 
-# Core Principle
+Instead of having a single validator building limited size blocks (PoW, PoS), DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token during the open time window. If the neigborhood can not achieve a __51%__ agreement over the state of a token, the next closest neigborhood is invited to covalidate that token. The process is repeated till a 51% consensus is achieved for any given declaration.
+
+After closing a time window, each nneiborhood produces and distribute an execution protocol. This is the merkel tree hash of all transactions validated by the neighborhood during that time window. With the protocol of each neigborhood, each validator can compute the time window hash that is the merkel tree hash of all neigborhood protocols and the hash of the precedent time window.
+
+# Core Principles
 A declaration is a formal or explicit and self contained statement or announcement. A declaration is used to create and modify tokens. For this purpose, each declaration exposes a controller property that defines modification rules of the referenced token.
 
 The purpose of the DialChain is to validate, legitimate and finalize declarations. This is done by applying following rules:
@@ -47,10 +51,10 @@ In order to leave, a validator just need to stop announcing itself for future ti
 After __24 tw__ of innactivity, a validator can submit a request to withdraw his validator deposit from the Dial treasury.
 
 # The Dial Economy
-Due to it open and permissionless character, the DialChain will need some sort of value generation system to keep controll on its environemnt and address spam and sustainability.
+Due to it open and permissionless character, the DialChain will need some sort of value generation system to address spam and sustainability.
 
 ## Value Generation
-Every single service performed by a service provider (e.g. validator) in the Dial network is paid for by the requestor of the service. The price of each service is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
+Every single service performed by a service provider (e.g. validator) in the Dial network is paid for by the requestor of that service. The price of each service is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
 
 ## Spam Resistance
 Spam is the main thread to open and permissionless architectures. The DialChain is built on top of a fundamental spam resistance system that makes sure the revenue generated from the publication of a single declaration is sufficient to cover present and future performance required to validate, maintain and retire that declaration.
@@ -59,10 +63,11 @@ In order to protect validators (or service provider in general), the DialChain r
 
 The price paid by a party to publish a declaration has a minimum cap, a file size factor and a validation effort factor. This price is generally substantial enough to have a significant impact on the wealth of the party generating spammy declarations.
 
-These three factors (a) payment for intent request, (b) payment for publication and (c) the validator registration constraint constitute an effective spam resistance mechanism.
+These three factors (a) payment for intent request, (b) payment for publication and (c) the validator registration constraint constitute together an effective spam resistance mechanism.
 
 ## Sustainability Incentive
 Traditional blockchain networks do not reflect on the future cost of current operations. Most blockchain networks are built on the speculation that the appreciation of the underlying crypto currency will motivate miners (validators) to stay in business. This is a risky approach as:
+
 - This __currency appreciation based theory__ does not give miners the necessary accounting tools to legally build provisions for the future maintenance of those files.
 - Letting a miner build a position in the miner's balance sheet does not prevent the miner from quitting when yield gets unattractive (due to increase of competition in the networks and among networks).
 - Further, the massive growth of the blockchain size (block history) might make the entrance of new validators economically unattractive.
@@ -80,16 +85,16 @@ The cost of maintaining those assets (log entries, currencies) is paid by the or
 # Monetary Policy
 The Dial native economy does not create money. The Dial economy relies on the capabilities of existing crypto networks like BTC and ETH to work. 
 
-### DialDAO
+## DialDAO
 The DialDAO is the external treasury of the Dial network operated on the Etherum network. The DialDAO is simple and has no governance. Deposit and withdrawal rules are defined an never change.
 
-### Liquid External Currencies
+## Liquid External Currencies
 Money emission occurs as counter value to deposited external currencies into the DialDAO. External currencies deposited into the DialChain are mapped aggainst their Dial internal __L-XXX__ counterparts (L-BTC, L-ETH, L-MATIC, ...).
 
-### Operation Currency
+## Operation Currency
 The DialChain will needs a currency to proceed with operations. At the beginning, the DialChain will be using L-BTC as the core operational currency. Service will then be paid in L-Satoshis.
 
-### Native Currency
+## Native Currency
 Dial will latter emit a native currency call DIAL whose value will be the mirror of external reserves held by the DialDAO. Therefore DIALs will be automatically produced and burned with the act of the DialDAO earning and spending external currencies.
 
 # Liquidity Service
@@ -97,10 +102,10 @@ The liquidity service of the DialChain is a service provided by the Dial treasur
 
 In order to expose an external monetary asset to the Dial network, the asset has to be transfered to the Dial treasury.
 
-### Depositing of Liquid-Assets
+## Depositing of Liquid-Assets
 If we take the BTC as an example, a participant will simply emit L-BTC by depositing corresponding BTC amount into the Dial treasury. The purpose code of that transaction will be a public key identical to the declaration to be submitted by that same participant to the Dial network. Once the declaration is processed in the Dial network, the corresponding token is under the controll of the entity holding the matching private key. In other words, the deposited asset exists in the Dial network as a token.
 
-### Breaking Down Liquid Assets
+## Breaking Down Liquid Assets
 In the DialChain, an L-BTC Coin can be broken down into 10 Million 10-Satoshis Coins. This will happen in a transaction in which the controller of the L-BTC token generates 10.000.001 declarations, the first one to kill the L-BTC (erasing the controller block) and the subsequent 10Mio declarations to activate each 10 statoshis coin generated. Once this declarations are published, the holder of those satoshis can start spending them in the network, e.g. using them to pay for services.
 
 If the breaking down of an L-BTC into 10 Mio satoshis exceeds the maximum file size, the controller of the L-BTC can consider taking an intermediary step. For example first breaking down the L-BTC into 1 coin of 90.000.000 satoshis and 1.000.000 coins of 10 satoshis. In this case the declaration file will contain only 1.000.002 files instead of 10.000.001 files.
@@ -109,10 +114,33 @@ Recall that each coin generated has a proper identifier (proper NFT). This will 
 
 The work of the validators of the break down declaration will consist in verifying that the conversion between 1 L-BTC and 10 Millions L-Satoshis is sound.
 
-### Bundling Coins
+## Bundling Coins
 As the publication of declaration files in the network are payable, it might be impractical to be using too many coins for large amount transactions. Using 500.000.000 declarations (spending each 1 satoshi) in a transaction that want to transfer 5 L-BTC might not work because of the file size. In some cases, the party holding too many small coins can bundle them by sending corresponding bundeling declarations to the network.
 
 A bundelling declaration might not be easy to validate, as each token in the declaration file might have to be validated in a different neighbourhood.
 
-### Withdrawal of Liquid-Assets
+## Withdrawal of Liquid-Assets
 To withdraw from the DialDAO, the controller of a token jsut need to publish a modification of the token including the indication of an externnal payment account (e.g. bitcoin address) and the new controller as the target address of the DialDAO . For each closed tw, after the tw hash is generated, the DialDAO will run through the tw files and transfer all whithdrawn token to corresponding external addresses.
+
+# Routers
+One goals of the DialChain is to achieve the broadest possible decentralization. This can only be achieved by keeping the DialChain simple, such as to allow for common devices like mobile phones or IOT devices to play the validator role and therefore participate to the Dial economy.
+
+Routers are Dial service providers that deploy simple communication infrastructure, that will allow network limited devices to act as first class citizen in the Dial network.
+
+## Sensorship Resitence
+Routers services will be simple enougth to allow for consumer grade home based computers with static ip addresses to be deployed and operated as routers. The operation of a router shall allow the owner to cover the cost of material and utility needed to operate the router. The service shall be simple enougth not to require special computer skill for the operation of router nodes.
+
+## Simple Relay
+Some routers will act as simple relay, allowing parties to exchange point to point messages with each other. Each message will off cource be associated with the corresponding payment. Payment collection and message delivery can be bundled into attomic transactions (atomic swap).
+
+## Gateway
+Some routers will play the role fo gateway for end user devices willing to participate to the validation protocoll. The gateway payment model will be negotiated between the gateway node and the end user device.
+
+## Registration
+Router can register their services with the network by submitting corresponding service declaration to the networt.
+
+# File Services
+These are the next enabling service for use in the Dial network. In order to keep validators simple, they are not required to maintain the whole state of the DialChain locally. The DialChain leverages the IPFS network to hold and maintain the history of the network. Files are generally referenced by their content identifiers, making them verifiable upon download.
+
+## Registration
+The DialChain will allow IPFS data nodes to register with the network as storage providers, providing their service and payment addrsses. The pricing policy for this service is left to the operator of the ipfs node.
