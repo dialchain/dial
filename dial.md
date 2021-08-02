@@ -3,14 +3,14 @@
 # Abstract
 The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding state of __tokens__. Tokens can be used to represent a digital coin, a person, an organization or even a physical building, in short everything addressable and therefore non fungible (__NFT__).
 
-The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submited during a period of time (a.k.a epoch or time window). 
+The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submitted during a period of time (a.k.a epoch or time window). 
 
-Instead of having a single validator building limited size blocks (PoW, PoS), DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token during the open time window. If the neigborhood can not achieve a __51%__ agreement over the state of a token, the next closest neigborhood is invited to covalidate that token. The process is repeated till a 51% consensus is achieved for any given declaration.
+Instead of having a single validator building limited size blocks (PoW, PoS), DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token during the open time window. If the neighborhood cannot achieve a __51%__ agreement over the state of a token, the next closest neighborhood is invited to co-validate that token. The process is repeated till a 51% consensus is achieved for any given token.
 
-After closing a time window, each nneiborhood produces and distribute an execution protocol. This is the merkel tree hash of all transactions validated by the neighborhood during that time window. With the protocol of each neigborhood, each validator can compute the time window hash that is the merkel tree hash of all neigborhood protocols and the hash of the precedent time window.
+After closing a time window, each neighborhood produces and distributes an execution protocol. This is the merkel tree hash of all declarations published by the neighborhood during that time window. With the protocol of each neighborhood, each validator can compute the time window hash that is the merkel tree hash of all neighborhood protocols and the hash of the precedent time window.
 
 # Core Principles
-A declaration is a formal or explicit and self contained statement or announcement. A declaration is used to create and modify tokens. For this purpose, each declaration exposes a controller property that defines modification rules of the referenced token.
+A declaration is a formal or explicit and self-contained statement or announcement. A declaration is used to create and modify tokens. For this purpose, each declaration exposes a controller property that defines modification rules of the referenced token.
 
 The purpose of the DialChain is to validate, legitimate and finalize declarations. This is done by applying following rules:
 - Anyone can submit a declaration to create a token. The declaration must present a unique identifier not yet in used in the DialChain. We use cryptographic public keys for this purpose.
@@ -18,31 +18,31 @@ The purpose of the DialChain is to validate, legitimate and finalize declaration
 - A DialChain validator upon reception of a declaration publication request,
   - proceeds with the formal validation of the declaration, then
   - proceeds with the verification of control rules (legitimation), then
-  - signs the declaration and drops it in the neiborhood responsible for that token in the current time window.
+  - signs the declaration and drops it in the neighborhood responsible for that token in the current time window.
 - In that neighborhood, all validators will:
-  - procced with the verification of controll rules (legitimation), then
+  - procced with the verification of control rules (legitimation), then
   - proceed each with the signature of the declaration, then
   - proceed with the distribution of the declaration to all other validators to achieve finality.
 
-After closing a time window __tw__, means during the course of the time window __tw+1__, validators of time window __tw__ will coordinate to produce the hash of the closed time window __tw__. The signature of this hash bei each involved validator is the proof of finality of all declarations submitted in that time window. Consensus is reached when __51%__ of validators of __tw__ sign the hash.
+After closing a time window __tw__, means during the course of the time window __tw+1__, validators of time window __tw__ will coordinate to produce the hash of the closed time window __tw__. The signature of this hash by each involved validator is the proof of finality of all declarations submitted in that time window. Consensus is reached when __51%__ of validators of __tw__ sign the hash.
 
 __Finality__ turns each declaration into an immutable assertion. Finality is achieved by ensuring that each published declaration is propagated to all validators within a defined time frame called __Time Window (Block)__. All declarations of a closed time window are final and non-conflicting with each other. The cryptographic hash of a time window is included in the computation of the hash of the next time window.
 
 The DialChain uses an __earth hour__ to contain a block, meaning that one would have to wait for the end of the hour to achieve finality. 
 
-Our __Ephemeral Neighborhoud Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighbourhood) responsible for that token during the open time window. This deterministic association of tokens to neighborhoods is essential to prevent conflicting modifications on the same token (double spending). A neighborhood is a small enougth group of validators to synchronize concurent modifications on a single token. Consensus is achieved inside the neighborhood with a __51%__ rule.
+Our __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators responsible for that token during the current open time window. This deterministic association of tokens to neighborhoods is essential to prevent conflicting modifications on the same token (double spending). A neighborhood is a small enougth group of validators to synchronize concurent modifications on a single token. Consensus is achieved inside the neighborhood with a __51%__ rule.
 
 # Validator
-Validators are entities responsible for the security of the network. Validators can join and leave the DialChain at will. Nevertheless, commitment to participate in the validation of a time window are binding. A validator must explicitly announce it's intention to validate for time window __tw__ with a declaration published in time window __tw-2__. Therefore, while __tw-2__ is being sealed during __tw-1__ all validators for __tw__ are known. The __neighborhood__ building process for __tw__ can also take place, as building process is contolled by a deterministic algorithm.
+Validators are entities responsible for the security of the network. Validators can join and leave the DialChain at will. Commitment to participate in the validation of a time window are binding. A validator must explicitly announce it's intention to validate for time window __tw__ with a declaration published in time window __tw-2__. Therefore, while __tw-2__ is being sealed during __tw-1__ all validators for __tw__ are known. The __neighborhood__ building process for __tw__ can also take place, as building process is controlled by a deterministic algorithm.
 
 ## Joining the Network
-Each validator is known to the network and is represented by a token whose declaration also contains the validator's service addresses. In order to join as a validator, it is sufficient to submit guaranty funds to the DialDao and send a __Validator Declaration__ to one or many existing validators.
+Each validator is known to the network and is represented by a token. The validator performance declaration must be renewed for every time window. The validator performance declaration contains the validator service addresses. In order to join as a validator, it is sufficient to submit guaranty funds to the DialDao and send a __Validator Declaration__ to one or many existing validators.
 
-A validator will generally need 3 time windows to get active.
-- In __tw-3__ the validator can submit it's declaration of existance. This will be validated and published with this time window.
-- During __tw-2__ the new validator announces it's intent to validate for __tw__, bei again submitting a declaration to the network (through an acctive validator).
-- During __tw-1__, after the hash of __tw-2__ is published, the neighborhood building process for __tw__ takes place. tw validators start preparing the field. Loading known identifiers that might be processed in that neighbourhood during tw. Collecting ip addresses of peer validators in the same neighborhood.
-- During __tw__ the validator is actively sent validation requests for token assigned to it's neighborhood.
+A validator will generally need three time windows to start performing.
+- In __tw-3__ the validator submits its declaration of existence. This will be validated and published with this time window.
+- During __tw-2__ the new validator announces its intent to validate for __tw__ by submitting a declaration to the network (through an active validator).
+- During __tw-1__, after the hash of __tw-2__ is published, the neighborhood building process for __tw__ takes place. __tw__ validators start preparing the field. Loading known identifiers that might be processed in that neighborhood during tw. Collecting ip addresses of peer validators in the same neighborhood.
+- During __tw__ the validator is actively sent validation requests for token assigned to its neighborhood.
 
 ## Leaving the Network
 In order to leave, a validator just need to stop announcing itself for future time windows. As the declaration of readiness for the validation in a time window muss occur actively, an innactive validator will never be a problem for the network.
