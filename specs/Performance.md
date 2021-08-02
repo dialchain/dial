@@ -1,10 +1,15 @@
 # Performance
-Performance is the act of providing a service in the Dial network. Well know services are:
-- Routers
-- Gateways
-- Validators
+Performance is the act of providing a service in the Dial network. Well known services are:
+- Relay Service provided by __Router Nodes__
+- Gateway Service provided by __Gateway Nodes__
+- Data Service provided by __Data Nodes__
+- Publishing Service provided by __Validator Node__
 
-Because of the permissionless nature of the DialChain, it is difficult to tell when a service provider join or leaves the network. Therefore, for some services, the Dial protocol will require service provider to pre-announce readyness for performance. We call this announcement a performance declaration. Performannce declarations are binding. E.g. in order for a validator to perform in time window __tw__, it needs to announce its readyness in time window __tw-2__.
+As we can notice in the naming, only Relay and Gateway services require permanent presence in the network. Those need static ip addresses so they can be permanently reachable by other network participants.
+
+Both data and validator nodes can rely on the the service of a Gateway Nodes to provide for reachability.
+
+Because of the permissionless nature of the DialChain, it is difficult to tell when a service provider join or leaves the network. Therefore, the Dial protocol requires service providers to pre-announce readyness for performance. We call this announcement a __Performance Declaration__. Performannce declarations are binding. E.g. in order for a service provider to perform in time window __tw__, it needs to publish its readyness in time window __tw-2__. This concept is essential for the stability of the network, as a participant consuming a service must rely on providers being available.
 
 The following file shows the structure of a performance declaration:
 
@@ -115,10 +120,10 @@ The following file shows the structure of a performance declaration:
 ```
 
 ## Identifier
-The declaration.id field references the participant publishing this declaration. Therefore, there is no need to have a controller rule in a performance declaration. The controller is automatically the controller of the participant with the same identifier.
+The declaration.id field references the participant issuing this declaration. Therefore, there is no need to have a controller rule in a performance declaration. The controller is automatically the controller of the participant with the same identifier.
 
 ## Service Records
-The performance declaration also exposes the sercice records, associated endpoints and corresponding authentication credentials (assertion method). A single service record has the following architecture:
+The performance declaration also exposes service records, associated endpoints and corresponding authentication credentials (assertion method). A single service record has the following architecture:
 ```json
 {
     "type": "PublisherService",
@@ -131,10 +136,10 @@ The performance declaration also exposes the sercice records, associated endpoin
 Indicate the type of service as decribed in the Dial type registry.
 
 ### serviceEndpoint
-This is the network endpoint receiving service calls on behalfe of the participant. The reason for registering many service endpoints is to increase availability. Those endpoint my be operated by routers and gateway services independent of the participant.
+This is the network endpoint receiving service calls on behalf of the participant. The reason for registering many service endpoints is to increase availability. Those endpoint my be operated by gateway services independent of the registering service provider.
 
 ## VerificationMethods and KeyAgreement
-A service record is only valid for a time window. It exposes an authentication and keyAgreement mechanisms solely associated with this record. Those two verification method will be forcefully regenerated for each new performance declaration, thus forcing key rotation.
+A service record is only valid for a time window. It exposes assertion and keyAgreement mechanisms solely associated with this record. Those two verification methods will be forcefully regenerated for each new performance declaration, thus forcing key rotation.
 
 ## Proof
-In this performance declaration, there are 2 PoP proofs justifying newly generated public keys and onne assertion proof of the cotoller of the participant declaration, that is also the controller of this performance declaration.
+In this performance declaration, there are 2 PoP proofs justifying newly generated public keys and one assertion proof of the cotoller of the participant declaration, as it is also the controller of this performance declaration.
