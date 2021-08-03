@@ -17,6 +17,9 @@ A neighborhood is a group of validators that are toghether responsible for the v
 - Provide for a natural scalability of the network. As the quantity of neighborhoods is not limited. The distance function used to map validator and token to neighborhoods guaranties a fair spreading of both token and validators across the network.
 - Provide a way of preventing MEV by making the association of token to neighborhoods unpredictable.
 
+The following picture illustrate the structure of a the ephemeral neighborhood protocol.
+![ENP](./img/enp.png?raw=true)
+
 ## Eligible Validators for a Time Window
 The list of validators eligible to validate declarations in time window __tw__ is known in advance during time window __tw-1__, as each validator of __tw__ must publish its performance declaration during __tw-2__.
 
