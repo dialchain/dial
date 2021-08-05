@@ -3,7 +3,7 @@
 # Abstract
 The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding state of __tokens__. Tokens can be used to represent a digital coin, a person, an organization or even a physical building, in short everything addressable and therefore non fungible (__NFT__).
 
-The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submitted during a period of time (a.k.a epoch or time window). 
+The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submitted during a period of time (a.k.a epoch or time window).
 
 Instead of having a single validator building limited size blocks (PoW, PoS), DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token during the open time window. If the neighborhood cannot achieve a __51%__ agreement over the state of a token, the next closest neighborhood is invited to co-validate that token. The process is repeated till a 51% consensus is achieved for any given token.
 

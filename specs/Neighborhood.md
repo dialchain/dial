@@ -5,7 +5,7 @@ The DialChain is a distributed log with the main purpose of turning each inserte
 
 A __time window__ is the laps of time in which all validators agree on the __state__ of every single __token__ maintained by the DialChain. Therefore when a time window is closed, we assume every token has a cosistent state across the network (all participants). To guaranty all participants see the same state, a time window closes with a __Twindow Hash__. This is the merkel tree of all declarations published during the target time window. A twindow is therefore known as aggreed upon when __51%__ of eligible validator publish that hash in the subsequent time window.
 
-For the moment, the length of a time window is set to one __Earth Hour__. This means a declaration published to the DialChain might need up to 2 hours to achieve finality. In order to provide for more instant finality, the DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token in a given time window. The ENP makes sur:
+For the moment, the length of a time window is set to one __Earth Hour__. This means a declaration published to the DialChain might need up to 2 hours to achieve finality. In order to provide for more instant finality, the DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token in a given time window. The ENP makes sure:
 - Eligible validators are assigned neigborhoods prior to the start of the time window.
 - Each declaration submitet for publication is also assigned to a single neighborhood during that time window.
 
