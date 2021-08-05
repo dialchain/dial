@@ -1,0 +1,36 @@
+{
+    "type": "Declaration",
+    "declaration": [
+        {
+            "type": "Dial",
+            "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
+            "controller": [
+                "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6"
+            ],
+            "value": 1
+        }
+    ],
+    "proof": [
+        {
+            "issuer": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
+            "proofPurpose": "PoP",
+            "type": "JcsBase64Ed25519Signature2021",
+            "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0",
+            "signatureValue": "NJlKbI7fqMzkm_PWpfd4jCPdVghxaH3gYw3tH22Ht29xen6DW0anTpsb_1Cw0lid37aEiDdte1SCbvc6BQsYAg",
+            "nonce": "43102c83-c20f-4e38-bfe0-b805bf54c6e2"
+        }
+    ],
+    "pow": [
+        {
+            "issuer": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "created": "2021-06-24T21:36:03.409110Z",
+            "proofPurpose": "CoinMining",
+            "type": "JcsBase64Sha256PoW2021",
+            "verificationMethod": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#2021-06-24T21:36:03.409110Z#key-0",
+            "hash256": "00000000000fd4jCPdVghxaH3gYw3tH22Ht29xen6DW0anTpsb_1Cw0lid37aEiDdte1SCbvc6BQsYAg",
+            "nonce": "434352-c20f-4e38-4354-b805bf54c6e2"
+        }
+    ]
+}
