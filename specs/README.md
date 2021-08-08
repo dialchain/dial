@@ -1,43 +1,60 @@
 # Specs
+The dial network is a permissionless network made out of tokens. Everything in the dial network (participants, assets, protocols) is represented with a token.
 
-## DialChain
-This is a set of files documenting declarations. These files are grouped and chained together into blocks.
+# Token
+A [token](./Token.md) is a unit of existance in the dial network. Each token has an identifier. The following schema is the most simplified type of a token:
+```json
+{
+    "type": "Declaration",
+    "declaration": [
+        {
+            "type": "token-type",
+            "id": "token-id",
+        }
+    ]
+}
+```
+The id of an active token is unique among all active tokenn in the network. The id of an expired token can be reused.
 
-## DIAL Network
-The DIAL Network is a group of participants that all agree on the same state of the DialChain. 
+# Entities
+An entity is a unit of interaction. An entity can therefore produce assertions.
+
+## Verification Method
+The simplest form of an entity is a verification method. This is a public key, enhanced with the indication of key algorithm associated with the key. Bellow is the example of a standalone verification method:
+```json
+{
+    "type": "Ed25519VerificationKey2021",
+    "publicKeyMultibase": "z4DiXDE9t44qkq6uGmrhwWZHsTFofqmaKvuTWq687UawA"
+}
+```
 
 ## Participant
-A [participant](./Participant.md) is an entity that has a representation in the DialChain. A computer in the network, an app on the user's mobile phone can be seen as participants if they are given a unique identifier.
+A [participant](./Participant.md) is an entity that has a representation in the dial network. A computer in the network, an app on the user's mobile phone can be seen as participants if they are given a unique identifier. A participant asserts by the mean of generating digital signatures of some declarations. A participant decalaration is used to list verification and assertion methods exposed by the participant.
 
-A participant asserts by the mean of generating digital signatures of some declarations.
+## Validator
+A [validator](./Validator.md) is an active participant that takes the duty of validating declarations sent by other participants to the network.
 
 ## Organization
-An organization is a participant composed out of other participants. The assertion of an organization is generally a member vote. Introducing the notion of an organization is essential to bridge the path to real word business cases.
-
-## Validator Organization
-A [validator](Validator.md) is an organization that can publish entries to the log. DIAL requires each validator to have at least 3 physically separated validator nodes. This way, the assertion of a validator always contains two signatures.
+An [organization](./Organization.md) is a participant composed out of other participants which act as members. The assertion of an organization is generally a member's vote. Introducing the notion of an organization is essential to bridge the path to real word business cases.
 
 # DiD Method DIAL
-The DialChain borrows the schema design of [DiD Core](https://www.w3.org/TR/did-core/) to define its organizational structure.
+The dial chain borrows the schema design of [DiD Core](https://www.w3.org/TR/did-core/) to define organizational structures.
 
 # Proof
 A proof is the vehicle we use to document the signature of a declaration. A proof has the following structure:
 - It is a JWS detached signature
-- The signature payload is file content without the proof subelement.
+- The signature payload is a file content without the proof subelement.
 - The JWS protected header field will be the base64 encoded, canonicalized content of the __"proof"__ block without the __"signatureValue"__ element. 
 
-To produce a signature,
-
-- drop the proof subelement, canonicalize the remaining json file, and compute the base64 urlencoded string for the "payload" string.
-- construct a proof object without the signatureValue, canonicalize the json and use the base64 urlencoded string as "header" string.
-Use the provided private key to sign the String "header.payload"
+To produce a signature, (1) drop the proof subelement, (2) canonicalize the remaining json file, and (3) compute the base64 urlencoded string for the "payload" string. (4) Construct a proof object without the signatureValue, (5) canonicalize the json and use the base64 urlencoded string as "header" string.
+(6) Use the provided private key to sign the String "header.payload"
 
 Do not add the algorithm to the header as signature algorithm is specified in "proof"."type" 
 
 # Declaration
-A declaration is the principal element of the DialChain. Following sections introduce the generic schema of the DialChain:
+A declaration is the principal element of the dial chain. Following sections introduce the generic schema of a declaration:
 
-The producer of a declaration will generally attach a signature to that declaration. As the proof is not part of the signed payload, many signers can parallely provide signatures to be embedded into that declaration file. This means we can use a tool to produce a declaration, send it to legitimate signers. Each signer can return the signature, and we will merge all signatures into the multisigned declaration file.
+The producer of a declaration must attach a signature to that declaration. As the proof is not part of the signed payload, many signers can parallely provide signatures to be embedded into that declaration file. This means we can use a tool to produce a declaration, send it to legitimate signers. Each signer can return the signature, and we will aggregate all signatures into the multisigned declaration file.
 ```json
 {
     "type": "Declaration",
@@ -104,7 +121,7 @@ The producer of a declaration will generally attach a signature to that declarat
     ]
 }
 ```
-This declaration file can be found on the IPFS Network under the address 
+This declaration files is immutable and can be found on the IPFS Network under the content address 
 ```json
 "B7NCfE8n7A7h5jYzLRHyzwavpsraT3PogzSJx22P9JYcXMCBifMnbNTh4SaS1mJH76rtPBB3RLBjrw2sqeBPS1boHFsj"
 ```
@@ -146,8 +163,12 @@ A publication is the act of a validator signing the file and sharing with to ord
     ]
 }
 ```
-Signatures production relies on the same principles as described above.
-1- Remove the proof block
-2- Produce a new proof and add to the list of proofs and put the proof block back into the document.
+Signatures production relies on the same principles as described above. (1) Remove the proof block,
+ (2) Produce a new proof and (3) add the new proof to the list of proofs and put the proof block back into the document.
 
-Publication only references the declaration file. This way many validators can simultaneously publish the same declaration file, each as a proof they validated declarations included in the file.
+A publication file is mutable, as it can be updated with validator signatures as they are provided. The actual version of the publication must be store under the ipns address of the declaration's identifier (public key identifying the declaration).
+
+# Contoller
+The controller of a declaration is the entity authorized to change the declaration. A controller can be a simple verification method, a participant or an organization identifier.
+
+The controller block of a __Constrained Tokens__ provide the network with the possibility of constraining the exchange of that token. (1) the authenticated witness protocol requires the (new) controller of a token to provide an offchain proof of identification, while staying anonymous onchain, (2) time lock contracts will delay the time to change control of the enclosing token, (3) hash locked contracts will allow the designated participant to control the enclosing token if it presents the seed of the given hash, (4) combination thereof might also be applied to constrain token disposition.
