@@ -33,7 +33,7 @@ __Token State Protocol__: this is the certified ordered list of the last declara
 __Fraud Report__: this is a file containing the ordered list of submited declarations that where juged fraudulent by the validator.
 
 ## Neighborhood Hash
-Finality is defined at a token level. Each token that appears in 6 of 11 protocols and does not appear in any fraud protoccol is considered valid. The hash of the ordered list of all valid tokens (token-id + file ccontent identifier) contitute the final __Neighborhood Hash__ of the neighborhood. This hash can be computed by any participant with access to all 11 neighborhood protocols.
+Finality is defined at a token level. Each token that appears in 6 of 11 protocols and does not appear in any fraud protoccol is considered valid. The hash of the ordered list of all valid tokens (token-id + file ccontent identifier) contitute the final __Neighborhood Hash__ of the neighborhood. This hash can be computed by any participant with access to all 11 neighborhood protocols. The hash is generally computed by data services and store for commercial redistribution.
 
 ## Time Window Hash
 The time window hash is the sha256 hash of the ordered list of all neighborhood hashes. The time window hash of tw-2 is used a __anchor__ for time window __tw__.
