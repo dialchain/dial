@@ -1,80 +1,55 @@
-# Distributed Immutable Assertions Log (DIAL)
-The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding __state of tokens__. Tokens can be used to represent digital assets, people, organizations or even real estates, in short everything addressable and therefore tokens are non fungible.
+# Distributed Immutable Assertions Log (dial)
+## Abstract
+The dial chain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The dial chain can be seen as a log holding __state of tokens__. Tokens can be used to represent digital assets, people, organizations or even real estates, in short everything addressable.
 
-A __time window__ is the lapse of time in which all eligible validators agree on the __state__ of every single __token__ maintained by the Dial network. After a time window is closed, the Dial protoccol assumes every token has a cosistent state across the network (all participants). To guaranty all participants see the same state, a time window closes with a __time window hash__. This is the hash of the state of all non expired tokens existent in the network. This hash is build in two steps: (1) __the neighborhood hash__ documents the state of all tokens maintained by the neighborhood in the target time window. For each token, the token-id and the file content identifier is included. (2) __the time window hash__ is the hash of all neighborhood hashes for that time window. For each neighborhood hash, the neighborhood-hash-id and the neighborhood protocol file content identifier (cid). The resulting file is the time window protocol. The time window protocol is independently signed and published by each neighborhood. The final protocol is the one identical for __51%__ of neighborhoods, as each neighborhood has a __51%__ decision rule. A validator consents with the state of the network by including the hash of the time window __tw-2__ in each publication of time window __tw__.
+A __time window__ is the lapse of time in which there is a deterministic partitioning of tokens and validators into __neighborhoods__. Partitioning is achieved by calculating the distance of each validator (resp. Token) to the __time window anchor__.
 
-__Eligible validators__ are the one listed for the target time window. The DialChain is designed to allow __11__ validators per neighborhood. The list of eligible validators for a given time window is always known in advance, as validator must register intention to perform in time winndow __tw__ two time windows in advance __tw-2__.
+This __Ephemeral Neighborhood Protocol (ENP)__ secures the unpredictable but deterministic assocciation between validators and tokens in any given time window, hereby preventing validators from extracting additional value from their priviledged role of validator. The following picture displays a 2 dimentional example of a time window.
 
-__Closing__ time window tw occurs during time window tw+1. Closing operations are performed by eligible validators of tw during tw+1. The duration of a time window is __one Earth Hour__. This means a declaration published to the DialChain might need up to 2 earth hours to achieve finality.
+![ENP](./img/../specs/img/dial-ENP2.png?raw=true&width=5)
 
-__Instant Finality__ is nevetheless provided by the DialChain's __Ephemeral Neighborhood Protocol (ENP)__. ENP secures a deterministic association between each token and a small group of validators (neighborhood) responsible for the guarding of that token in a given time window. This way double spending can only occur with the complicity of all those validators in the host neighborhood. If one validator of the neighborhood has a fraud proof, it can spread a fraud declaration through the neighborhood and the next closes neigborhood. A participant willing to assume finality can request the validity proof from all validators of the target neighborhood. If __at least one of the validators__ returns a fraud declaration, finality shall not be assumed. If all active validators returns a validity proof, finality can be assumed. In presence of a fraud proof, participant must wait for the closing of the time window to check finality.
+In the picture above,
+- The red dot is the anchor of the target time window. This is generally the hash of time window (tw-2).
+- Black dots are eligible validators. These are validators registered for performance during time window (tw). Registration takes place in time window tw-2.
+- Blue dots are tokens. Each declaration creating or modifying a token is automatically assigned to a neighborhood (partition) by computing the distance of the token-id to the time window anchor.
 
-__Speed of Validation__ occurs by making sure all eligible validators in a neighborhood have the same state of assigned tokens, prior to starting the time window. If less than 51% of eligible validators of a neighborhood are present at any moment during the time window, declaration is also validated by the next closest neighborhood.
+## Core Principles
+__Instant Finality__ is provided as the __Ephemeral Neighborhood Protocol (ENP)__ defines a small enougth set of validators to take care of each token during the open time window. Double spending can only occur with the complicity of all validators of the host neighborhood. One good validator is sufficient to prevent double spending. A participant receiving a positive result from all validators of a neighborhood can assume finality.
 
-The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. This might sound negligeable at first but will later be proven essential for the sustainability of blockchain networks and the adoption of blockchain technology by other industries. __Unlimited blocksize__ is by no mean an obstacle to scalability, as the DialChain is designed to allow each participant (e.g. mobile phone) to act as a validator. While growing demand for publications will automatically lead to a growing number of validators, ENP will automatically grow the number of neighborhoods as number of validators grow.
+__Organic Scalability__ is provided. As (1) the dial chain is designed to allow each participant (e.g mobile phone) to perform the duty of a validator, (2) growing number of end users leads to a growing number of validators, (3) growing number of validators leads to a growinng number of neighborhoods.
 
-__The Maximal Number of Validators__ eligible for a time window will highly depend on the number of tokens maintained by the DialChain and the frequency of of publication request to the network. By controlling the number validators, the DialChain will make sure post window coordination and synchronization operations are kept efficient.
+__Unlimited Blocksize__ is provided as all declarations submited for publication during a given time window are validated and included into the time window protocol.
 
-__File Size of the DialChain__ will also be kept down to the essential by enforcing token expiration. In order to keep maintenance reasonable, the Dialchain is built on the principel that each token is fully represented by the last valid declaration. This way, there is no need to include the history of a token in the validation process. Beside having a single file represent each token, the price paid to maintain a token on the DialChain is a factor of the expiration of the token. Enforcing expiration of each token allows the DialChain to constantly prune the chain.
+__DETerministic Ordering of EXecution (DETOX)__ is essential for the adoption of blockchain by other industries. As no transaction recording/execution system will work at scale, if it cannot provide a guarantee for the time and order of execution of submitted transactions.
 
-More on the architecture of the DialChain can be found under [DialChain white paper](./dial.md)
+__Spam Resistance__ is provided despite the open and permissionless character of the dial chain. Participants are registered with the system using a __Time Degarding Proof of Work Protocol__. According to this protocol, (1) all requests sent to the dial network are associated with a payment. (2) Curency needed to perform payment (service currency) is self generated by each participant and constrained in it usage. (3) Initial generation of service currency is associated with difficult proof of work. (4) As participant built reputation, less difficulty is required for the proof of work needed to generate service currency. Currency earned by network service providers is subsequently free of usage accross the network.
 
-# Rationales
-The architecture of current blockchain technologies make them suitable for defined use cases, but unappropriate for others. The bitcoin network is for example a great settlement platform for transactions with high monetary value. Following is a non-exhaustive list of reasons why we are going for a new DialChain architecture:
+__Optimistic Consensus Mechanism__ allows for less synchronization among nodes, as we assume each participant has an interest of behaving honest. The reputation built by a participant for spam resitance has a monetary value as (1) it entitles the participant to generate new dial coins without tremendous proof of work, (2) it provides the participant with reputation needed to act as a validator and therefore earn from services provided to the network. A participant attempting to double spend will destroy its reputation as the assets and account of the participant will (1) be liquidated to cover the damage, (2) the rest automaticaly frozen by the network and made unusable (burned).
 
-## Deterministic Ordering of Transactions
-No transaction recording/execution system will work at scale, if it cannot provide a guarantee for the time and order of execution of submitted transactions.
+__Constrained Tokens__ provide the network with the possibility of constraining the exchange of some tokens. (1) the authenticated withness protocol will require the (new) controller of a token to provide an offchain proof of identification, while staying anonymous onchain. (2) time lock contracts will delay the time to change control of the enclosing token. (3) hash locked contracts will allow the designated participant to control the enclosing token if it presents the seed of the given hash, (4) combination thereof might also be applied to constrain token disposition.
 
-Traditional market makers (banks, brokers, ...) are known to exploit existing asymmetry of information and thereby capitalize on arbitration opportunities.
+__History File Size__ is kept low as only active tokens are included into the validation process. A token is active if (1) the token has a controller and (2) is not expired. While preparing for the performance of a time window, a dial validator only needs to collect and index active tokens associated with the target neighborhood. Therefore the more neighborhoods we have, the less files are needed by each validator for the performance in a time window.
 
-Despite the decentralized nature of blockchain networks, we are still faced with the situation where a selected miner (or validator) decides on which transactions will be included into block being sealed. Leading to the phenomena known as MEV (Miner Extractable Value).
+__Sustainability Incentive__ is provided as reserves needed to maintain a token during their given lifetime are collected from the issuing participant with the publication of corresponding declarations. The collected revenue is held in the dial treasury and distributed to validators for each hour of relevance of the concerned token.
 
-Our __DETOX__ guarantees that a submitted declaration will be included within the requested time frame.
+## Monetary Policy
+The dial coin is the utility currency used in the dial network. The dial coin emmission process follows two steps: 
 
-## Spam Resistance
-The DialChain is open and permissionless, but built on top of a fundamental spam resistance system that makes sure performance of DialChain service providers are remunerated. The same system ensures revenue generated from the publication of a single declaration is sufficient to cover present and future performance required to validate, maintain and retire that the underlying token.
+(1) Participants to the dial network perform proof of work to generate time and space limited __dial Service Coins__ that can only be used to pay for fundamental dial services on the dial network for the given period of time. dial service coins expires when not consumed in the given period of time.
+(2) By earning __dial Service Coins__, dial network service providers tranform them into __dial coins__. These coins are then put into the free market by those service providers.
 
-The price paid by a participant to publish a declaration has a minimum cap, a file size factor and a validation effort factor. This price is set substantial enough to have a significant impact on the wallet of a participant generating spammy declarations.
+As the generation of dial coins is bound to participants effectively consuming dial network services, there is no need to put a cap on the number of dial coins that can be produced. There is also no intent on inflating the value of the dial by inducing scarecity, as the main purpose of the Dail is to empower the service economy in the dial network. The amount of dial in circulation at all time is a mapping of the volume of fundamental services provided by the dial network.
 
-## Sustainability Incentive
-Traditional blockchain networks do not reflect on the future cost of current operations. Most blockchain networks are built on the speculation that the appreciation of the underlying crypto currency will motivate miners (validators) to stay in business. This is a risky approach as:
-- This __currency appreciation based theory__ does not give miners the necessary accounting tools to legally build provisions for the future maintenance of those files.
-- Letting a miner build a position in the miner's balance sheet does not prevent the miner from quitting when yield gets unattractive (due to increase of competition in the network and among networks).
-- Further, the massive growth of the blockchain file size (block history) might make the entrance of new validators economically unattractive.
+## Fundamental Network Services
+Fundamental network services are the one whithout which the dial network won't be able to function as intended. All fundamental dial network services are permissionless and can be operated by any participant of the dial network. They are:
 
-As the DialChain does not plan with future appreciation of the DIAL, reserves needed to maintain a declaration during the lifetime of that declaration is collected from the issuing participant with the publication of that declaration. The collected revenue is held in the DIAL Treasury and distributed to validators for each hour of relevance of the concerned record.
+__Relay Services__: allow two dial participants with limited inbound internet capabilities to exchange messages. This relay service is fundamental to the dial network philosophy as it allows dial participants implement peer to peer messaging. The relay service offers following functions:
+- post(url): allow a dial participant to deposit a data packet for collection by another participant. Data expire by default in 48 hours.
+- get(url): allow a participant to collect a data packet. Returns an empty string if no data is available.
+- delete(url): allow a participant to delete a data packet.
 
-## Validator Diversification
-Because of the simplicity of the no-racing validation protocol, operating validator node:
-- will not require special hardware components (like ASICS)
-- will not require unusual data center skills
+__Gateway Services__: allow a participant to expose static internet addresses to which messages can be sent. If a participant (e.g. mobile phone) want to play the role of a validator, this participant will have to register with a gateway service and have incomming messages sent to that gateway. The participant then maintains a communication relation with the gateway that allows the participant to read those incoming messages in near real time. The nature of the communication relationship between the participant and the gateway service is an implementation detail (websocket, cloud messaging, long poll, ...).
 
-In short, the DialChain is designed simple enought to allow each mobile phone to play the role of a validator. This simplicity shall lead to the largest spreading of validators around the world. The larger the validator base, the stronger the security of the network.
+__Data services__: are node holding the state of the dial chain. They use the IPFS protocol semantic to address files and can build on top of the IPFS network. A participant willing to act as a validator does not need to hold the full state of the dial chain, but only part of data needed to guard qualified tokens during the given time window.
 
-## No Validator Dominance
-Validator dominance cannot occur as assignment of validators and declarations to neighborhoods occurs in a deterministic but unpredictable manner. In order for a validator to corupt the system, the validator has to controll more than half of the validators of a neighborhood and be lucky enougth to have the target token assigned to that neighborhood in the given time window.
-
-An even if corruption occurs during the time window, counter validation at window closing will detect the flaw and discard the transaction.
-
-## Double Spending
-All token in the DialChain are non fungible in that each token has a unnique identifier. Once existent, the modification of a token must obei the rules defined in the controller block of the corresponding declarationn. As the Dial protocol uses the token id to determine the neighborhood controlling the token in the open time window, there is no way a token can be modified in parallel by two conflicting declarations.
-
-## Programmer Adoption
-The integration of the DialChain with existing business applications (like enterprise resource planning systems) is an essential goal toward the mass adoption of the DialChain. With this respect, the DialChain is built on the top of the simplest most use computer idioms like [JSON](https://datatracker.ietf.org/doc/html/rfc8259), [JWS](https://datatracker.ietf.org/doc/html/rfc7515), [DID Core](https://www.w3.org/TR/did-core/).
-
-The DialChain will later introduce TypeScript based code automates to allow for programable declarations.
-
-# Core Principles
-A declaration is a formal or explicit and self-contained statement or announcement. A declaration is used to create and modify tokens. For this purpose, each declaration exposes a controller property that defines modification rules of the referenced token.
-
-The purpose of the DialChain is to validate, legitimate and finalize declarations. This is done by applying following rules:
-- Anyone can submit a declaration to create a token. The declaration must present a unique identifier not yet in used in the DialChain. We use cryptographic public keys for this purpose.
-- Only the controller of a token can modify that token. Modification is done by submitting a declaration bearing the target token identifier and a valid assertion of the controller of that target token.
-- In a DialChain neighborhood upon reception of a declaration publication request, each validator of the neighborhood:
-  - proceeds with the formal validation of the declaration, then
-  - proceeds with the verification of control rules (legitimation), then
-  - proceeds with the signature of the declaration, then
-  - proceeds with the distribution of the declaration to all other validators in the n.
-
-After closing a time window __tw__, means during the course of the time window __tw+1__, validators of time window __tw__ coordinate to produce the hash of each neighborhood and then the hash of the closed time window __tw__. Finality is achived when 51% of neighborhoods present the same natwork protocol, containing all neighborhood protocols. Each neighborhood protocol containing a 51% vote of the neighborhood protocol.
-
+__Validator Services__: are fundamental to the dial network security, as they have the duty of guarding tokens maintained by the dial network, making sure each token creation or modification is done in accordance with embedded controller rules.
