@@ -14,22 +14,27 @@ A [token](./Token.md) is a unit of existance in the dial network. Each token has
     ]
 }
 ```
-The id of an active token is unique among all active tokenn in the network. The id of an expired token can be reused.
+The id of an active token is unique among all active tokens in the network. The id of an expired token can be reused.
 
-# Entities
+# Asset
+An [Asset](./Asset.md) is a token controlled by another token (entity).
+
+# Asset Class
+An asset class is a token describing a category of assets. It also provides a schema, control rules and a unit of account for all assets of that class.
+
+# Entity
 An entity is a unit of interaction. An entity can therefore produce assertions.
 
 ## Verification Method
-The simplest form of an entity is a verification method. This is a public key, enhanced with the indication of key algorithm associated with the key. Bellow is the example of a standalone verification method:
+The simplest form of an entity is a verification method. This is a public key, enhanced with the indication of a key algorithm associated with the key. Bellow is the example of a standalone verification method:
 ```json
 {
     "type": "Ed25519VerificationKey2021",
     "publicKeyMultibase": "z4DiXDE9t44qkq6uGmrhwWZHsTFofqmaKvuTWq687UawA"
 }
 ```
-
 ## Participant
-A [participant](./Participant.md) is an entity that has a representation in the dial network. A computer in the network, an app on the user's mobile phone can be seen as participants if they are given a unique identifier. A participant asserts by the mean of generating digital signatures of some declarations. A participant decalaration is used to list verification and assertion methods exposed by the participant.
+A [participant](./Participant.md) is an entity that has a reputation in the dial network. A computer in the network, an app on the user's mobile phone can be seen as participants if they are given a unique identifiers. A participant asserts by the mean of generating digital signatures of some declarations. A participant decalaration is used to list verification and assertion methods exposed by the participant.
 
 ## Validator
 A [validator](./Validator.md) is an active participant that takes the duty of validating declarations sent by other participants to the network.
@@ -127,7 +132,7 @@ This declaration files is immutable and can be found on the IPFS Network under t
 ```
 
 # Publication
-A publication is the act of a validator signing the file and sharing with to order validators. The publication of the declaration above looks like:
+A [publication](./Publication.md) is the act of a validator signing the file and sharing with to order validators. The publication of the declaration above looks like:
 
 ```json
 {
@@ -169,6 +174,4 @@ Signatures production relies on the same principles as described above. (1) Remo
 A publication file is mutable, as it can be updated with validator signatures as they are provided. The actual version of the publication must be store under the ipns address of the declaration's identifier (public key identifying the declaration).
 
 # Contoller
-The controller of a declaration is the entity authorized to change the declaration. A controller can be a simple verification method, a participant or an organization identifier.
-
-The controller block of a __Constrained Tokens__ provide the network with the possibility of constraining the exchange of that token. (1) the authenticated witness protocol requires the (new) controller of a token to provide an offchain proof of identification, while staying anonymous onchain, (2) time lock contracts will delay the time to change control of the enclosing token, (3) hash locked contracts will allow the designated participant to control the enclosing token if it presents the seed of the given hash, (4) combination thereof might also be applied to constrain token disposition.
+The [controller](./Controller.md) of a declaration is the entity authorized to change the declaration. A controller can be a simple verification method, a participant or an organization identifier.
