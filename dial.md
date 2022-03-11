@@ -1,146 +1,408 @@
-# DialChain White Paper
+# DIAL White Paper
+The DIAL stands for __Distributed Immutable Assertion Log__.
 
 # Abstract
-The DialChain is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The DialChain can be seen as a log holding state of __tokens__. Tokens can be used to represent a digital coin, a person, an organization or even a physical building, in short everything addressable and therefore non fungible (__NFT__).
+The Dial is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The Dial can be seen as a log holding state of __tokens__. Tokens can be used to represent anything addressable. A token is (1) created or modified by the token __controller__, (2) verified, certified and published by many __publishers__.
 
-The DialChain is unique in its kind of offering an __unlimited block size__ and a __deterministic ordering and execution protocol (DETOX)__. Unlimited block size capability is achieved by accepting all valid declarations submitted during a period of time (a.k.a epoch or time window).
+The Dial defines time slices called __(time windows - tw)__. Each time window starts at the __UTC Hour__ and ends before the next __UTC Hour__. A day has 24 time windows __(tw-0, ..., tw-23)__. At the end of a time window, all publishers share the same state of the Dial. All declarations published during a time window are part of that time window's protocol. 
 
-Instead of having a single validator building limited size blocks (PoW, PoS), DialChain's __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators (neighborhood) responsible for that token during the open time window. If the neighborhood cannot achieve a __51%__ agreement over the state of a token, the next closest neighborhood is invited to co-validate that token. The process is repeated till a 51% consensus is achieved for any given token.
+# Shallow Dive
 
-After closing a time window, each neighborhood produces and distributes an execution protocol. This is the merkel tree hash of all declarations published by the neighborhood during that time window. With the protocol of each neighborhood, each validator can compute the time window hash that is the merkel tree hash of all neighborhood protocols and the hash of the precedent time window.
+## Time Window - Declaration - Token
+A time window identifier can be represented by a string starting with TW an the formated date time YYYYMMDDHH. The following picture displays 3 time windows in which the same token is modified using declarations. 
 
-# Core Principles
-A declaration is a formal or explicit and self-contained statement or announcement. A declaration is used to create and modify tokens. For this purpose, each declaration exposes a controller property that defines modification rules of the referenced token.
+![DIAL](./img/../specs/img/dial-decl-token-tw.png?raw=true&width=5)
 
-The purpose of the DialChain is to validate, legitimate and finalize declarations. This is done by applying following rules:
-- Anyone can submit a declaration to create a token. The declaration must present a unique identifier not yet in used in the DialChain. We use cryptographic public keys for this purpose.
-- Only the controller of a token can modify that token. Modification is done by submitting a declaration bearing the target token identifier and a valid assertion of the controller of that target token.
-- A DialChain validator upon reception of a declaration publication request,
-  - proceeds with the formal validation of the declaration, then
-  - proceeds with the verification of control rules (legitimation), then
-  - signs the declaration and drops it in the neighborhood responsible for that token in the current time window.
-- In that neighborhood, all validators will:
-  - procced with the verification of control rules (legitimation), then
-  - proceed each with the signature of the declaration, then
-  - proceed with the distribution of the declaration to all other validators to achieve finality.
+The first declaration (Declaration-0) creates the token. Subsequent declarations modify the token. Like displayed in TW2022031015, a token can be modified more than once in a single time window.
 
-After closing a time window __tw__, means during the course of the time window __tw+1__, validators of time window __tw__ will coordinate to produce the hash of the closed time window __tw__. The signature of this hash by each involved validator is the proof of finality of all declarations submitted in that time window. Consensus is reached when __51%__ of validators of __tw__ sign the hash.
+The entity responsible for the publication of a declaration into the Dial is called a publisher. Before insertion, the publisher verifies that the submited declaration is consistent with the state of the token as documented so far.
 
-__Finality__ turns each declaration into an immutable assertion. Finality is achieved by ensuring that each published declaration is propagated to all validators within a defined time frame called __Time Window (Block)__. All declarations of a closed time window are final and non-conflicting with each other. The cryptographic hash of a time window is included in the computation of the hash of the next time window.
+## Neighborhood
+In order to allow for parallel publications, Dial publishers are partitioned into ephemeral neighborhoods. The __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but unpredictable association between each token and a group of publishers (neighborhood) responsible for the publication of changes on that token during the hosting time window. A neighborhood exists only for the life time of the hosting time window. The __layout__ of a time window is the complete set of all neighborhoods hosted by that time window, as presented in the following image (simplified to 2 dimensions for visualization).
 
-The DialChain uses an __earth hour__ to contain a block, meaning that one would have to wait for the end of the hour to achieve finality. 
+![ENP](./img/../specs/img/dial-ENP2.png?raw=true&width=5)
 
-Our __Ephemeral Neighborhood Protocol (ENP)__ secures a deterministic association between each token and a group of validators responsible for that token during the current open time window. This deterministic association of tokens to neighborhoods is essential to prevent conflicting modifications on the same token (double spending). A neighborhood is a small enougth group of validators to synchronize concurent modifications on a single token. Consensus is achieved inside the neighborhood with a __51%__ rule.
+### Distance Vector Mapping
+As displayed in the picture above, both publishers and tokens are assigned to neighborhoods by computing their respective __distance__ to the time window __anchor__. The time window anchor is the merkel root of the preceeding time window.
 
-# Validator
-Validators are entities responsible for the security of the network. Validators can join and leave the DialChain at will. Commitment to participate in the validation of a time window are binding. A validator must explicitly announce it's intention to validate for time window __tw__ with a declaration published in time window __tw-2__. Therefore, while __tw-2__ is being sealed during __tw-1__ all validators for __tw__ are known. The __neighborhood__ building process for __tw__ can also take place, as building process is controlled by a deterministic algorithm.
+### Token's Hosting Neighborhood
+A token is said to be __hosted__ by a neigborhood if the ENP assigns that token to that neighborhood in the hosting time window. The neighborhood hosting a token is called __THost__.
+
+### Time Window's Hosting Neighborhood(TWHost)
+The time window itself can be considered a token with the reserved identifier TWYYYYMMDDHH. The distance between the hash of this identifier and the anchor can alow us to locate the neighborhood responsible for hosting the time window. This neigborhood is called the __TWHost__ and is responsible for the publication of the time window protocol.
+
+### Neighborhood's Hosting Neigborhood (NHost)
+In the same logic as the time window, each neighborhood has a unique identifier carrying the id NYYYYMMDDHH-I where YYYYMMDDHH is the sufix of the hosting timewindow, and I ist the position of the neighborhood relative to the time window anchor.
+
+The distance between the hash of this identifier and the anchor can alow us to locate the neighborhood responsible for hosting thaat neighborhood. This neigborhood is called the __NHost__ and is responsible for the publication of the neighborhood's protocol.
+
+# Publication Protocols
+## Publication Certificate
+A declaration is considered published when a controller can present enougth publication certificates __(PCert)__. In order to obtain PCerts, a controller must (1) send the declaration for verification to all __n__ publishers of the THost. Upon receiving __(n/2)+1 verification certificates (VCert)__, the controller must bundle the VCerts and send them to all __k__ publishers of the NHost for insersion into he neighborhood protocol. Each publisher of the NHost returns a __Publication Certificate (PCert)__ to the controller. The declaration is considered published when the controller is in possession of __(k/2)+1__ PCerts.
+
+
+## Sharing Certificates
+All publishers of a neighborhood are required to share each produced certificate (VCert, PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noice and spam in the network.
+
+In order to enforce sharing of produced certificates, redemtion of coin associated with work done, can only happen, if publisher shows __proof of deposition__ of produced certificates (in the inbox of other publishers).
+
+## Neighborhood Protocol (NP)
+A NP can be built out of all complete PCerts. Whereby a PCert is considered complete if produced by more than half of the publishers of the NHost.
+
+### Incremental Computation of Merkel Tree
+The NPs merkel tree is built out of the ordered list of all tokens of the neighborhood. Entries are ordered by (1) the timestamp of the tokens first publication and (2) the lexicographical token identifier. This strict order allows for the incremental computation of the merkel tree, as there is no need to rearrange the merkel tree when a declaration for the creation or modification is sent to the neighborhood.
+
+### Intermediary Neighborhood Protocol (INP)
+The INP is computed during the 57th minute of the time window and contains all PCerts from the first to the 56th minute. The INP must be sent to the TWHost before the end of the 57th minute.
+
+## Time Window Protocol (TWP)
+The TWP is the merkel tree of all corresponding NPs merkel root (a.k.a NH).
+
+### Intermediaary Time Window Protocol (ITWP)
+The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. It is used to determine the intermediatry time window hash __(ITWH)__, which is the merkel root of the ITWP.
+
+The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
+
+### Restriction on New Token
+The Dial does not allow the production of new tokens in the last three minutes of a time window. As the cutoff for the computation of the new anchor is the 56th minute.
+
+### Final Neighborhood Protocol (NP)
+The final neighborhood protocol is computed in the first minute of the subsequent time window by publishers of NHost. The change date is the last second of the old time window. NP are sent to the old TWHost for documentation, as the change is hapening in the old time window.
+
+### Final Time Window Protocol (TWP)
+The final time window protocol is computed in the third minute of the subsequent time window by the TWHost (of the old time window) and documented as such.
+
+This TWP is then markedwith the timestamp of the first second of the new time window and sent to the relevant THost of the new time window  for documentation (The saame way any token get published).
+
+## Verifying the State of a Token
+
+### Locatting Protocols
+There is no requirement of having a single location where to store protocols. Each publisher is responsible for passing the protocol to relevant publishers of the subsequent time window.
+
+Holding the protocol is an economic activity, as publishers are paid to release protocols. Because protocols are signed by publishers, protocol holders can also release full or partial trees to requestors against payment.
+
+As NP and TNPs are tokens with well defined identifiers, it is always easy to compute the address of the neighborhood hosting them.
+- NPs are only existent in their time window of origine.
+- TWP are available:
+  - as closing protocol in their neighbohood of origin
+  - as openning protocol in the subsequent neigborhood
+
+Therefore, keeping publishers of two consecutive time windows active is enougth to have access to all relevant protocols.
+
+### Locating Neighborhoods
+Knowing the anchor aand the number of publisher per neighborhood, a simple formula can be used to compute the neigborhood's boundaries.
+
+### Accessing Partial Merkel Trees
+The folowing picture illustrate both the neigghborhood's and the time window protocols.
+
+![ENP](./img/../specs/img/dial-protocols.png?raw=true&width=5)
+
+### Validating a Token
+In order to validate a token:
+- locate the current time window __(TW2022031016)__
+- locate the previous time window __(TW2022031015)__
+- read the previous anchor __(A2022031015)__
+- use the token identifier and the anchor to compute the neighborhood __d(A2022031015, tokenId)=N2022031015-76__
+- read the neighborhood partial merkel tree __pmt0=pmt(N2022031015-76, tokenId)__
+- read the previous time window's partial merkel tree for the neighborhood __pmt1=pmt(W2022031015, N2022031015-76)__
+- Verify that both partial merkel trees re clena given the token state
+  - verify that the neighborhood hash is correct __NH2022031015-76==pmtHash(pmt0, tokenState)__
+  - verify that the time window hash is correct __TWH2022031015==pmtHash(pmt1, NH2022031015-76)__
+
+# Token and Declaration
+A declaration is a document used to create or modify a token. For this purpose, each declaration exposes a controller property that defines modification rules of the underlyinng token.
+
+## Structure of a Declaration
+A declation is made out of a header and a token payload.
+
+### Declaration Header
+The declatation header only contains information relevant for the publication of that declaration:
+- the token identifier (ID, final, unique)
+- the controler identifier (CTL)
+- the expiration date (EXP)
+- the token paylod content identifier (CID). The payload of a token is not exposed to the Dial.
+  
+### Token Payload
+The token payload is the information describing the token. It is generally specific to the application using the token. In some use cases (like managing monetary values, token payload might be well known vaalues, set by the application layer to represent type and/or value of coins).
+
+## Creating a Token
+A token is created by providing a declaration with a new public key hash. The declaration is signed with the corresponding private key. In order to be modifiable, a token must be created with a controller property.
+
+The publisher of a new declaration must only verify that the declaration is correctly signed with the private key of the public key used to build the token identifier.
+
+## Modifying a Token
+In order to change the token (properties CTL, EXP, CID), the current controller must sign and submit a declaration for publication.
+
+## Publishing a Declaration
+The purpose of the Dial is to finalize declarations by publishing them in the Dial. Publishing is done by applying following rules:
+- Anyone can submit a declaration to create a token. Creator must sign the initial declaration with the private key matching the declaration identifier.
+- Once created, only the latest controller of a token can sumit a modification on the token by signing the modifying declaration with the private key matching the identifier of the controller property (CTL) of the token.
+
+In order to publish a declaration,
+- The controller of the underlying token submits the declaration to all publishers of the neighborhood for that token (THost).
+- A THost publisher upon reception of a publication request,
+  - proceeds with the formal validation of the contained declaration (mandatory information like ID), then
+  - matches the declaration against the current state of the token (controller identifier),
+  - proceeds with the verification of control rules (signature of the current controller), then
+  - produces a verification certificate (VCert) and returns it to the requesting participant. 
+- The controller upon receiving more than half of the responses (VCerts), submits the declaration for publication to all publishers hosting the token's neighborhood (NHost)
+- An NHost publisher upon reception of the publication request,
+  - verifies the legitimacy of all included VCerts including the majority rule
+  - enforces the verification of remaining publishers of the THost if missing
+  - produces a publication certificate (PCert) and returns it to the requesting participant
+
+The declaraation is considered published when the controller (requesting participant) holds more than half of the PCerts.
+
+# Ephemeral Neightborhood Protocol (ENP)
+ENP secures a deterministic association between each token (existing or new) and a group of publishers responsible for that token during the given time window. The deterministic association of tokens to neighborhoods is essential for the serialization of movement of tokens acros time windows and preventconflicting state of tokens.
+
+## Assigning Publishers to Neighborhood
+Publishers are entities responsible for the security of the network. A publisher can join and leave the Dial at will. The commitment to participate in the publication process of a time window is nevertheless binding. A publisher must explicitly announce it's intention to participate for time window __tw__ with a declaration he publishes in time window __tw-2__. This mean after tw-2 is sealed during __tw-1__, all publishers for __tw__ are known. The list of publishers of tw is held
+
+The __neighborhood__ building process is a simple, but deterministic algorithm that can be performed by any device. In order to make the neightborhood distribution of tw non predicatable, the partitioning algorithm consumes the last __ITWH__ ot tw-1, even though publishers are known at the end of tw-2.
+
+## Availability of Publishers and Protocols
+
+### Publisher Availability Commitment
+The credit for hosting a token is only awarded to a publisher after active transmission of the token to each publisher of the next hosting neighborhood.
+
+A publisher of time window __tw__ is comited to be available during time windows __tw+1__ to (1) actively push each hosted token to the next hosting neighborhood and (2) supply any requestor with protocols __tw__ (NP, TWP, ITWH, ...).
+
+### Protoccol Availability Commitment
+The protocol of a neighborhood contains the list of all tokens assigned to that neighborhood, independent on whether the token was modified in that neighborhood or not. A a neighborhood has a life time of 1 hour, publishers of a neighborhood have the time to incrementally collect and compile the last state of all token assigned to that neighborhood.
+
+Based on this assumption, the Dial only need the protocol of the last time windows to be fully functional. No publisher is required to hold more than the information it needs for the validation publication of hosted tokens during the given time window.
 
 ## Joining the Network
-Each validator is known to the network and is represented by a token. The validator performance declaration must be renewed for every time window. The validator performance declaration contains the validator service addresses. In order to join as a validator, it is sufficient to submit guaranty funds to the DialDao and send a __Validator Declaration__ to one or many existing validators.
+Each publisher is known to the network and is represented by a token. The publisher performance declaration must be renewed for every time window. The publisher performance declaration contains the publisher's service addresses.
 
-A validator will generally need three time windows to start performing.
-- In __tw-3__ the validator submits its declaration of existence. This will be validated and published with this time window.
-- During __tw-2__ the new validator announces its intent to validate for __tw__ by submitting a declaration to the network (through an active validator).
-- During __tw-1__, after the hash of __tw-2__ is published, the neighborhood building process for __tw__ takes place. __tw__ validators start preparing the field. Loading known identifiers that might be processed in that neighborhood during tw. Collecting ip addresses of peer validators in the same neighborhood.
-- During __tw__ the validator is actively sent validation requests for token assigned to its neighborhood.
+A publisher will generally need three time windows to start performing:
+- In __tw-3__ the publisher submits its declaration of existence. This will be validated and published with this time window.
+- During __tw-2__ the new publisher announces its intent to publish for __tw__ by submitting a modification to the network, announcing it's intent to publish. This intent is part of the protocols of tw-2.
+- During __tw-1__, __tw__ publishers observe the network, collecting the addresses of all other publishers of tw from the corresponding NHost of tw-1.
+- After the ITWH of tw-1 is published (anchor of tw), each publisher of tw-1 and tw computes the __layout of tw__ (neighborhood distribution). 
+- In the first minutes of tw, tw-1 publishers actively rediem their coins pushing tokens and protocols to corresponding THost and NHosts of tw.
+- In __tw__ THost and NHost publisher take over their duty.
 
 ## Leaving the Network
-In order to leave, a validator just need to stop announcing itself for future time windows. As the declaration of readiness for the validation in a time window muss occur actively, an innactive validator will never be a problem for the network.
+In order to leave, a publisher just needs to stop announcing itself for future time windows. As the declaration of readiness for publication in a time window muss occur actively, an innactive publisher will never be a problem for the network.
 
-## Withdrawal of Guarantee Funds
-After __24 tw__ of innactivity, a validator can submit a request to withdraw his validator deposit from the Dial treasury.
+# Locating Network Information
+
+## Time Window Anchor (TWA => A-YYYYMMDDHH)
+The TWA of time window tw ins the intermediary time window hash (ITWH) of tw-1. It is the snapshot of the state of the 56th minute of tw-1. Therefore ITWH-2022031115==A-2022031116. This information is generally available to all participant of the network aand shall be circulated as metainformation among network participants.
+
+## Closest Neigborhood (N-YYYYMMDDHH-0)
+The neighborhood closest to the anchor carries the identifier N-YYYYMMDDHH-0. This neighborhood host information on the layout of the time window. The service address of all publishers of this neighborhood is known by default and shall be circulated as meta information using a gossip protocol in the network.
+
+Each publisher of this neighborhood offers following services:
+- Provide identifier of last neighborhood. e.g N-YYYYMMDDHH-2543 if this time window has 2543 neighborhoods.
+- Provide the neighborhood identifier given a distance to the anchor.
+- Provide the list of neighborhood publishers and the neighborhood boundaries given a neighborhood identifier.
+
+These three services are generally sufficient to allow a new participant to hook into the Dial publication process.
+
+## Neighborhood aas Host of Protocols
+The logic of the Dial is generic in that Dial native component like neighborhoods and time windows are also considered token (with reserved identifiers). In order to locate an information, in the dial network, a participaant needs:
+- the anchor (A-x)
+- the closest neighborhood (n-x-0)
+- the token identifier (tid)
+
+The participant can the compute the distance between the token identifier and the anchor d(A-x, tid). This distance can be used to request hosting neighborhood information from n-x-0. Every other information on the token can then be retrieved from token hosting neighborhood (THost).
+
+THost carries a specific name for (1) a neighborhood (NHost) and for (2) a time window (TWHost). The different naming is introduced to distinguish these reserved tokens from other tokens of the Dial Different naming therefore does not change the logic of how tod etermine the neighborhood hosting a token.
 
 # The Dial Economy
-Due to it open and permissionless character, the DialChain will need some sort of value generation system to address spam and sustainability.
+Due to it open and permissionless character, the Dial defines a value generation system to address spam and sustainability.
 
 ## Value Generation
-Every single service performed by a service provider (e.g. validator) in the Dial network is paid for by the requestor of that service. The price of each service is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
+Every single service performed by a Dial service provider (e.g. publisher) in the Dial is paid for by the requestor of that service. The price of some fundamental services (like the publication service) is set by the network. The price of other services is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
 
-## Spam Resistance
-Spam is the main thread to open and permissionless architectures. The DialChain is built on top of a fundamental spam resistance system that makes sure the revenue generated from the publication of a single declaration is sufficient to cover present and future performance required to validate, maintain and retire that declaration.
+## Spam Rsistance
+Spam is the main thread to open and permissionless architectures. The Dial is built on top of a fundamental spam resistance system that makes sure the revenue generated from the publication of a single declaration is sufficient to cover present and future performance required to validate, maintain and retire that declaration. 
 
-In order to protect validators (or service provider in general), the DialChain requires each service request to be accompanied with a payment. Even the price inquiry service (a.k.a service intent request) is a payable service. Recall that the service intent request also returns a binding offer to the requesting party.
+This is also a reason why each token carries an expiration date. After the expiration date, the token identifier is not known to the Dial and does not appear in the protocol.
 
-The price paid by a party to publish a declaration has a minimum cap, a file size factor and a validation effort factor. This price is generally substantial enough to have a significant impact on the wealth of the party generating spammy declarations.
+In order to protect publishers (or service providers in general), the Dial requires each service request to be accompanied with a payment. Even the price inquiry service (a.k.a service intent request) is a payable service. Recall that the service intent request also returns a binding offer to the requesting party.
 
-These three factors (a) payment for intent request, (b) payment for publication and (c) the validator registration constraint constitute together an effective spam resistance mechanism.
+The price paid by a party to publish a declaration has a minimum cap, a file size factor, a validation effort factor and time to live factor. This price is generally substantial enough to have a significant impact on the wealth of the party generating spammy declarations.
 
-## Sustainability Incentive
-Traditional blockchain networks do not reflect on the future cost of current operations. Most blockchain networks are built on the speculation that the appreciation of the underlying crypto currency will motivate miners (validators) to stay in business. This is a risky approach as:
+These three factors (a) payment for intent request, (b) payment for publication and (c) the publisher registration constraint constitute together an effective spam resistance mechanism.
 
-- This __currency appreciation based theory__ does not give miners the necessary accounting tools to legally build provisions for the future maintenance of those files.
-- Letting a miner build a position in the miner's balance sheet does not prevent the miner from quitting when yield gets unattractive (due to increase of competition in the networks and among networks).
-- Further, the massive growth of the blockchain size (block history) might make the entrance of new validators economically unattractive.
+## Sustainability
+Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is fogoten with the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enougth reserves to finance the security of the token till expiration.
 
-As the DialChain does not plan with future appreciation of the DIAL, reserves needed to maintain a declaration during the lifetime of that declaration is collected from the issuing party with the publication of that declaration. The collected revenue is held in the Dial treasury and distributed to validators for each tw of relevance of the concerned record.
-
-## Value Added Tax (VAT)
-In order to provide for sustainability, the Dial network must make sure every present operation is priced with future costs it incurs. For example:
-
-- Each file inserted in the DialChain log will have to be maintained for a substantial amount of time (we presume 50 earth years).
-- Each monetary value held by the Dial network will maintain a sound relationship to the corresponding external asset. For example, the BTC account held by the DialDAO will continouosly incure costs in the Etherum network.
-
-The cost of maintaining those assets (log entries, currencies) is paid by the originating parties at the moment of publication of the declaration into the DialChain log. The Dial treasury will retain this amount from the revenue of the service provider (in the form of a VAT). This retained revenue will be spent by the Dial treasury during the lifetime of that token to pay for the maintenance of that token. For each block of maintenance of an asset, the corresponding maintenance fee will be distributed to the service providers of the network based on predefined distribution keys; sample key is the proportion of revenue generated during the block (e.g. earth hour).
+The Dial also does not have a treasury. Each token caries it's maintenance budget in the form of attached coins. This maintenance budget is consumed as the token is passed from one time window to another till the token is removed from the log at expiration.
 
 # Monetary Policy
-The Dial native economy does not create money. The Dial economy relies on the capabilities of existing crypto networks like BTC and ETH to work. 
+## Fundamental Principle
+Each coin in the Dial originates from a combination between an external __Proof of Work__ and the __performace__ or a __canonical service__.
 
-## DialDAO
-The DialDAO is the external treasury of the Dial network operated on the Etherum network. The DialDAO is simple and has no governance. Deposit and withdrawal rules are defined an never change.
+### External Proof of Work (PoW)
+The external PoW is designed to enforce a relation between the value extracted from of a service consumed and the effort performed to legitimate the service request. The more balanced the relationship between the effort performed (input) and the value extracted (output), the lesser probable will a participant try to spam the system.
 
-## Liquid External Currencies
-Money emission occurs as counter value to deposited external currencies into the DialDAO. External currencies deposited into the DialChain are mapped aggainst their Dial internal __L-XXX__ counterparts (L-BTC, L-ETH, L-MATIC, ...).
+### Mining Coins out of PoW
+The Dial allows a participant to perform some computation intensive work and use the resulting proof (PoW) to pay for the execution of a service. The service execution process transforms the provided PoW into a coin. This resulting coin is subsequently used in the Dial network as a mean of payment.
 
-## Operation Currency
-The DialChain will needs a currency to proceed with operations. At the beginning, the DialChain will be using L-BTC as the core operational currency. Service will then be paid in L-Satoshis.
+### Reducing Opportunistic Behavior
+With respect the open and permissionless character of the Dial, coin production must be designed such as to have the total coin supply reflect the volume of activity performed in the Dial network. With this in mind, the Dial wants to prevent participant (1)  from performing work just with the purpose of increasing the coin supply, (2) from extracting additional value out of the coin production process (e.g. by producing work for services directed to service providers known in advance).
 
-## Native Currency
-Dial will latter emit a native currency call DIAL whose value will be the mirror of external reserves held by the DialDAO. Therefore DIALs will be automatically produced and burned with the act of the DialDAO earning and spending external currencies.
+In order to prevent opportunistic behavior, the Dial limits PoW to coin convertion to services which by their nature do not allow participants to behave oppotunistic. Currently identified services are:
+- The publication service.
+- The coin bundling service.
 
-# Liquidity Service
-The liquidity service of the DialChain is a service provided by the Dial treasury that allows the mapping of external monetary values into the Dial network. Those values are generally denominated L-XXX, where XXX is the denomination known in the world outside of Dial. E.g.: L-BTC, L-ETH. Beside fees collected by the Dial treasury for the maintenance of those underlying records, the value of an L-BTC (Liquid Bitcoin) is a one-to-one mapping of the value of a Bitcoin.
+## Publication Service Model
+In order to have a declaration published, the submiting participant muss provide one payment for each publisher of both the THost and the NHost. I for example the THost has 11 publishers and the NHost has 11 publishers, the participant must provide 22 payment vouchers addressed to those publishers.
 
-In order to expose an external monetary asset to the Dial network, the asset has to be transfered to the Dial treasury.
+If we call __main token (resp. main declaration)__ the token being created or modified and __payment token (payment declaration)__ the token being used for payment, a publication operation will involve n + 1 tokens (1 main token and n payment tokens), where n is the number of publishers of THost + NHost, as we send a payment to each publisher of those two neighborhoods.
 
-## Depositing of Liquid-Assets
-If we take the BTC as an example, a participant will simply emit L-BTC by depositing corresponding BTC amount into the Dial treasury. The purpose code of that transaction will be a public key identical to the declaration to be submitted by that same participant to the Dial network. Once the declaration is processed in the Dial network, the corresponding token is under the controll of the entity holding the matching private key. In other words, the deposited asset exists in the Dial network as a token.
+In order to rediem the payment, a publisher must fullfil all it's obligations and submit the coin/PoW with the proof of service performed for publication to the Dial.
 
-## Breaking Down Liquid Assets
-In the DialChain, an L-BTC Coin can be broken down into 10 Million 10-Satoshis Coins. This will happen in a transaction in which the controller of the L-BTC token generates 10.000.001 declarations, the first one to kill the L-BTC (erasing the controller block) and the subsequent 10Mio declarations to activate each 10 statoshis coin generated. Once this declarations are published, the holder of those satoshis can start spending them in the network, e.g. using them to pay for services.
+### Publication Workflow
+In order to publish a declaration,
+- the requesting participant uses the token identifier to determines the neighborhood hosting the token (THost).
+- the requesting participant uses the neighborhood identifier to deteremine the neighborhood hosting the THost (NHost)
+- For each publisher of the THost, the publisher provides a payment token issued to the publisher. This payment token can be either a PoW or an existing coin. In both cases, the identifier of the payment token must be chosen such as to be hosted in the same THost as the main token.
+- For each publisher of the NHost, the publisher provides a payment token issued to the publisher. This payment token can be either a PoW or an existing coin. In both cases, the identifier of the payment token must be chosen such as to be hosted in the same NHost as THost. 
+- The controller of the underlying token submits the declaration to all publishers of the neighborhood for that token (THost) including the THost payment token.
+- A THost publisher upon reception of a publication request,
+  - proceeds with the formal validation of the contained declaration (mandatory information like ID), then
+  - matches the declaration against the current state of the token (controller identifier),
+  - proceeds with the verification of control rules (signature of the current controller), then
+  - produces a verification certificate (VCert) and returns it to the requesting participant. 
+- The controller upon receiving more than half of the responses (VCerts), submits the declaration for publication to all publishers hosting the token's neighborhood (NHost), including NHost payment tokens.
+- An NHost publisher upon reception of the publication request,
+  - verifies the legitimacy of all included VCerts including the majority rule,
+  - enforces the verification of remaining publishers of the THost if missing,
+  - produces a publication certificate (PCert) and returns it to the requesting participant.
 
-If the breaking down of an L-BTC into 10 Mio satoshis exceeds the maximum file size, the controller of the L-BTC can consider taking an intermediary step. For example first breaking down the L-BTC into 1 coin of 90.000.000 satoshis and 1.000.000 coins of 10 satoshis. In this case the declaration file will contain only 1.000.002 files instead of 10.000.001 files.
+The declaration is considered published when the controller (requesting participant) holds more than half of the PCerts.
 
-Recall that each coin generated has a proper identifier (proper NFT). This will generally be the initial controlling public key. From there on, those coins can be moved arround by just submitting declarations that modify the controller block to bear the new public key controlling the coin.
+### Publication of the Rediemed Coin
+In order to rediem a coin earned publishing, each publisher must:
+- transfer the VCert (resp. PCert) to all relevant publishers of the THost of the subsequent time window, within a minute after closing of the time window. The proof of transfer is a transfer certificate (TCert) produced by each publisher of the THost.
+- bundle the TCerts (at least half +1) with the rediemed coin and submit them for publication to the coins relevant THost and NHost.
+- The received VCerts are the proof of legitimacy of the coin and caan allow the publisher to spend the coin.
 
-The work of the validators of the break down declaration will consist in verifying that the conversion between 1 L-BTC and 10 Millions L-Satoshis is sound.
+These coin based operaations do not require payment.
 
-## Bundling Coins
-As the publication of declaration files in the network are payable, it might be impractical to be using too many coins for large amount transactions. Using 500.000.000 declarations (spending each 1 satoshi) in a transaction that want to transfer 5 L-BTC might not work because of the file size. In some cases, the party holding too many small coins can bundle them by sending corresponding bundeling declarations to the network.
+## Payment for Publication
+There are two type of payments for the publication of a declaration sent to the Dial:
+- The sending participant can attach coins to the declaration, in which case the publisher will rediem the coin attached to the publication request.
+- The sending participant can attach proofs of work to that declaration, in which case each publisher will mine a new coin associated with a PoW attached to the publication request.
 
-A bundelling declaration might not be easy to validate, as each token in the declaration file might have to be validated in a different neighbourhood.
+### Coin for Payment
+Using a coin for the payment of a publication service is tricky in that, the coin has to carry an identifier hosted __in the same neigborhood__ as the main declaration's underlying token. This means the publisher produces two publications at the same time:
+- the conditional publication advertizing the payment
+- the publication certifying the main declaration
 
-## Withdrawal of Liquid-Assets
-To withdraw from the DialDAO, the controller of a token jsut need to publish a modification of the token including the indication of an externnal payment account (e.g. bitcoin address) and the new controller as the target address of the DialDAO . For each closed tw, after the tw hash is generated, the DialDAO will run through the tw files and transfer all whithdrawn token to corresponding external addresses.
+In order to pay with a coin,
+- the requesting participant has to have a coin
+- the coin has to carry an identifier that falls in the same neighborhood
 
-# Routers
-One goals of the DialChain is to achieve the broadest possible decentralization. This can only be achieved by keeping the DialChain simple, such as to allow for common devices like mobile phones or IOT devices to play the validator role and therefore participate to the Dial economy.
+### Proof of Work based Payment
+In the case were the requesting participant does not have a matching coin, the requesting participanat can perform some work and use that __proof of work (PoW)__ to pay for the publication of the declaration.
 
-Routers are Dial service providers that deploy simple communication infrastructure, that will allow network limited devices to act as first class citizen in the Dial network.
+The PoW performed for the payment of the publication has following properties:
+- PoW must carry all details of the declaration to be published
+- PoW must carry all details of the target neighborhood (timestamp)
+- PoW must carry a conditional controller block with the public key of the addressed publisher
+- PoW must provide an identifier hosted in the target neighborhood
 
-## Sensorship Resitence
-Routers services will be simple enougth to allow for consumer grade home based computers with static ip addresses to be deployed and operated as routers. The operation of a router shall allow the owner to cover the cost of material and utility needed to operate the router. The service shall be simple enougth not to require special computer skill for the operation of router nodes.
+The PoW document will be added a generated nonced to produce a hash that satisfies a defined difficulty (number of leading zeros).
 
-## Simple Relay
-Some routers will act as simple relay, allowing parties to exchange point to point messages with each other. Each message will off cource be associated with the corresponding payment. Payment collection and message delivery can be bundled into attomic transactions (atomic swap).
+The process of redieming the PoW attached to a publication request turns that PoW into a coin that can be spent by the publisher. The redemtion process is complete when publishers of the subsequent time window certify reception of the published record and coin are published in the subsequent time window.
 
-## Gateway
-Some routers will play the role fo gateway for end user devices willing to participate to the validation protocoll. The gateway payment model will be negotiated between the gateway node and the end user device.
+## Bundling Coins (mon)
+In matter of file size, a 50 mon has the same size like a 1 mon. Therefore transacting with a 50 single mon coins is 50 times more expenssive than transacting with a single 50 coin. As the publication of declaration files in the network are payable, it might be impractical to be using too many coins for large amount transactions. 
 
-## Registration
-Router can register their services with the network by submitting corresponding service declaration to the networt.
+A bundeling declaration allows a participant to bundle many single coins into single bigger coin. E.g.: bundeling 50 single 1 mon into 1 single 50 mon. A bundeling declaration can therefore only be performed on coins falling in the same neighborhood. The identifier of the bundled coin must also be hosted in the same neighborhood.
 
-# File Services
-These are the next enabling service for use in the Dial network. In order to keep validators simple, they are not required to maintain the whole state of the DialChain locally. The DialChain leverages the IPFS network to hold and maintain the history of the network. Files are generally referenced by their content identifiers, making them verifiable upon download.
+# Network Services
+One goal of the Dial is to achieve the broadest possible decentralization. This can only be achieved by keeping the Dial simple, such as to allow for common devices like mobile phones or IOT devices to play the publisher role and therefore participate to the Dial economy.
 
-## Registration
-The DialChain will allow IPFS data nodes to register with the network as storage providers, providing their service and payment addrsses. The pricing policy for this service is left to the operator of the ipfs node.
+Dial network service providers deploy simple communication infrastructure components, that will allow network limited devices to act as first class citizen in the Dial network.
+
+Dial network services are simple enougth to allow for consumer grade home based computers with static ip addresses to be deployed and operated as Dial network services. The operation of a Dial network component shall allow the owner to cover all incured costs. The service shall be simple enougth not to require special computer skills for the operation of network nodes.
+
+## Relay Service
+A relay service allows parties to exchange point to point messages with each other. Each message sent to a relay is accopanied with a payment token. The request for reading that message is also accompanied with a token.
+
+If two different messages are sent to the same relay address, the second message overrides the first message.
+
+A relay is open, permissionless and offers 3 methods:
+- POST(url, data, exp, payment): allowing the caller to deposit a message for pickup with the relay.
+- GET(url, payment): allowing the caller to collect a message
+- DEL(url): allowing the removal of a message no longer needed.
+
+The payment amount is dependent on the size of the message and expiration of the message. The Dial defines standard paacket sizes and prices for the relay service.
+
+## Gateway Service
+A gateway service allows a Dial participant to expose a permanent endpoint at which it can receive messages. Therefore, a single gateway address holds a queue of messages. The deposition and the collection of a messaage from a gateway endpoint is payable. A gatewaay support following operations:
+- POST(url, data, exp, payment): allowing the caller to deposit a message for pickup to the gateway endpoint with the address url.
+- GET(url, payment, PoP): allowing the caller to collect and delete the next message in the queue
+The get request to a gateway address provides a proof of possession of the endpoint url.
+
+## Broadcast Service
+A broadcast service allows a Dial participant to expose a url where authenticated information can be pushed for the rest of network participants. A broadcast endpoint generally holds one file that is updated by the controller of that broadcast address. The deposition and the collection of a messaage from a broadcast endpoint is payable. A broadcast supports following operations:
+- POST(url, data, pop, payment-1): allowing a participant to update the file held at the endpoint og a broadcast address.
+- GET(url, payment-2): allowing the caller to collect the file
+- DEL(url, pop): allowing the removal of a message no longer needed
+The broadcast url contains public key hash. Posting or deleting the file at that url requires the proof of possession of the corresponding private key. Each file posted at that location is also signed with the corresponding private key
+
+
+## Service Registration
+Network service providers must register their services with the Dial by submitting corresponding performance declarations to the Dial. Following the same rationales as explained for publishers, a network service provider must register the performance declaration for __tw__ in __tw-2__. A performance declaration is binding. In the same logic of publishers, coin earned in a time window can only be rediemed in the subsequent time window, after presentation of the proof of performance.
+
+# Performance Considerations
+The Dial is designed to allow for efficient participation of memory and space limited devices.
+
+## Space Constraints
+The Dial is not designed to maintain archives. Neither the dial is designed to have a single participant maintain all information. Each participant of the (including publishers and other service providers) keep only the files the have an interest in keeping.
+
+### Files Maintained by a Controller
+A controller is a participant that controls a token. This means the participant holds the private key needed to initiate a change on the token.
+
+All information needed to proove legitimate control of that token (PCerts) must be held by that controling participant.
+
+The protocol held by publishers only contains the hash of the state of the token.
+
+### Files Maintained by a Publishers of THost
+The THost is the neighborhood hosting a token (in time window tw). At the begining of tw, publishers of the precendent time window (tw-1) redeems their due by transafering the last state of each token they hosted (in tw-1) to all publishers of the THost in tw. The transafer is aknowledged with a transfer certificate (TCert). The bundled list of TCerts of each token are used by the publisher of tw-1 to redeem the coin associated with hosting the token in tw.
+
+The transfer of the state of a token is associated with part of the protocol (partial merkel tree) needed to validate the authenticity of that token state. 
+
+### Files Maintained by a Publishers of NHost
+The NHost is the neigborhood hosting the protocol of a THost. The NHost is responsible for:
+- preparing the INP and NP at the end of the time window, aand transfering that NP to the TWHost of the time window.
+- Transfering those protocols to publishers of the correponding neighborhood of the subsequent time window for documentation agains a TCert.
+- Serving those protocols or partial version thereof against payment to requesting participants during tw.
+- Using the TCerts in tw to redeem the work performed in tw-1.
+
+### Files Maintained by Publishers of the TWHost
+The TWHost is the neighborhood that:
+- receptions NPs 
+- use INP and NPs to produce ITWP and TWP at the end of the time window. 
+- Transfers the ITWP and TWP to relevant neighborhood of subsequent for documentation against TCert.
+- Use the TCerts in tw to redeem the work performed in tw-1.
+
+### General on Space Constraints
+As described above, no single node is required to hold the entire state of the Dial. The more token, are available in the Dial, the more coin are generated by publication activities, the more publishers will join the network, reducing the load to be carried by single publishers.
+
+## Scalability
+The Dial will scale with the number of tokens maintained by the network. The quantity of tokens maintained by the network will make economically interesting for publishers to join or leave the network.
+
+The number of publishers release for the service of a time window is also dependent on the quantity of token avaailable for maintenance. The Dial will define a proportion between token and publisher that will help limit the number of publishers admitted to service a time window.
+
+## Efficiency
+The Dial is designed as an ideal nano payment infrastructure for web3 network services. The Dial is designed to allow for permissionless but verry efficient interaction among network actors.
+- A network node maintaining a full dial log can validate payment locally and provide services to caller before forwarding payment token to the Dial.
+- A more valuable service can require the caller to get the payment published before adding the payment token to the service call.
+
+In both scenarios, the Dial allows for verry fast execution of annonymous and permissionless service operations.
+
+# Security Considerations
+## Annonymity
+The Dial is designed to allow for 100% permissionles contribution. The only credential needed for the participation is the control over certain private keys. There is no need to keep an identity over the life time of a service life cycle (3 time windows.).
+## Off Chain Capabilities
+The Dial publication pattern allows for off chain transfer of token. A token might migrate toward many controllers before getting published to the Dial, as long as those transacting participant trust each oder for not double spending. The chain of signature will be sufficient for the dial, as long as the first signature in the chain is the one controling the last state of the token in the dial.
