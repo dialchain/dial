@@ -1,5 +1,5 @@
 # Token Class
-A token class is a token describing a class of tokens. It also provides a schema, control rules and a unit of account for all tokens of that class. Each token resp. declaration in the dial network is instantiated from a token class. Event fudamental nnetwork rules are defined into token classes. A genesis packet provides initial files used to bootstrap the network.
+A token class is a token describing a class of tokens. It also provides a schema, control rules and a unit of account for all tokens of that class. Each token resp. declaration in the dial network is instantiated from a token class. Event fudamental network rules are defined into token classes. A genesis packet provides initial files used to bootstrap the network.
 
 # Declaration
 A declaration is the fundamental unit of expression
@@ -31,7 +31,7 @@ The folowing declaration describes the look of a network defined token class.
                 "type": "network",
                 "reputation-unit":"time-window",
                 "reputation-count": "8640",
-                "votes-percen":"51",
+                "votes-percent":"51",
                 "time-frame":"4320"
             }
         }

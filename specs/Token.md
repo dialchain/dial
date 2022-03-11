@@ -1,48 +1,39 @@
 # Token
-A token is the unit of existance in the dial network. Each token has an identifier. The identifier of an __active token__ is unique among all active tokens in the network. The identifier of an expired token can be reused. 
+A token is the unit of existence in the dial network. There is nothing else in the dial network but tokens.
 
-In order to prevent misuse of identifiers, the dial network (1) requires identifier of a token to be a public key, (2) requires a new declaration to prove possession of the corresponding private key. This way, reusing a token identifier will require control on the corresponding private key.
+## Token Properties
 
-In a json representation, the identifier is displayed encoded in a [multibase](https://github.com/multiformats/multibase) format.
+### Controller Identifier
+The controller of a token is the party authorized to modify the token. It is the address referencing a public key that can be used to verify the next modification on this token.
 
-## Declaration
+### Token Identifier
+The identifier of a token is the hash of the public key generated for the purpose of identifying this token. The underlying keypair is used to legitimate the token declaration (proof) at creation.
+
+### Expiration
+Each token has an expiration date. The expiration date of a token can be extended by the mean of the current controller submiting a change declaration of the token. The expiration date of a token is essential, as the network has to keep the history of the protocols for the purpose of validating changes on unexpired token.s The longer the expiration time of he token, the more expesive is the validation of he token, as the network will have to keep all protokols affecting this token, till the token expires.
+
+## Token Declaration
 In order to create or modify a token, we use a declaration. The declaration identifier is always the token identifier.
 
 ### Json Representation
+Note that (1) we will use Json to describe the structure of document in prose, (2) We will use [CBOR](https://datatracker.ietf.org/doc/html/rfc8152) as the underlying serialization format, (3) we will use [multicodec](https://github.com/multiformats/multicodec) to prefix all binary representations of keys, hashes and content identifiers.
 ```json
 {
     "type": "Declaration",
     "declaration": [
         {
             "type": "Participant",
-            "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
+            "id": "unnique PublicKeyHash-MultiCodec",
+            "controller": "another PublicKeyHash-MultiCodec",
+            "exp": "time-utc-sec"
         }
-    ]
+    ],
+    "proof": ["proof produced with private of id"]
 }
 ```
-### Binary Representation
-All operations operating on a token use the sha256 of the tokens public key bytes.
-
-## Sub-Declaration
-Some tokens have a hierarchical structure. A Participant can have a validator function. For that purpose the participant must register a performance declaration for each time window of action. A performance declaration itself is a sub-declaration, derived from the declaration of a participant.
-
-The following json displays the header part of a performance declaration.
-```json
-{
-    "declaration": [
-        {
-            "type": "Perfomance",
-            "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6#z6uYZbi4aubwxGkZ2wEXpvfp1XVN5cQ2FDGmowGyMJDXY",
-            "controller": [
-                "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6"
-            ]
-        }
-    ]
-}
-```
-The first part of the identifier refers to the public key multibase of the enclosing participant. The second part of the id is the multibase representation of the public key of this performance declaration. The controller of a performance declaration is allways the enclosing participant.
 
 ## Proof of Possession
+
 The declaration identifier is allways a public key. The producer of a declaration must prove possession of the corresponding private key. This is done by adding a proof block to the declaration. The following document displays the proof associated with a new declaration.
 ```json
 {
@@ -51,7 +42,7 @@ The declaration identifier is allways a public key. The producer of a declaratio
         {
             "type": "Participant",
             "id": "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6",
-            "created": "2021-06-24T21:36:03.409110Z",
+            "exp": "2021-06-24T21:36:03Z",
             "controller": [
                 "zEruWfhngbEc16jmpZBHSk4Tx872CHDWXeNsDJfL8yHo6"
             ],
@@ -71,33 +62,21 @@ The declaration identifier is allways a public key. The producer of a declaratio
     ]
 }
 ```
-Proof of possession is essential, as we give the responsibility of publishing this document in the __ipfs network__ to the creator of the document.
+Proof of possession is essential, as we give the responsibility of publishing the initial document to the creator of the document.
 
-## Publishing a Declarationn to IPFS using the IPNS Address
-Each declaration produced in the dial network can be advertized by the producer of the Declaration in the ipfs network. (1) the producing participant starts by storing the document in the ipfs network under the __content identifier (cid)__ of the declarationn file. (2) the cid is then used to create a publication file looking like:
-```json
-{
-    "type": "Publication",
-    "cid": [
-        "B7NCdnaDQvwipw4YLV58MHb1yCkW6rTamgwCXwVNHtqijxRroN6wDa86LG1myQCthekWsf3sNLJrU1M4YNa61hQXdYBz"
-    ]
-}
-```
-(3) This second file is published on ipns under the __ipns address__ of the declaration, that is the sha256 of the public key bytes representing the id of the token, as specified by [ipns](https://docs.ipfs.io/concepts/ipns/#example-ipns-setup-with-cli). 
+## Token Controll
 
-Publishing declarations and sub-declarations associated with a token is only meaningfull for well defined use cases. A sub-declaration is published under the public key of the sub-declaration. This is the second multibase string in the id of the sub-declaration.
+### Token Validation
+A declaration associated with a token can be validated by any entity in possession of the relevant recent partial history of the network. Validation is simple enougth to allow each participant of the network to validate a declaration in milliseconds. Nevertheless, a valide token is far from being sufficient for a transaction as the controller of the token can issue two conflicting declarations at the same time.
 
-The publication document as presented above is called a __non certified document__.
+### Publishing a Declaration
+Publishing a declaration in the network allows the prevetion of the issuance of conflicting declarations on the same token.
 
-### Validating a Declaration
-Declarations and sub-declarations related to a token are always validated in the neighborhood associated with the token identifier. The token identifier is always the first multibase string in the id field of the declaration (resp. subdeclaration).
+When a participant sends a declaration to a publisher for insersion into the network log, the publisher returns a proof block to the participant. It is the responsibility of the participant to store and advertize the issued proof as certificate of ccontroll of the underlying token. 
 
-### Publishing a Declaration IPFS
-When a participant send a declaration to a validator for publication, the validator returns a proof block to the participant. It is the responsibility of the participant to add that proof block to the publication file and update the publication file in the ipfs network.
+Publisher aare only required to hold the declaration of a very limited aamount of time. The time needed to pass over publication responsibilities to other validators.
 
-The creating participant has a legitimate innterest of updating this file, as the order transacting party will have to verify the file before trusting the transaction.
-
-After two validation responses, the ipns referenced file will look like:
+A declaration with two publication certificated, looks like.
 
 ```json
 {
@@ -135,8 +114,8 @@ After two validation responses, the ipns referenced file will look like:
 ```
 
 ## No Archivinng of Proofs
-The dial network does not require validators to archive document they certify. The network assumes each controller of a token has an economic interest in keeping the last active version of the token declaration and the justifying publication.
+The dial network does not require publishers to archive document they certify. The network assumes each controller of a token has an economic interest in keeping the last active version of the token declaration and the justifying publication.
 
-The sole information to be maintained by validators for the purpose of performing their duties are neighborhood protocols.
+The sole information to be maintained by publishers for the purpose of performing their duties are neighborhood protocols.
 
-A controller willing do dispose a token must provide the last version of the declaration and corresponsing publicationn proof to each validator of the target neighborhood.
+A controller willing to exercise controll on a token must provide the last declaration tranfering control to that participant.

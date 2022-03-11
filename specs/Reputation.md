@@ -8,16 +8,16 @@ In order to __regulate monney emmission__, (1) he dial network limits the quanti
 # Mining a Coin
 There is two way of paying for a declaration sent to the network for validation. (1) either the sending participant attaches coins to the declaration, or it attaches a proof of work to that declaration.
 
-In the first case, the validator will rediem the coinn attached to the declaration. In the second case, the validator will mine a new coin associated with the PoW attached to the declaration. For performance reason, there is no need to check for participant limit at the validation time, as any limit violation will ruin the reputation of the participant at the closing of the time window.
+In the first case, the validator will rediem the coin attached to the declaration. In the second case, the validator will mine a new coin associated with the PoW attached to the declaration. For performance reason, there is no need to check for participant limit at the validation time, as any limit violation will ruin the reputation of the participant at the closing of the time window.
 
 ## Preventing Delegation of PoW
 In order to prevent an illicite PoW market, the PoW system is designed such as to force the participant to sign the nonced input of the PoW-Hash. This process will make it more expensive for a participant to delegate millions of hash operations to a network computer as network operations will endup being more expensive than the local hash computation.
 
 ## Guarantee of Actuallity
-Actuallity of the proof of work is essential to make sure reputaion is really built onn continuous usage of network services. Proof of actuality of the work done is provided by having the participant include the hash of the last known time window (tw-2) into the input string to be signed.
+Actuallity of the proof of work is essential to make sure reputaion is really built on continuous usage of network services. Proof of actuality of the work done is provided by having the participant include the hash of the last known time window (tw-2) into the input string to be signed.
 
 # Time Degradation of the Proof of Work
-In order to turn the work done sofar into a reputation, the network allows a participant to use the work done sofar (accumulated reputation capital) as leverage to generate new tokens with less work. In order to generate a certificate of work done, a participant can send a subdeclaration to the network summarizing the work done sofar into a single PoW Certificate. That proof can be used in future operations to reduce the PoW to be performed on a new declaration.
+In order to turn the work done sofar into a reputation, the network allows a participant to use the work done sofar (accumulated reputation capital) as leverage to generate new tokens with less work. In order to generate a certificate of work done, a participant can send a modified declaration to the network summarizing the work done sofar into a single PoW Certificate. That proof can be used in future operations to reduce the PoW to be performed on a new declaration.
 
 ## Less work for new Declarations
 A PoW certificate expresses the work done in number of time windows. As the proof of work required for a single declaration is also expressed in number of Time Windows, the reputation expressed on the PoW certificate can be used to multiply the PoW generated for a single declaration.
