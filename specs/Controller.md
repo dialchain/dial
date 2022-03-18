@@ -3,6 +3,14 @@ The controller of a declaration is the entity authorized to change the declarati
 
 The concept of a controller if fundamental to the dial chain, as it is used to implement all type of __transfer of control__ in the dial network. e.g. In order for a participant (payer) to make a payment to another participant (payee) in the dial chain, the payer must transfer controll of a set of dial coins to the payee.
 
+## Controller Script
+A controller script is the part of a token that defines control rules on the token. A token can only be changed by a new declaration if the submiting participant can prove successfull execution of that controller script.
+
+Event though protocols are used to secure the state of tokens, only the hash of the controller script of a token is found in the protocol. The content of the controller script is held by the participant and submitted to the publisher with the target declaration.
+
+In the proccess of submiting a declaration to modify a token, the token controller must provide the controller script, whose hash matches the one included in the current protocol.
+
+
 ## Representation
 The controller entry is the hash of a public key. It is represented inn multihash format.
 ```json
