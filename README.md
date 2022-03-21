@@ -6,19 +6,16 @@ As we figure out that end user devices are not designed to be full citizen of pe
 
 This paper describes a network that creates an economy for the deployment of scalable, open, permissionless and nano payment capable API networks. The latest will in turn open room for the deployment of truly decentralized and censorship resistant web3 applications.
 
-# Exkurs Token Management
-A token management system can maintain a list of token (keyed by the token identifier) and annotate eaach token with a controller property that indicate who can modify the token.
+# Excourse Token Management
+A token management system can maintain a list of tokens. Each token can have a controller property that indicates who can modify the token. The following table displays a database table in which the state of a token is being modified.
 
 ![Token Management](./img/../specs/img/tokenMgt-1.png)
 
-To modify a token, controller must prove possession of the private key matching the public key in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key founnd in the CTL-hash field. That signature if found in the field proof.
+The time column is displayed to show that those modifications do not occur in parallel.  The CTL-hash column displays the public key that enforce the legitimate modification of the token.
 
-The simplest implementation of a token management system can be provided by a centralized database management system.
+To modify a token, the controller must prove possession of the private key matching the public key found in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key found in the CTL-hash field. That signature is displayed in the proof column.
 
-But the purpose of the Dial is to implement the token management 
-- in a distributed environment
-- in a permissionless environment
-- where single participants joining of leaving the network won't impact the functionality of the network.
+Although the simplest implementation of this token management system can be provided by a centralized database server, the central architecture won't be suitable for the deployment of scalable, open, permissionless, and censorship resistant, nano payment capable API networks
 
 # Abstract
 The Dial __(Distributed Immutable Assertion Log)__ is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The Dial can be seen as a log holding state of __tokens__. Tokens can be used to represent anything addressable. A token is (1) created or modified by the token __controller__, (2) verified, certified, and published by many __publishers__.
@@ -76,47 +73,47 @@ A token is said to be __hosted__ by a neighborhood if the ENP assigns that token
 A time window itself is considered a token with the reserved identifier _TWYYYYMMDDHH_. The distance between the hash of this identifier and the anchor alows to locate the neighborhood responsible for that time window. This neighborhood is called the __TWHost (time window host)__ and is responsible for the publication of information on that time window e.g., the list of registered publishers and the time window protocol.
 
 ### Neighborhood hosting a Neighborhood (NHost)
-Each neighborhood is also a token with the reserved unique identifier _NYYYYMMDDHH-I_ where _YYYYMMDDHH_ is the timestamp of the hosting time window, and _I_ ist the position of the neighborhood relative to the time window anchor.
+Each neighborhood is also a token with the reserved unique identifier _NYYYYMMDDHH-I_ where _YYYYMMDDHH_ is the timestamp of the hosting time window, and _I_ is the position of the neighborhood relative to the time window anchor.
 
-The distance between the hash of this identifier and the anchor can alow us to locate the neighborhood responsible for hosting that neighborhood. This neigborhood is called the __NHost (neighborhood host)__ and is responsible for the aggregation of the work done by publishers of the guest neighborhood and the publication of the guest neighborhood's protocol.
+The distance between the hash of this identifier and the anchor can allow us to locate the neighborhood responsible for hosting that neighborhood. This neighborhood is called the __NHost (neighborhood host)__ and is responsible for the aggregation of the work done by publishers of the guest neighborhood and the publication of the guest neighborhood's protocol.
 
 ## Certificates
-Certificates are proofs. They are not directly stored in the Dial, but can be part of the hash documenting the authorization script of a token.
+Certificates are proofs. They are not directly stored in the Dial but can be part of the hash documenting the authorization script of a token.
 
 ### Verification Certificate (VCert)
-A __verification certificate (VCert)__ is produced by each publisher of the THost as a proof that the submitted declaration is consistent witth the state of the token as documented sofar.
+A __verification certificate (VCert)__ is produced by each publisher of the THost as a proof that the submitted declaration is consistent witth the state of the token as documented so far.
 
 ### Publication Certificate (PCert)
 A __publication certificate (PCert)__ is a proof that the resulting state of the underlying token is present in the Dial. A declaration is considered published when a controller can present more than half of publication certificates __(k/2 + 1 PCerts)__, where k is the number of publishers of the token's corresponding NHost.
 
 ### Sharing Certificates (SCert)
-All publishers of a neighborhood are required to share each produced certificate (VCert, PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noice and spam in the network.
+All publishers of a neighborhood are required to share each produced certificate (VCert, PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noise and spam in the network.
 
-In order to enforce sharing of produced certificates, redemtion of coin associated with work done can only happen if publisher present __Sharing Certificates (SCerts)__. These are recceipts produced by other publishers after recception of certificates produced by their neighborhood peers.
+To enforce sharing of produced certificates, redemption of coin associated with work done can only happen if publisher presents __Sharing Certificates (SCerts)__. These are receipts produced by other publishers after reception of certificates produced by their neighborhood peers.
 
 ## Protocols
 A protocol is a merkel tree holding the state of some entities. The Dial knows neighborhood protocols and time window protocols.
 
 ### Incremental Computation of Merkel Roots
-We can allow for incremental computation of a merkel root if we design the ordering criteria to apend new leaf nodes at the end of the list of leaf nodes. All protocols in the Dial are designed such as to allow for the incremental  computation of merkel roots and therefore reduce the time needed to secure the state of the Dial between time windows.
+We can allow for incremental computation of a merkel root if we design the ordering criteria to append new leaf nodes at the end of the list of leaf nodes. All protocols in the Dial are designed such as to allow for the incremental  computation of merkel roots and therefore reduce the time needed to secure the state of the Dial between time windows.
 
 ### Neighborhood Protocol (NP)
 The NP is the merkel tree of the last state of all tokens hosted by the target neighborhood. The neighborhood protocol is produced by publishers of the NHost.
 
-In order to allow for incremental computation of neighborhood protocols, leaf nodes are ordered by (1) the timestamp of the token first publication and (2) the lexicographical order of the token identifier. This way, new tokens are appended at the end of the list and do not trigger a rebalance of the protocol tree.
+To allow for incremental computation of neighborhood protocols, leaf nodes are ordered by (1) the timestamp of the token first publication and (2) the lexicographical order of the token identifier. This way, new tokens are appended at the end of the list and do not trigger a rebalance of the protocol tree.
 
 ### Intermediary Neighborhood Protocol (INP)
 The INP is computed during the 57th minute of the time window and contains (1) the state of all unchanged tokens and (2) the state of all changed tokens from the first to the 56th minute. The INP must be sent to the TWHost before the end of the 57th minute.
 
-Aspiring publishers of time window TW+1 must register for performancce in TW, before the INP is computed. This list of publishers for TW+1 is available to publishers of each NHost at the time they are computing the INP. The partial list of publishers is sent together with the INP to the TWHost.
+Aspiring publishers of time window TW+1 must register for performance in TW, before the INP is computed. This list of publishers for TW+1 is available to publishers of each NHost at the time they are computing the INP. The partial list of publishers is sent together with the INP to the TWHost.
 
 ### Time Window Protocol (TWP)
 The TWP is the merkel tree of all neighborhood protocols hosted by the time window. 
 
-As the list of neigborhoods of a time window is knwon in advance, as well as their order, the merkel root of the TWP can be upgraded evertime a publication certificate upgrades the NP.
+As the list of neighborhoods of a time window is known in advance, as well as their order, the merkel root of the TWP can be upgraded every time a publication certificate upgrades the NP.
 
 ### Intermediary Time Window Protocol (ITWP)
-The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. It is used to determine the intermediatry time window hash __(ITWH)__, which is the merkel root of the ITWP.
+The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. It is used to determine the intermediary time window hash __(ITWH)__, which is the merkel root of the ITWP.
 
 The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
 
@@ -124,7 +121,7 @@ After the ITWH of TW if computed, publishers of TWHost can pull the list of publ
 
 ### Final Neighborhood Protocol (NP)
 The final neighborhood protocol is computed in the first minute of the subsequent time window by publishers of the respective NHost of the expiring time window. The change date is the last second of the expiring time window.
-- NPs are sent to publishers of the TWHost of he expiring time window for the computation of the final time window protocol.
+- NPs are sent to publishers of the TWHost of the expiring time window for the computation of the final time window protocol.
 - NPs are sent to publishers of their hosting neighborhood in the new time window, in the context of the transfer of responsibility. These publishers will custody this protocol till the end of their own time window. These publishers also verify the proocols and forward them to the corresponding TWHost of the old time window in the new time window.
 
 ### Final Time Window Protocol (TWP)
@@ -132,18 +129,18 @@ The final time window protocol is computed in the third minute of the subsequent
 
 This TWP is then marked with the timestamp of the first second of the new time window and sent to publishers of the relevant neighborhood in the new time window  for documentation. Publishers of this neighborhood will custody the protocol for the duration of their own time window.
 
-- The TWHost of the old time window in the new time window receives a time window proocol from the TWHost of the old ime window in the old time window.
+- The TWHost of the old time window in the new time window receives a time window protocol from the TWHost of the old time window in the old time window.
 - The TWHost of the old time window in the new time window also receives the single time window hashes from NHost of the old neighborhoods in the new time window. Publishers of the TWHost of the old time window in the new time window can then use these neighborhood hashes to recompute the TWP and therefore verify the delivered protocol of the old time window.
 
-The folowing picture illustrate both a time window protocol and attached neighborhood protocols.
+The following picture illustrate both a time window protocol and attached neighborhood protocols.
 
 ![Protocols](./img/../specs/img/dial-protocols.png?raw=true&width=5)
 
 ### Verifying a Token
-In order to validate the a token at the end of a given time window, two partial merkel trees (PMT) are required:
+To validate a token at the end of a given time window, two partial merkel trees (PMT) are required:
 - The PMT of the protocol neighborhood that hosted the token in the passed time window
 - The PMT of the protocol of the passed time window.
-Knowing the identifier of eaach of these documents, a participant can locate where to download the documents in the current time window.
+Knowing the identifier of each of these documents, a participant can locate where to download the documents in the current time window.
 
 # The Dial Economy
 Due to it open and permissionless character, the Dial defines a value generation system to address spam and sustainability.
