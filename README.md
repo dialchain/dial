@@ -11,7 +11,7 @@ A token management system can maintain a list of tokens. Each token can have a c
 
 ![Token Management](./img/../specs/img/tokenMgt-1.png)
 
-The time column is displayed to show that those modifications do not occur in parallel.  The CTL-hash column displays the public key that enforce the legitimate modification of the token.
+The time column is displayed to show that those modifications do not occur in parallel.  The CTL-hash column displays the public key that enforces the legitimate modification of the token.
 
 To modify a token, the controller must prove possession of the private key matching the public key found in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key found in the CTL-hash field. That signature is displayed in the proof column.
 
@@ -24,7 +24,7 @@ The Dial defines time slices called __time windows__. Each time window starts at
 
 The Dial scales by __partitioning__ tokens and publishers into neighborhoods. The __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but unpredictable association between each token and a group of publishers (neighborhood) responsible for the verification and publication of changes on that token in the given time window.
 
-The Dial has no authoritative identification mechanism. The Dial conditions permissionless participation with a __cumulative Proof of Work (PoW)__ called __Reputation__. The __reputation__ of a participant is the aggregation of the PoW performed so far by that participant. The reputation of a participant (sort of capital) exposes the participant to privileges (e.g., eligibility to provide or consume some services). __Spam control__ is provided by making sure verifiable misbehavior of a participant leads to the loss of that participant's reputation.
+The Dial has no authoritative identification mechanism. The Dial conditions permissionless participation with a __cumulative Proof of Work (PoW)__ called __Reputation__. The __reputation__ of a participant is the aggregation of the PoW performed so far by that participant. The reputation of a participant (sort of capital) exposes the participant to privileges (e.g., eligibility to provide or consume some services). __Spam control__ is provided by making sure verifiable misbehaviour of a participant leads to the loss of that participant's reputation.
 
 The Dial does not care about the __nature or the content of a token__. The main purpose of the Dial is to document the last authorization script of each token, such as to prevent illicit modification. Therefore, data found in Dial protocols are mainly identifiers, expiration dates, content, and authorization hashes. In this same perspective, the Dial does not require a publisher to maintain a protocol history. 
 
@@ -36,7 +36,7 @@ The Dial __monetary policy__ allows the mining of coins out of participant's PoW
 
 The Dial __sustainability policy__ requires each token to be associated with a payment substantial enough to maintain the token toward its expiration. The total value held by the Dial will be the motivating factor for publishers to join and service future time windows.
 
-The following picture displays the life cycle of a declaration, form the request for publication to the transfer of control to the subsequent time window. Dashed lines describe operations performed at the closing of a time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant.
+The following picture displays the life cycle of a declaration, from the request for publication to the transfer of control to the subsequent time window. Dashed lines describe operations performed at the closing of a time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant.
 
 ![DIAL-WORKFLOW](./img/../specs/img/dial-workflow.png?raw=true&width=5)
 
@@ -160,7 +160,7 @@ The price paid by a party to publish a declaration has a minimum cap, a file siz
 These three factors (a) payment for intent request, (b) payment for publication and (c) the publisher registration constraint constitute together an effective spam resistance mechanism.
 
 ## Sustainability
-Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is fogotten with the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enougth reserves to finance the security of the token till expiration.
+Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is forgotten with the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enough reserves to finance the security of the token till expiration.
 
 The Dial also does not have a treasury. Each token caries it's maintenance budget in the form of attached coins. This maintenance budget is consumed as the token is passed from one time window to another till the token is removed from the log at expiration.
 
@@ -174,17 +174,17 @@ The PoW is designed to enforce a relation between the value extracted from of a 
 The Dial allows a participant to perform some computation intensive work and use the resulting proof (PoW) to pay for the execution of a service. The service execution process transforms the provided PoW into a coin. This resulting coin is subsequently used in the Dial network as a mean of payment.
 
 ## Reputation
-The reputation of a participant is the cumulated amount of PoW performed by that participant so far. This reputation exposes the participant to priviledges:
+The reputation of a participant is the cumulated amount of PoW performed by that participant so far. This reputation exposes the participant to privileges:
 - the registration as a service provider requires a participant to justify controll over a defined amount of cummulated PoW (called reputation)
-- the amount of PoW required to subbmit a publication request is an inverse factor of the reputation of a participant. The bigger the reputaation of a participant, the lesser is the PoW required from the participant for the submission of a publication request.
+- the amount of PoW required to submit a publication request is an inverse factor of the reputation of a participant. The bigger the reputation of a participant, the lesser is the PoW required from the participant for the submission of a publication request.
 
-The reputation of a participant can also be attached to some operations as a guaaranty of not double spending. Speeding up the off chain transaction of token and increasing the annonymity of the overall echosystem.
+The reputation of a participant can also be attached to some operations as a guaranty of not double spending. Speeding up the off chain transaction of token and increasing the annonymity of the overall echosystem.
 
 ## Reducing Opportunistic Behavior
-With respect the open and permissionless character of the Dial, coin production must be designed such as to have the total coin supply reflect the volume of activity performed in the Dial network. With this in mind, the Dial wants to prevent participant (1)  from performing work just with the purpose of increasing the coin supply, (2) from extracting additional value out of the coin production process (e.g. by producing work for service requests directed to service providers known in advance).
+With respect to the open and permissionless character of the Dial, coin production must be designed such as to have the total coin supply reflect the volume of activity performed in the Dial network. With this in mind, the Dial wants to prevent participant (1)  from performing work just with the purpose of increasing the coin supply, (2) from extracting additional value out of the coin production process (e.g. by producing work for service requests directed to service providers known in advance).
 
 In order to prevent opportunistic behavior, the Dial limits the conversion of PoW to coin to services which by their nature do not allow participants to behave oppotunistic. Currently identified services are:
 - The publication service.
 - The coin bundling service.
 
-In this same rationale, the Dial allows a participant to attach it's reputation to an operation as a guaranty of honesty. Misbehavior will then lead to the participant loosing this reputation.
+In this same rationale, the Dial allows a participant to attach it's reputation to an operation as a guaranty of honesty. Misbehavior will then lead to the participant losing this reputation.
