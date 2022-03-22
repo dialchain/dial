@@ -7,40 +7,79 @@ As we figure out that end user devices are not designed to be full citizen of pe
 This paper describes a network that creates an economy for the deployment of scalable, open, permissionless and nano payment capable API networks. The latest will in turn open room for the deployment of truly decentralized and censorship resistant web3 applications.
 
 # Excourse Token Management
-A token management system can maintain a list of tokens. Each token can have a controller property that indicates who can modify the token. The following table displays a database table in which the state of a token is being modified.
+A token management system can maintain a list of tokens. Each token can have a controller property that indicates who can modify the token. The following picture displays a database table in which the state of a single token is tracked.
 
 ![Token Management](./img/../specs/img/tokenMgt-1.png)
 
-The time column is displayed to show that those modifications do not occur in parallel.  The CTL-hash column displays the public key that enforces the legitimate modification of the token.
+To understand the table above, let's describe it's columns:
+- Column "Time" is displayed to show that those modifications do not occur in parallel.  
+- Column "TokenID" holds a unique identifier for the token. This identifier is also a public key hash. Enforcing proof of possession (PoP) of the corresponding private key at token creation time will make sure two users can not present the same id to the system (Unless they are sharing the private key).
+- Columnn "CTL hash" displays the hash of the public key that guards the token. This is the key used to enforce legitimate modification of the token.
+- Columns "Exp", "Token Hash" and "Value" are information not relevant for the management of the transfer of the token.
+- Column "Proof" documents the PoP used to legitimate modification on the token. To modify a token, the controller must prove possession of the private key matching the public key found in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key found in the CTL-hash field. That signature is displayed in this Proof column.
 
-To modify a token, the controller must prove possession of the private key matching the public key found in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key found in the CTL-hash field. That signature is displayed in the proof column.
+Although the simplest implementation of this token management system can be provided by a centralized database server, the central architecture won't be suitable for the deployment of scalable, open, permissionless, and censorship resistant, nano payment capable API networks.
 
-Although the simplest implementation of this token management system can be provided by a centralized database server, the central architecture won't be suitable for the deployment of scalable, open, permissionless, and censorship resistant, nano payment capable API networks
+This last remark push us toward the design of an equivalent system but distributed, open and permissionless.
 
 # Abstract
-The Dial __(Distributed Immutable Assertion Log)__ is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The Dial can be seen as a log holding state of __tokens__. Tokens can be used to represent anything addressable. A token is (1) created or modified by the token __controller__, (2) verified, certified, and published by many __publishers__.
+The Dial __(Distributed Immutable Assertion Log)__ is a distributed log holding state of __tokens__.
+ Token can be created or modified using __declarations__. Each token is (1) created or modified by the token __controller__, (2) verified and certified by many __publishers__.
 
-The Dial defines time slices called __time windows__. Each time window starts at the __UTC Hour__ and ends before the next __UTC Hour__. At the end of a time window, a __protocol__ is produced to make sure all participants share the same state of the Dial.
+ The Dial only documents the last state of a token. It does not keep the change history of the token.
 
-The Dial scales by __partitioning__ tokens and publishers into neighborhoods. The __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but unpredictable association between each token and a group of publishers (neighborhood) responsible for the verification and publication of changes on that token in the given time window.
+ The Dial only knows the identifier, the content hash and the authorization hash of a token. Payload information is held by interrested parties (generally the controller).
 
-The Dial has no authoritative identification mechanism. The Dial conditions permissionless participation with a __cumulative Proof of Work (PoW)__ called __Reputation__. The __reputation__ of a participant is the aggregation of the PoW performed so far by that participant. The reputation of a participant (sort of capital) exposes the participant to privileges (e.g., eligibility to provide or consume some services). __Spam control__ is provided by making sure verifiable misbehaviour of a participant leads to the loss of that participant's reputation.
+ The overall state the Dial at any given __moment__ is allways partitioned among publishers. No publisher is required to hold all files. A simple and deterministic algorithm allows the location of the group of publishers holding the state of a given token, knowing the __token identifier__ and a so called __anchor__.
 
-The Dial does not care about the __nature or the content of a token__. The main purpose of the Dial is to document the last authorization script of each token, such as to prevent illicit modification. Therefore, data found in Dial protocols are mainly identifiers, expiration dates, content, and authorization hashes. In this same perspective, the Dial does not require a publisher to maintain a protocol history. 
+ As the Dial is open and permissionless, publishers might join and leave at will. This opennes justifies the requirement, not to keep a token under the custodiaanship of a single publisher for an unlimited amount of time. To enable the __transfer of custodianship__ to other publishers, the Dial defines time slices called __time windows__. Each time window starts at the __UTC Hour__ and ends before the next __UTC Hour__. At the end of a time window, the last state of each token is passed by the current custodians (publishers holding the token) to new custodians.
 
-The Dial does not require a single publisher to __store  all protocols__. All data relevant to the Dial are partitioned among neighborhoods of the current time window. Whereby all publishers of a neighborhood hold the same data. After closing a time window, publishers of the closed time window transfer each protocol they produced to relevant publishers in the new time window (as part of their coin redemption process). This partitioning is possible because each protocol in the Dial is also considered a token and hence, has an identifier that can be used to determine the protocol's host neighborhood in any given time window.
+To allow for parallel proccessing of tokens, the Dial scales by __partitioning__ publishers of a given time window into groups called __neighborhoods__. Inside the time window, each token is assigned to exactely one neighborhood. This way, changes on a single token inside a time window are all verified by the same set of validators, thus preventing the certificcation of conflicting changes.
 
-The Dial does not require a publisher to __stay alive__ beyond the time committed to service a time window. After passing produced protocols to relevant publishers of the new time window, current publishers can go out of service. Violating committed availability will nevertheless lead to a publisher losing its reputation.
+The Dial __sustainability policy__ requires each token to be associated with payments substantial enough to maintain the token toward its expiration. The total value held by the Dial will be the motivating factor for publishers to join and service future time windows.
+
+# Consensus
+The open and permissionless character of the Dial might leave room for opportunistic and/or spammy behavior. 
+
+## Proof of Work
+All requests to the Dial are required to provide a Proof of Work __(PoW)__. The required PoW is substantial enougth to prevent spammy behavior of the requesting participant.
 
 The Dial __monetary policy__ allows the mining of coins out of participant's PoWs and the reuse of those coins for the payment of goods and services among Dial participants.
 
-The Dial __sustainability policy__ requires each token to be associated with a payment substantial enough to maintain the token toward its expiration. The total value held by the Dial will be the motivating factor for publishers to join and service future time windows.
+## Reputation
+Permissionless participation is  also conditioned with the cumulative Proof of Work __(PoW)__ called __reputation__. The __reputation__ of a participant is the aggregation of the PoW performed so far by that participant. The reputation of a participant (sort of capital) exposes the participant to privileges e.g.:
+- eligibility to perform as a publisher,
+- reduction of the PoW required for a given operation.
 
-The following picture displays the life cycle of a declaration, from the request for publication to the transfer of control to the subsequent time window. Dashed lines describe operations performed at the closing of a time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant.
+As the reputation is a sort of valuable capital, verifiable misbehaviour of a participant leads to the loss of that participant's reputation.
+
+## Participant Opportunistic Behavior
+A participant controlling a token is assumed the have sole control on corresponding key credentials. Submitting conflicting declarations to the network can occur by the mean of the participant sending different versions of the change declaration to publishers of the token neighborhood. Even though this attempt will never succeed due to majority rules implemented by neighborhoods, the submitting participant will lose the PoW associated to the declaration. If this PoW is sustained by a reputation, the submitting participant will also loose the corresponding reputation.
+
+## Publisher Opportunistic Behavior
+Despite participants which are given less room for opportunistic behavior, publishers are given the priviledge to:
+- convert proof of work into coins
+- aggregate proof of work into reputations
+- verify and certify creation and modifications of tokens
+- verify and certify token operations (aggregation)
+
+As the system is open and permissionless, we can not expect any integrity from publisher. Beside this, the Dial does not keep the change history. Therefore, the integrity of the Dial is provided by the verification, certification, and publication workflow.
+
+### Control over Neighborhood
+A group of related publishers can cordinate their effort in neighborhoods they controll to perform illegitimate modifications on tokens. In order the prevent this:
+
+- The Dial's __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but __unpredictable__ association between each token and the neighborhood responsible for the validation of changes on that token in the given time window.
+- Beside the unpredictable distribution of token to neighborhoods, the Dial allows publishers to issue __invalidation certificates__ for conflicting declarations. As invalidation certificates do not require majority rule, having a non conforming publisher in a neighborhood is sufficcient to prevent opportunistic behavior.
+
+The following picture displays the life cycle of declaration modifying a token, from the request for publication to the transfer of control to the subsequent time window. Dashed lines describe operations performed at the closing of a time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant.
 
 ![DIAL-WORKFLOW](./img/../specs/img/dial-workflow.png?raw=true&width=5)
 
-Transferring control on a token occurs by the means of the current controller publishing a new declaration. To publish a declaration, (1) the current controller submits the declaration to one or more publishers of the token neighborhood (THost). (2) Addressed publishers verify the declaration and share the declaration with all other publishers of that neighborhood. (3) Each publisher of that neighborhood produces a verification certificate (VCert) and (4) sends the VCert to all publishers of the protocol neighborhood (NHost). (5) Upon receiving more than half of VCerts, each publisher of the protocol neighborhood creates a publication certificate (PCert) and returns it to the submitting controller. The declaration is considered published when the submitting controller is in possession of more than half of PCerts.
+The picture above shows that each token is randomly validated by at least two neighborhoods. The neighborhood hosting the token in the current time window (THost) and the neighborhood hosting the token in the subsequent time window.
+
+With the unpredictable distribution of publishhers and the possibility for a single publisher to uncover wrong doing, a group of malicious publishers must cover a substantial part of the network to successfully induce the illegitimate modification of a single token, as the group has to corrupt all publishers of two randomly built neighborhoods in subsequent time windows to achieve capability of corrupting a single token.
+
+Transferring control on a token occurs by the means of the current controller publishing a new declaration. To publish a declaration, (1) the current controller submits the declaration to one or more publishers of the token neighborhood (THost). (2) Addressed publishers verify the declaration and share the declaration with all other publishers of that neighborhood. (3) Each publisher of that neighborhood produces a certificate (PCert), (4) share this certificate with other controllers of the same neighborhood and (5) returns the certificate to the submitting controller. The declaration is considered published when the submitting controller is in possession of more than half of PCerts.
 
 # Key Entities
 
