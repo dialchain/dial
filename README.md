@@ -44,7 +44,7 @@ The Dial __sustainability policy__ requires each token to be associated with pay
 The open and permissionless character of the Dial might leave room for opportunistic and/or spammy behavior. 
 
 ## Proof of Work
-All requests to the Dial are required to provide a Proof of Work __(PoW)__. The required PoW is substantial enougth to prevent spammy behavior of the requesting participant.
+All requests to the Dial are required to provide a Proof of Work __(PoW)__. The required PoW is substantial enougth to prevent spammy behavior of the requesting participant. 
 
 The Dial __monetary policy__ allows the mining of coins out of participant's PoWs and the reuse of those coins for the payment of goods and services among Dial participants.
 
@@ -54,6 +54,12 @@ Permissionless participation is  also conditioned with a cumulative Proof of Wor
 - the reduction of the PoW required for a given operation.
 
 As the reputation is a sort of valuable capital, verifiable misbehaviour of a participant leads to the loss of that participant's reputation.
+
+## Expiration
+Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is forgotten after the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enough reserves to finance the security of the token till expiration.
+
+The Dial also does not have a treasury. Each token caries it's maintenance budget in the form of attached coins (or PoW). This maintenance budget is consumed as the token is passed from one time window to another till the token is removed from the log at expiration.
+
 
 ## Participant Opportunistic Behavior
 A participant controlling a token is assumed the have sole control on corresponding key credentials. Submitting conflicting declarations to the network can occur by the mean of the participant sending different versions of that declaration to publishers. Even though this attempt will never succeed due to majority rules implemented by neighborhoods, the submitting participant will lose the PoW associated with the declaration. If this PoW is sponsored with by a reputation, the submitting participant will also loose that reputation.
@@ -167,55 +173,62 @@ Certificates are proofs. They are not directly stored in the Dial but can be par
 A __publication certificate (PCert)__ is a proof that the resulting state of the underlying token is is consistent witth the state of the token as documented so far. A participant can consider a token published if none of the custodying publishers returns a rejection certificate.
 
 ### Sharing Certificates (SCert)
-All publishers of a neighborhood are required to share each produced certificate (VCert, PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noise and spam in the network.
+All publishers of a neighborhood are required to share each produced certificate (PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noise and spam in the network.
 
 To enforce sharing of produced certificates, redemption of coin associated with work done can only happen if publisher presents __Sharing Certificates (SCerts)__. These are receipts produced by other publishers after reception of certificates produced by their neighborhood peers.
 
 ## Protocols
 A protocol is a merkel tree holding the state of some entities. The Dial knows three types of protocols:
-- The token protocol
+- the token protocol
 - the neighborhood protocol and 
-- time window protocol.
+- the time window protocol.
+
+### Protocol Identifiers
+Protocol identifiers are generally made out of the unnderlying entity identifier and the timestamp of the protocol. Beside token, all other entities like time windows, neighborhoods have conventional identifiers, that can be computed by each particpant.
 
 ### Incremental Computation of Merkel Roots
 We can allow for incremental computation of a merkel root if we design the ordering criteria to append new leaf nodes at the end of the list of leaf nodes. All protocols in the Dial are designed such as to allow for the incremental  computation of merkel roots and therefore reduce the time needed to secure the state of the Dial between time windows.
 
 ### Token Protocol (TP)
-A token protocol documents all certificates produced to secure the last state of a token in a merkel tree. The documentaation of the las state of a token is held by the controller of the token and shall be presented to publishers as part of a new declaration to modify the token.
+A token protocol is aa merkel tree documenting all certificates produced to secure the state of a token in a merkel tree. The documentation of the state of a token is held by the controller of the token and shall be presented to publishers as part of a new declaration to modify that token.
 
 By verifying the merkel root of the token state, the publisher can consume information contained in the token documentation to verify the legitimacy of the new modification request.
 
-### Neighborhood Protocol (NP)
-The NP is the merkel tree of the last state of all tokens hosted by the target neighborhood. The neighborhood protocol is produced by publishers of the THost.
+### Neighborhood Protocol
+A neighborhood protocol is a merkel tree of the last state of all tokens hosted by the target neighborhood. It is produced by each publisher of the neighborhood hosting the token at the end of the time window.
 
 To allow for incremental computation of neighborhood protocols, leaf nodes are ordered by (1) the timestamp of the token first publication and (2) the lexicographical order of the token identifier. This way, new tokens are appended at the end of the list and do not trigger a rebalance of the protocol tree.
 
-### Intermediary Neighborhood Protocol (INP)
+#### Intermediary Neighborhood Protocol (INP)
 The INP is computed during the 57th minute of the time window and contains (1) the state of all unchanged tokens and (2) the state of all changed tokens from the first to the 56th minute. The INP must be sent to the TWHost before the end of the 57th minute.
 
 Aspiring publishers of time window TW+1 must register for performance in TW, before the INP is computed. This list of publishers for TW+1 is available to publishers of each NHost at the time they are computing the INP. The partial list of publishers is sent together with the INP to the TWHost.
 
-### Time Window Protocol (TWP)
+The identifier of an INP follows the pattern: _INP-YYYYMMDDHH-I_ where _YYYYMMDDHH-I_ is the suffix of the neighborhood. 
+
+#### Final Neighborhood Protocol (NP)
+The final neighborhood protocol is computed in the first minute of the subsequent time window by publishers of the respective THost of the expiring time window. The change date is the last second of the expiring time window.
+- NPs are sent to publishers of the TWHost of the expiring time window for the computation of the final time window protocol.
+- NPs are sent to publishers of their hosting neighborhood in the new time window, in the context of the transfer of responsibility. These publishers will custody this protocol till the end of their own time window. These publishers also verify the proocols and forward them to the corresponding TWHost of the old time window in the new time window.
+
+The identifier of an NP follows the pattern: _NP-YYYYMMDDHH-I_ where _YYYYMMDDHH-I_ is the suffix of the neighborhood.
+
+### Time Window Protocol
 The TWP is the merkel tree of all neighborhood protocols hosted by the time window. 
 
 As the list of neighborhoods of a time window is known in advance, as well as their order, the merkel root of the TWP can be upgraded every time a publication certificate upgrades the NP.
 
 ### Intermediary Time Window Protocol (ITWP)
-The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. It is used to determine the intermediary time window hash __(ITWH)__, which is the merkel root of the ITWP.
+The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. The identifier of an ITWP follows the pattern: _ITWP-YYYYMMDDHH_ where _YYYYMMDDHH_ is the suffix of the time window. 
 
-The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
+The ITWP is used to determine the intermediary time window hash __(ITWH)__, which is the merkel root of the ITWP. The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
 
 After the ITWH of TW if computed, publishers of TWHost can pull the list of publishers of TW+1 and use it to compute the layout of TW+1.
 
-### Final Neighborhood Protocol (NP)
-The final neighborhood protocol is computed in the first minute of the subsequent time window by publishers of the respective NHost of the expiring time window. The change date is the last second of the expiring time window.
-- NPs are sent to publishers of the TWHost of the expiring time window for the computation of the final time window protocol.
-- NPs are sent to publishers of their hosting neighborhood in the new time window, in the context of the transfer of responsibility. These publishers will custody this protocol till the end of their own time window. These publishers also verify the proocols and forward them to the corresponding TWHost of the old time window in the new time window.
-
 ### Final Time Window Protocol (TWP)
-The final time window protocol is computed in the third minute of the subsequent time window by the TWHost (of the old time window) and documented as such.
+The final time window protocol is computed in the third minute of the subsequent time window by the TWHost (of the old time window) and documented as such.  The identifier of an ITWP follows the pattern: _TWP-YYYYMMDDHH_ where _YYYYMMDDHH_ is the suffix of the time window.
 
-This TWP is then marked with the timestamp of the first second of the new time window and sent to publishers of the relevant neighborhood in the new time window  for documentation. Publishers of this neighborhood will custody the protocol for the duration of their own time window.
+This TWP is then sent to publishers of the relevant neighborhood in the new time window for documentation. Publishers of this neighborhood will custody the protocol for the duration of their own time window.
 
 - The TWHost of the old time window in the new time window receives a time window protocol from the TWHost of the old time window in the old time window.
 - The TWHost of the old time window in the new time window also receives the single time window hashes from NHost of the old neighborhoods in the new time window. Publishers of the TWHost of the old time window in the new time window can then use these neighborhood hashes to recompute the TWP and therefore verify the delivered protocol of the old time window.
@@ -228,51 +241,26 @@ The following picture illustrate both a time window protocol and attached neighb
 To validate a token at the end of a given time window, two partial merkel trees (PMT) are required:
 - The PMT of the protocol neighborhood that hosted the token in the passed time window
 - The PMT of the protocol of the passed time window.
+
 Knowing the identifier of each of these documents, a participant can locate where to download the documents in the current time window.
-
-# The Dial Economy
-Due to it open and permissionless character, the Dial defines a value generation system to address spam and sustainability.
-
-## Value Generation
-Every single service performed by a Dial service provider (e.g. publisher) in the Dial is paid for by the requestor of that service. The price of some fundamental services (like the publication service) is set by the network. The price of other services is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
-
-## Spam Rsistance
-Spam is the main thread to open and permissionless architectures. The Dial is built on top of a fundamental spam resistance system that makes sure the revenue generated from the publication of a single token is sufficient to cover present and future performance required to validate, maintain and retire that token. 
-
-This is also a reason why each token carries an expiration date. After the expiration date, the token identifier is not known to the Dial and does not appear in the protocol.
-
-In order to protect publishers (or service providers in general), the Dial requires each service request to be accompanied with a payment. Even the price inquiry service (a.k.a service intent request) is a payable service. Recall that the service intent request also returns a binding offer to the requesting party.
-
-The price paid by a party to publish a declaration has a minimum cap, a file size factor, a validation effort factor and time to live factor. This price is generally substantial enough to have a significant impact on the wealth of the party generating spammy declarations.
-
-These three factors (a) payment for intent request, (b) payment for publication and (c) the publisher registration constraint constitute together an effective spam resistance mechanism.
-
-## Sustainability
-Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is forgotten with the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enough reserves to finance the security of the token till expiration.
-
-The Dial also does not have a treasury. Each token caries it's maintenance budget in the form of attached coins. This maintenance budget is consumed as the token is passed from one time window to another till the token is removed from the log at expiration.
 
 # Monetary Policy
 Each coin in the Dial originates from a combination between a __Proof of Work__ and the __performance__ of a __canonical service__.
 
 ## Proof of Work (PoW)
-The PoW is designed to enforce a relation between the value extracted from of a service consumed and the effort performed to legitimate the service request. The more balanced the relationship between the effort performed (input) and the value extracted (output), the lesser probable will a participant try to spam the system.
+The PoW is designed to enforce a relation between the value extracted from of a service consumed and the effort performed to legitimate the service request. A balanced relationship between the effort performed (input) and the value extracted (output) will discourage a participant from spamming the Dial.
 
 ## Mining Coins out of PoW
-The Dial allows a participant to perform some computation intensive work and use the resulting proof (PoW) to pay for the execution of a service. The service execution process transforms the provided PoW into a coin. This resulting coin is subsequently used in the Dial network as a mean of payment.
+The Dial allows a participant to perform some computation intensive work and use the resulting proof (PoW) to pay for the execution of a Dial service. The service execution process transforms the provided PoW into a Dial coin. This resulting coin is subsequently used in the Dial network as a mean of payment.
 
 ## Reputation
-The reputation of a participant is the cumulated amount of PoW performed by that participant so far. This reputation exposes the participant to privileges:
-- the registration as a service provider requires a participant to justify controll over a defined amount of cummulated PoW (called reputation)
-- the amount of PoW required to submit a publication request is an inverse factor of the reputation of a participant. The bigger the reputation of a participant, the lesser is the PoW required from the participant for the submission of a publication request.
+The reputation of a participant is the cumulated amount of PoW performed by that participant so far. As described above, the reputation exposes the participant to privileges:
+- the registration as a service provider requires a participant to provide a ccertain reputation it controlls.
+- the amount of PoW required to submit a publication request is an inverse factor of the reputation of the submitting participant. The bigger the reputation of a participant, the lesser is the PoW required from the participant for the submission of a publication request.
+- the reputation of a participant can also be attached to some operations as a guaranty of not double spending. Speeding up the off chain transaction of token and increasing the annonymity of the overall echo system.
+- Reputations are integral part of the monetary policy as reputation are tradable value object.
 
-The reputation of a participant can also be attached to some operations as a guaranty of not double spending. Speeding up the off chain transaction of token and increasing the annonymity of the overall echosystem.
-
-## Reducing Opportunistic Behavior
-With respect to the open and permissionless character of the Dial, coin production must be designed such as to have the total coin supply reflect the volume of activity performed in the Dial network. With this in mind, the Dial wants to prevent participant (1)  from performing work just with the purpose of increasing the coin supply, (2) from extracting additional value out of the coin production process (e.g. by producing work for service requests directed to service providers known in advance).
-
-In order to prevent opportunistic behavior, the Dial limits the conversion of PoW to coin to services which by their nature do not allow participants to behave oppotunistic. Currently identified services are:
-- The publication service.
-- The coin bundling service.
-
-In this same rationale, the Dial allows a participant to attach it's reputation to an operation as a guaranty of honesty. Misbehavior will then lead to the participant losing this reputation.
+## Supply Cap
+The Dial monetary policy does not set a supply cap, but designs the proof of work (PoW) such as to have the Dial supply reflect the volume of activity performed in the Dial network:
+- the PoW required for a service is set such as to have the work done consume resources equivalent to the monetary value to be paid for the same service. As devices get powerfull, PoW will be addjusted to service it original purpose. 
+- the PoW performed includes details on the service request and on the target time window. This means a PoW generaated for a service request can not be reused for another service request, thus preventing the development of a secondary PoW market.
