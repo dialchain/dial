@@ -12,7 +12,8 @@ A token reference is the representation of a token as it appears in a neighborho
 {
     "id": "unique publicKey multihash",
     "mod": 20220323121835,
-    "wrk": 1800,
+    "wrk": 1799,
+    "rep": 1,
     "mr": "merkel root multihash"
 }
 ```
@@ -24,9 +25,12 @@ The unique identifier of a token is the hash of the public key generated for the
 This is either the creation or the last modification timestamp. This is essential to indicate the version of cryptographic materials used to produce the certificates.
 
 ### Work (wrk)
-The work is the amount of work unit held by the token. If we assume that a token spends a work unit per time window to stay in the log, the work value of 24 will indicate that the token can still be carried thru 24 time windows and then forgotten.
+The work is the amount of __work units (wu)__ held by the token. If we assume that a token spends a work unit per time window to stay in the log, the work value of _24 wu_ will indicate that the token can still be carried thru 24 time windows and then forgotten.
 
 The notion of work implicitely creates an expiration time for the token. Means the token expires when the work carries the value zero.
+
+### Reputation Credit (rep)
+Every single work unit spent by a token is added to the reputation credit of that token. The value of the _rep_ field can be awarded to the participant if the participant provides a reputation token with the next modification request.
 
 ### Merkel Root (mr)
 This is the merkel root of the token state as verified by the publisher of the last modification. This information is not present for the creation record.
@@ -43,7 +47,8 @@ The token state holds information necessary to document modifications on the tok
 {
     "id": "unique publicKey multihash",
     "mod": 20220323121835,
-    "wrk": 1800,
+    "wrk": 1799,
+    "rep": 1,
     "ctl": "controller script multihash",
     "hash": "token data multihash",
     "crt": [
@@ -102,7 +107,8 @@ resulting to the following file. AAdditionnaly, [Cannonical CBOR](https://datatr
 {
     "id": "unique publicKey multihash",
     "mod": 20220323121835,
-    "wrk": 1800,
+    "wrk": 1799,
+    "rep": 1,
     "ctl": "controller script multihash",
     "hash": "token data multihash",
     "crt":[
@@ -139,21 +145,34 @@ The list of _crt_ is sorted aaccording to the lexicographical representation of 
 In order to create or modify a token, a participant must send a declaration file to the neighborhood hosting the token identifier.
 
 ### Declaration File
-A declaration file will generally contain many declarations.
-- the declaration referencing the main token being modified
-- the declaration referencing payment tokens
-
+The following document displays the top level structure of a declarationn file.
 ```json
 {
     "decl": ["List of declarations"],
-    "pymt": 
-    {
-        "coin":["List of identifiers of coins used for the payment, identifier listed above"],
-        "pow": ["proof of work provided to support the declaration. evtl supported with reputations listed aabove."]
-    }
+    "coin":["List of coin declarations for payment"],
+    "pow": ["List of PoW declarations for payment"],
 }
 ```
-Recall that all tokens and payments addressed in a declaration file must be custodied in the same neighborhood for the given time window.
+#### Main Declaration (decl)
+Holds the list of declatrations provided to creates or modify tokens. 
+
+If there is more than one declaration in the list, we assume the file is submitting an arithmetic operation. Following conditions must apply:
+- all tokens and payments addressed in a declaration file must fall in the same neighborhood for the given time window.
+- the arithmetic sum of all tokens minus proccessing fees must be zero.
+- all target _ctl_ entries must be identical. Means all declarations must transact to the same target controller script.
+- each declaration can provide a target _rep_ token to collect the reputation earned from the operation.
+
+#### Coin (coin)
+The _coin_ entry holds the list of coin declarations attached to the file. These are independent of the main declarations.
+
+All coin declarations provided must transact to the same target _ctl_ entry used in the main decclarations, as those are going to be redistributed by the publishers of the target neighborhood.
+
+#### Proof of Work (pow)
+In the same perspective, the _pow_ entry holds all proof of work provided for the operation.
+
+All PoW declarations provided must transact to the same target _ctl_ entry used in the main decclaration, as those are going to be redistributed by the publishers of the target neighborhood.
+
+The proof of work might contain a __reputation__ entry, that helps reduce the amount of computation to be performed by the submitting participant for a work unit. The reputation can transaact to any _ctl_ value. A separated certificate will release this proof osf work a the closing of the time window.
 
 ### Declaration Entry
 A single declaration entry provides (1) the current state of the token as known to the Dial, (2) the content of the current controller script, (3) the new state of the token, and (4) the proof of execution of the controller script.
@@ -162,7 +181,8 @@ A single declaration entry provides (1) the current state of the token as known 
     "state": {
         "id": "token unnique publicKey multihash",
         "ctl": "controller script multihash",
-        "wrk": 1300,
+        "wrk": 1799,
+        "rep": 1,
         "hash": "token data multihash",
         "crt": ["... additional certificates"],
         "mr": "merkel root of the last state of the token"
@@ -173,10 +193,12 @@ A single declaration entry provides (1) the current state of the token as known 
         "type": "proof type e.g. JcsBase64Ed25519Signature2021",
         "nonce": "e.g. 43102c83-c20f-4e38-bfe0-b805bf54c6e2"
     },    
-    "token":{
+    "target":{
         "id": "unnique publicKey multihash",
         "ctl": "new controller script multihash",
         "hash": "new token data multihash",
+        "wrk":1100,
+        "rep": "reputation identifier, where to accumulate earned reputation"
     },
     "poe": "signature e.g. NJlKbI7fqMzkm_PWpfd4jCPdVghxaH3gYw3tH22Ht29xen6...",
 }
@@ -189,6 +211,7 @@ For each declaration, the controller must provide a proof of execution of the cu
 
 In the case of a new token, the field _state_ is not present. The field _ctl_ contains the description of the public key producing the token identifier.
 
+## Publishing Process
 ### Verifying a Declaaration
 In order to verify a declaration, the publisher must be in possession of:
 - the last time window protocol, that aggregates neighborhood protoccols. This protocol is verifiable as it aggregates to the time window hash universally available,
@@ -204,7 +227,8 @@ Upon successful verification, the publisher will produce and return a certificat
 {
     "id": "token unnique publicKey multihash",
     "ctl": "controller script multihash",
-    "wrk": 1300,
+    "wrk": 1799,
+    "rep": 1,
     "hash": "token data multihash",
     "crt":{
         "n":"N2022032312-13",

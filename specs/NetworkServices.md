@@ -15,10 +15,10 @@ A relay is open, permissionless and offers 3 methods:
 - GET(url, payment): allowing the caller to collect a message
 - DEL(url): allowing the removal of a message no longer needed.
 
-The payment amount is dependent on the size of the message and expiration of the message. The Dial defines standard paacket sizes and prices for the relay service.
+The payment amount is dependent on the size of the message and expiration of the message. The Dial defines standard packet sizes and prices for the relay service.
 
 ## Gateway Service
-A gateway service allows a Dial participant to expose a permanent endpoint at which it can receive messages. Therefore, a single gateway address holds a queue of messages. The deposition and the collection of a messaage from a gateway endpoint is payable. A gatewaay support following operations:
+A gateway service allows a Dial participant to expose a permanent endpoint at which it can receive messages. Therefore, a single gateway address holds a queue of messages. The deposition and the collection of a message from a gateway endpoint is payable. A gateway supports following operations:
 - POST(url, data, exp, payment): allowing the caller to deposit a message for pickup to the gateway endpoint with the address url.
 - GET(url, payment, PoP): allowing the caller to collect and delete the next message in the queue
 The get request to a gateway address provides a proof of possession of the endpoint url.
@@ -32,4 +32,4 @@ The broadcast url contains public key hash. Posting or deleting the file at that
 
 
 ## Service Registration
-Network service providers must register their services with the Dial by submitting corresponding performance declarations to the Dial. Following the same rationales as explained for publishers, a network service provider must register the performance declaration for __tw__ in __tw-2__. A performance declaration is binding. In the same logic of publishers, coin earned in a time window can only be rediemed in the subsequent time window, after presentation of the proof of performance.
+Network service providers must register their services with the Dial by submitting corresponding performance declarations to the Dial. Following the same rationales as explained for publishers, a network service provider must register the performance declaration for __tw__ in __tw-1__ before the producction of the INP. A performance declaration is binding. In the same logic of publishers, coin earned in a time window can only be rediemed in the subsequent time window, after presentation of the proof of performance.
