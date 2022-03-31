@@ -10,16 +10,17 @@ It is the hash of the public key generated for the purpose of identifying
 that token. The underlying  keypair is used to legitimate the token 
 declaration (proof of execution) at creation.
 
-The current format is: sha256-ripmd160. 
+The current format is: sha256. 
 
 The omission of a network identifier is intentional.
 */
-token-id = bytes .size 32
+token-id = (id: bytes .size 32)
+issuer-id = token-id
 
 /*
 The token representation contains sufficient information to keep track 
-of a token in the Dial. Fields _modif_ and _work_ can be used to determine 
-if the token still have some available resources to finance it's maintenance
+of a token in the Dial. Fields modif and work can be used to determine 
+if the token still has some available resources to support maintenance
 in the Dial.
 
 The token representation is only modified when the controller sends 
@@ -29,7 +30,7 @@ token = {
     /* id
     The unique identifier of a token.     
     */
-    id: token-id, 
+    token-id, 
 
     /* modif
     Creation or last modification timestamp in seconds since epoch. 
@@ -72,7 +73,7 @@ token = {
 Type of proof. e.g. JcsBase64Ed25519Signature2021. Only enumeration
 entry available  for the moment.
 */
-verification-method-type = "JcsBase64Ed25519Signature2021"
+verification-method-type = &("JcsBase64Ed25519Signature2021": 1)
 
 /*
 A certificate is a proof of reception and optionaly verification of an information.
@@ -83,7 +84,7 @@ certificate = {
     
     Muss be a multihash of the public key of the issuer.
     */
-    iss: token-id,
+    issuer-id,
 
     /* ts
     Signature timestamp
@@ -140,7 +141,7 @@ token-state = {
     /* id
     Token representation as described above.
     */
-   token: token, 
+    ~token, 
 
     /* ctl
     Multihash of the controller script.
@@ -291,7 +292,7 @@ A single declaration entry provides (1) , (2) , (3) the new state of the token, 
 /*
 The controller entry is held at the discretion of the controlling participant.
 
-The script is generaly disclosed with the nextt modification request and shall
+The script is generaly disclosed with the next modification request and shall
 not be reused.
 */
 controller = {
