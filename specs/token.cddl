@@ -1,0 +1,132 @@
+; Unique identifier of a token.
+; Hash of the public key generated for identifying that token. 
+; Proof of possession needed to legitimate the token at creation.
+token-id = bytes .size 32
+
+; Multihash, less than 100 bytes
+multihash = bytes .lt 100
+
+; Contains sufficient information to keep track of a token in the Dial.
+token = [
+    ; Unique identifier of this token.
+    token-id: token-id,
+
+    ; Creation or last modification timestamp in seconds since epoch.
+    modified: int,
+
+    ; Amount of work units (wu) held by the token since modif.
+    ; Implicite erosion with each time window of existance.
+    work-units: int,
+
+    ; Reputation credit attached to this token.
+    ; inn reputation uits
+    reputation-credit: int,
+
+    ; Multihash of the controller script.
+    controller-script-hash: multihash,
+
+    ; Multihash of the underlying asset. Not evaluated by the Dial.
+    token-data-hash: multihash,
+
+    ; List of certificates associated with this token.
+    certificates: [* certificate],
+
+    ;  Merkel root of all certificates produced by publishers 
+    ; of the given neighborhood. 
+    ? certificates-hash: multihash, 
+
+    ; Hash of this token with empty certificates array
+    ; and no certificates-hash
+    ? token-hash: multihash, 
+
+    ; Hash of this token with all certificates
+    ; Used to build the neighborhood token protocol.
+    ? full-hash: multihash
+]
+
+; Verification method type
+vm-type = &("JcsBase64Ed25519Signature2021": 1)
+
+; Proof of reception and optionaly verification of an information
+certificate = [
+    ; Unique identifier of the issuer of this certificate. 
+    issuer-id: token-id,
+
+    ; Signature timestamp
+    timestamp: int,
+
+    ; Type of verification method.
+    verification-method-type: vm-type,
+
+    ; verification-method. e.g. public key
+    verification-method: bytes,
+
+    ; Random nonce bytes.
+    ; Format and size depennds on vm-type
+    nonce: bytes .lt 128,
+
+    ; Hash of signed content, incl protected field above.
+    ; Format and size depennds on vm-type
+    signature-input-hash: bytes lt. 128, 
+
+    ; Signature
+    ; Format and size depennds on vm-type
+    signature: bytes .lt 128,
+]
+
+declaration-file = [
+    ; List of declarations provided to create or modify tokens. 
+    declarations: [+ declaration],
+
+    ; List of coin declarations for payment
+    coins:[* coin],
+
+    ; List of PoW declarations for payment
+    pows: [* pow],
+]
+
+; Disclosed with the next modification request
+controller-script = [
+    ; Type of verification method.
+    vm-type: vm-type,
+
+    ; verification-method
+    verification-method: bytes,
+
+    ; Random nonce bytes. Limited to 32 bytes.
+    nonce: bytes .size 32,
+]
+
+declaration-values = [
+    ; Unique identifier of this token.
+    token-id: token-id,
+
+    ; Work unit to be carried with the token.
+    additional-work-units: int,
+    
+    ; Reputation identifier, where to accumulate earned reputation
+    reputation-token: token-id
+    
+    ; New controller script multihash
+    new-controller-script-hash: multihash,
+
+    ; New token data multihash
+    new-token-data: multihash,
+]
+
+declaration = [
+    ; Current state of the token as known to the Dial
+    token: token,
+
+    ; Script disclosed by the controller
+    controller-script: controller-script,    
+
+    ; New token state. This is used to produce the content of the signature,
+    ; as a proof of execution of the current controller script.
+    declaration-values: declaration-values
+
+    ; Proof of execution.
+    proof-of-execution: bytes,
+]
+
+declaration-response = token

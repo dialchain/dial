@@ -2,192 +2,243 @@
 # Motivation
 Web3 is struggling with finding the correct architecture. Fully mature and apparently decentralized applications appear to be giving way to censorship, because end user access to peer-to-peer networks are routed through API servers that are under the control of centralized organizations.
 
-As we figure out that end user devices are not designed to be full citizen of peer to peer networks, API layers are establishing themselves as foundation for good user experience in Web3.
+As we figure out that end user devices are not designed to be full citizen of peer-to-peer networks, API layers are establishing themselves as foundation for good user experience in Web3.
 
-This paper describes a network that creates an economy for the deployment of scalable, open, permissionless and nano payment capable API networks. The latest will in turn open room for the deployment of truly decentralized and censorship resistant web3 applications.
-
-# Exkurs Token Management
-A token management system can maintain a list of token (keyed by the token identifier) and annotate eaach token with a controller property that indicates who can modify the token.
-
-![Token Management](./img/../specs/img/tokenMgt-1.png)
-
-To modify a token, controller must prove possession of the private key matching the public key in field CTL-hash. This means the controller must sign the modification request with the private key matching the public key found in the CTL-hash field.
-
-The simplest implementation of a token management system can be provided by a centralized database management system.
-
-But the purpose of the Dial is to implement the token management 
-- in a distributed environment
-- in a permissionless environment
-- where single participants joining of leaving the network won't impact the functionality of the network.
+This paper describes a network that creates an economy for the deployment of scalable, open, permissionless and nano payment capable API networks. The latest opens room for the deployment of truly _decentralized_ and _censorship resistant_ web3 applications.
 
 # Abstract
-The Dial __(Distributed Immutable Assertion Log)__ is a distributed log with the main purpose of turning each inserted __declaration__ into an __immutable assertion__. The Dial can be seen as a log holding state of __tokens__. Tokens can be used to represent anything addressable. A token is (1) created or modified by the token __controller__, (2) verified, certified, and published by many __publishers__.
+The Dial _(Distributed Immutable Assertion Log)_ is a distributed log holding state of tokens. A _token_ can be created or modified using a _declaration_ that contains a _proof of execution_ of the token controller script. Each token is (1) created or modified by the token _controller_, (2) verified and certified by many _validators_.
 
-The Dial defines time slices called __time windows__. Each time window starts at the __UTC Hour__ and ends before the next __UTC Hour__. At the end of a time window, a __protocol__ is produced to make sure all participants share the same state of the Dial.
+Each verification act is documented in a _certificate_ whose hash is part of the Dial _protocol_. Certificates are held by controllers and Dial protocols are held by validators. The overall state of the Dial at any given _moment_ is therefore distributed among controllers and validators.
 
-The Dial scales by __partitioning__ tokens and publishers into neighborhoods. The __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but unpredictable association between each token and a group of publishers (neighborhood) responsible for the verification and publication of changes on that token in the given time window.
+To allow for the parallel processing of tokens, the Dial scales by _partitioning_ validators of into groups called _neighborhoods_. A simple and deterministic algorithm allows the location of the group of validators responsible for any given token.
 
-The Dial has no authoritative identification mechanism. The Dial conditions permissionless participation with a __cumulative Proof of Work (PoW)__ called __Reputation__. The __reputation__ of a participant is the aggregation of the PoW performed so far by that participant. The reputation of a participant (sort of capital) exposes the participant to privileges (e.g., eligibility to provide or consume some services). __Spam control__ is provided by making sure verifiable misbehaviour of a participant leads to the loss of that participant's reputation.
+Although required to available for a certain amount of time, the permissionless character of the Dial allows validators to join and leave at will, thus justifying the requirement not to keep the last state of a token with a single group of validators for an unlimited amount of time. The _transfer of responsibility_ to other validators is implemented by defining time slices called _time windows_. Each time window starts at the _UTC Hour_ and ends before the next _UTC Hour_. At the end of a time window, the last state of each token is passed by the current validators of this token to new validators the token. At the beginning of each time window, all validators coordinate to produce an opening protocol documenting the last state of all tokens.
 
-The Dial does not care about the __nature or the content of a token__. The main purpose of the Dial is to document the last authorization script of each token, such as to prevent illicit modification. Therefore, data found in Dial protocols are mainly identifiers, expiration dates, content, and authorization hashes. In this same perspective, the Dial does not require a publisher to maintain a protocol history. 
+Neighborhoods are reshuffled at the beginning of each time window. Inside the time window, each token is assigned to exactly one neighborhood. This way, changes on a single token inside a time window are all verified by the same set of validators, thus preventing the certification of conflicting changes. 
 
-The Dial does not require a single publisher to __store  all protocols__. All data relevant to the Dial are partitioned among neighborhoods of the current time window. Whereby all publishers of a neighborhood hold the same data. After closing a time window, publishers of the closed time window transfer each protocol they produced to relevant publishers in the new time window (as part of their coin redemption process). This partitioning is possible because each protocol in the Dial is also considered a token and hence, has an identifier that can be used to determine the protocol's host neighborhood in any given time window.
+The Dial _sustainability policy_ requires each token to be associated with payments substantial enough to maintain the token toward its expiration. Part of the total value held by the Dial is released to validators as each time window closes, making this the motivating factor for validators to join and service future time windows.
 
-The Dial does not require a publisher to __stay alive__ beyond the time committed to service a time window. After passing produced protocols to relevant publishers of the new time window, current publishers can go out of service. Violating committed availability will nevertheless lead to a publisher losing its reputation.
+# Principles
 
-The Dial __monetary policy__ allows the mining of coins out of participant's PoWs and the reuse of those coins for the payment of goods and services among Dial participants.
+## Proof of Work (PoW)
+The open and permissionless nature of a network leaves room for opportunistic behavior and/or spam. For that reason, the Dial relies on the proof of work as an effective way of conditioning permissionless participation.
 
-The Dial __sustainability policy__ requires each token to be associated with a payment substantial enough to maintain the token toward its expiration. The total value held by the Dial will be the motivating factor for publishers to join and service future time windows.
+Each request to the Dial is required to provide a payment, either in form of coins or in from of the proof of performance of a difficult computational task (so called proof of work). The amount of the  required payment is set by the Dial such as to prevent spam. As the Dial _monetary policy_ allows the conversion of PoW into coins, both coins and PoW are seen as equivalent means of payment in the Dial.
 
-The following picture displays the life cycle of a declaration, from the request for publication to the transfer of control to the subsequent time window. Dashed lines describe operations performed at the closing of a time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant.
+## Reputation Token
+A reputation token is an cumulated reward for participation and honest behavior. Whenever a participant pays for the execution of a service, the value of the payment is added to a reputation token (if provided by that participant).
+
+A reputation token, as an aggregation of the PoW performed so far can be seen as some sort of capital that can be used by its owner (controller):
+- as a collateral to guaranty honest behavior and promised availability of a validator,
+- as a support for the reduction of the PoW required for a given request,
+- as a collateral to mitigate counter party risk in a contract.
+
+Even though a reputation token can be traded:
+- the Dial does not convert reputation tokens into coins,
+- the Dial does not aggregate reputation tokens.
+
+When used as support or collateral, verifiable misbehavior of the controlling participant will lead to the lost the reputation token. 
+
+## Sustainability
+Each token in the Dial carries a monetary value measured in number of work units _wu_ (resp. reputation unit _ru_). Moving a token from one time window to another consumes one _work unit_ (resp. one _ru_). As each token pays for its own maintenance, a token with a work unit value of zero will be considered _expired_ and not further maintained by Dial validators.
+
+This auto sufficiency property of each token:
+- is essential for the simplicity of the Dial, as there is no cross-token dependency,
+- allows the Dial to limit the log to active tokens only,
+- relieves the Dial from the necessity of maintaining a common treasury.
+
+## Participant Behavior
+A participant controlling a token is assumed to have sole control on corresponding key credentials. Submitting conflicting declarations to the Dial can occur by the mean of the participant sending different versions of that declaration to validators. Even though this attempt will never succeed due to coordination rules implemented by neighborhoods, the submitting participant will lose the payment associated with the declaration. If this payment is a PoW sponsored by a reputation token, the submitting participant will also loose that reputation token.
+
+## Validator Behavior
+Validators are given more room for opportunistic behavior as they are given the privilege to:
+- convert proof of work into coins,
+- aggregate payments into reputations,
+- verify and certify creation and modifications of tokens,
+- verify and certify token operations (aggregation, split).
+
+### Collateralizing the Validator Service
+As an open and permissionless network, the Dial can not assume validatorsbehave honest. The publishing service is collateralized with a substantial enough collateral (reputation token) that will be lost if verifiable misbehavior of a validator is uncovered. The collateral of a publishing session is held during the entire subsequent session, thus giving all participants the time to discover and expose misbehavior of the closed session.
+
+Even though the Dial does not require participant to keep the change history, participants can archive past certificates and protocols for the purpose of:
+- providing them to other participants against payment,
+- uncovering weaknesses and loopholes in the Dial coordination workflow,
+- uncovering validators misbehaviors,
+- using them as stronger proof of legitimacy of underlyinng assets.
+
+If a misbehavior is exposed in the given retention time of the collateral, the disclosing participant will be rewarded with half of the collateral (reputation) attached to the transaction, the rest will be lost (burned).
+
+### Publication and Rejection Certificate
+A _publication certificate_ is returned by a validator to the submitting participant as a commitment for inclusion of the last state of the token into the Dial. 
+
+A _rejection certificate_ tells a participant, that a creation or modification request is either not valid, or conflicting. 
+
+a publication request goes through following steps:
+
+- (1) if the payment attached to the request is invalid, reject the request.
+- (2) if the payment attached to the request can not finance the verification, confiscate the payment. Document confiscation with a certificate attached to each coins and reputation token.
+- (3) if the payment is sufficient for the verification, process the request.
+- (4) if the main declaration is verified, but conflicting with the last state of token, attach a rejection certificate to the token. Confiscate the payment attached to the declaration.
+- (5) if the main declaration is verified and non conflicting, produce and return a publication certificate.
+
+### Hijacking a Neighborhood
+A group of related validators could coordinate their effort in neighborhoods they control to perform illegitimate modifications on tokens. Recall a neighborhood can only be controlled if all validators of the neighborhood are controlled, as a single controller issuing a rejection certificate will uncover the intended illegitimate modification. 
+
+To prevent control of neighborhood by validators, the Dial's _Ephemeral Neighborhoods Protocol (ENP)_ secures a deterministic but unpredictable association between each token and the neighborhood responsible for the validation of changes on that token in the given time window. The Dial publication workflow also makes it impossible to guess the next group of validators responsible for the doublecheck of each token.
+
+### Publication Workflow
+The following picture displays the life cycle of a declaration modifying a token, from the request for publication to the transfer of control to the subsequent time window. Solid lines cover the process from the submission of a declaration to the reception of the publication certificate by the submitting participant. Dashed lines describe operations performed at the closing of a time window.
 
 ![DIAL-WORKFLOW](./img/../specs/img/dial-workflow.png?raw=true&width=5)
 
-Transferring control on a token occurs by the means of the current controller publishing a new declaration. To publish a declaration, (1) the current controller submits the declaration to one or more publishers of the token neighborhood (THost). (2) Addressed publishers verify the declaration and share the declaration with all other publishers of that neighborhood. (3) Each publisher of that neighborhood produces a verification certificate (VCert) and (4) sends the VCert to all publishers of the protocol neighborhood (NHost). (5) Upon receiving more than half of VCerts, each publisher of the protocol neighborhood creates a publication certificate (PCert) and returns it to the submitting controller. The declaration is considered published when the submitting controller is in possession of more than half of PCerts.
+Creating or modifying a token follows these steps:
+- (1) the current controller submits the declaration to one or more validators of the token neighborhood, 
+- (2) addressed validators verify the declaration, produce each a certificate (PCert), share this certificate with other validators of the same neighborhood and 
+- (3) return the certificate to the submitting controller.
 
-# Key Entities
+As the picture above displays, each token is validated by one neighborhoods inside the time window, and double checked by another neighborhood in the subsequent time window. Therefore, the new state of the token shall be considered published if that state is part of the opening protoccol of the subsequent time window.
 
-## Time Window - Declaration - Token
-A time window identifier can be represented by a string starting with TW and the formatted date time YYYYMMDDHH. The following picture displays 3 times windows in which the same token is modified using declarations. 
+With the unpredictable distribution of validators to neighborhoods and the possibility for a single validator to uncover wrongdoing, a group of malicious validators must cover a substantial part of the network to successfully induce the illegitimate modification of a single token, as the group must corrupt all validators of two randomly built neighborhoods in subsequent time windows to achieve capability of corrupting a single token.
 
-![DIAL](./img/../specs/img/dial-decl-token-tw.png?raw=true&width=5)
+As we need a full time window to have a 100% guaranty of the correctness of a transaction, a reputation token can be used to collateralize a transaction while it is still inside the modification time window.
 
-The first declaration (Declaration-0) creates the token. Subsequent declarations modify the token. Like displayed in TW2022031015, a token can be modified more than once in a single time window.
+### Transfer Control to the Next Time Window
+As displayed in the picture above, following activities are performed at the end of the time window.
 
-## Publisher
-The entity responsible for the publication of a declaration into the Dial is called a __publisher__. Before insertion into the Dial, publishers of the neighborhood responsible for this token __(THost)__ verify that the submitted declaration is consistent with the state of the token as documented so far, and publishers of the neighborhood responsible for that neighborhood __(NHost)__ insert the declaration into the protocol of that neighborhood.
+- (4) Each validator of the token neighborhood creates a neighborhood protocol.
+- (5) validators compute the time window protocol (TWP) pairing up in a coordinated way to exchange hashes and aggregate nodes that will lead to the merkle root of the time window.
+- (6) The time window protocol is distributed to all validators of the time window.
+- (7) Each validator transfers each token under custody to all validators of the neighborhood hosting the token in TW+1, including corresponding protocols and certificates.
 
-To act as a publisher in the time window TW+1, a publisher must register for performance in time window TW.
+### Opening Protocol
+After receiving all tokens from TW, validators of TW+1 coordinate to produce opening neighborhood and opening time window protocols. If there is any discrepancy between validator on the state of an opening protocol, the Dial defined majority rules will be used to decide on which version of the  protocol to keep.
 
-## Neighborhood
-To allow for parallel publications, Dial publishers are partitioned into ephemeral neighborhoods. The __Ephemeral Neighborhoods Protocol (ENP)__ secures a deterministic but unpredictable association between each token and a group of publishers (neighborhood) responsible for the verification and publication of changes on that token in a time window. A neighborhood exists only for the lifetime of a time window. The __layout__ of a time window is the ordered list of all neighborhoods of that time window, as presented in the following image (simplified to 2 dimensions for visualization).
+# Time Window
+The following image displays a simplified layout of a time window.
 
 ![ENP](./img/../specs/img/dial-ENP2.png?raw=true&width=5)
 
-### Distance Vector Mapping
-As displayed in the picture above, both publishers and tokens are assigned to neighborhoods by computing their respective __distance__ to the time window __anchor__. The time window anchor is the merkel root of the intermediary protocol of the preceding time window.
+The Dial is always inside a time winndow. The time window is the primary element of synchronization in the Dial network. It is represented with the keywork TW and the timestamp of the first second of the UTC Hour _TWYYYYMMDDHH_ e.g. _TW2022032415_. Each Participant can compute this identifier without any additional information.
 
-Each neighborhood has the same number of publishers. In this case 11 publishers. The remaining group of publishers less than 11 will not serve for the given time window.
+## Anchor
+The _anchor_ is the most critical information of the Dial. The anchor of a time window is a _hash_ of the state of the Dial at the end of the 56th minute of the precedent time window.
 
-### Neighborhood hosting a Token (THost)
-A token is said to be __hosted__ by a neighborhood if the ENP assigns that token to that neighborhood in the given time window. The neighborhood hosting a token is called __THost (for token host)__.
+The _anchor_ is used to:
+- partition validators of the time window into neighborhoods
+- determine the neighborhood hosting a token
 
-### Neighborhood hosting a Time Window (TWHost)
-A time window itself is considered a token with the reserved identifier _TWYYYYMMDDHH_. The distance between the hash of this identifier and the anchor alows to locate the neighborhood responsible for that time window. This neighborhood is called the __TWHost (time window host)__ and is responsible for the publication of information on that time window e.g., the list of registered publishers and the time window protocol.
+The _anchor_ is:
+- computed in a coordinated effort among neighborhoods (distributed merkle tree)
+- verified by and known to all validators.
 
-### Neighborhood hosting a Neighborhood (NHost)
-Each neighborhood is also a token with the reserved unique identifier _NYYYYMMDDHH-I_ where _YYYYMMDDHH_ is the timestamp of the hosting time window, and _I_ ist the position of the neighborhood relative to the time window anchor.
+If there is any dispute during the computation of the anchor, majority rules set by the Dial will be used to decide on which value to keep.
 
-The distance between the hash of this identifier and the anchor can alow us to locate the neighborhood responsible for hosting that neighborhood. This neigborhood is called the __NHost (neighborhood host)__ and is responsible for the aggregation of the work done by publishers of the guest neighborhood and the publication of the guest neighborhood's protocol.
+## Neighborhood
+A neighborhood is a set of validators commonly responsible for the guardianship of a set of tokens inside the given time window. 
 
-## Certificates
-Certificates are proofs. They are not directly stored in the Dial, but can be part of the hash documenting the authorization script of a token.
+The list of validators registered for performance in the next time window is propagated together with the construction of the neighborhood protocol. The same way the neighborhood hashes are incrementally aggregated up the tree to compute the time window hash, the list of validators registered with the subtree including its hash is propagated up the merkle tree.
 
-### Verification Certificate (VCert)
-A __verification certificate (VCert)__ is produced by each publisher of the THost as a proof that the submitted declaration is consistent witth the state of the token as documented sofar.
+The layout of neighborhoods in a time window can then be computed by any given participant holding the time window hash and the list of registered validators.
 
-### Publication Certificate (PCert)
-A __publication certificate (PCert)__ is a proof that the resulting state of the underlying token is present in the Dial. A declaration is considered published when a controller can present more than half of publication certificates __(k/2 + 1 PCerts)__, where k is the number of publishers of the token's corresponding NHost.
+As displayed in the picture above, both validators and tokens are assigned to neighborhoods by computing their respective _distances_ to the anchor.
 
-### Sharing Certificates (SCert)
-All publishers of a neighborhood are required to share each produced certificate (VCert, PCert) with each other not later than in the __minute__ following the production of those certificates. This is essential as the earliest knowledge of each certificate will reduce the certification of conflicting declarations and help reduce noice and spam in the network.
+Each neighborhood has the same number of validators. In this case 11 validators. The remaining group of validators less than 11 does not serve for the given time window.
 
-In order to enforce sharing of produced certificates, redemption of coin associated with work done can only happen if publishers present __Sharing Certificates (SCerts)__. These are receipts produced by other publishers after recception of certificates produced by their neighborhood peers.
+# Certificates
+A certificate is a validator signed document, that can be presented by the participant to support a claim.
 
-## Protocols
-A protocol is a merkel tree holding the state of some entities. The Dial knows neighborhood protocols and time window protocols.
+## Publication Certificate (PCert)
+A publication certificate is a proof that the resulting state of the referenced token is consistent with the state of the token as documented so far. A PCert is produced by a validator and returned to the controller of the token for documentation. A PCert is also transferred by the producing validator to the hosting validators of the subsequent time window (as soon as this last one is known).
 
-### Incremental Computation of Merkel Roots
-We can allow for incremental computation of a merkel root if we design the ordering criteria to apend new leaf nodes at the end of the list of leaf nodes. All protocols in the Dial are designed such as to allow for the incremental  computation of merkel roots and therefore reduce the time needed to secure the state of the Dial between time windows.
+## Transfer Certificates (TCert)
+A transfer certificate is a proof, that a validator has passed the held protocols and certificates to the relevant validator of the subsequent time window.
+
+To enforce transfer of produced certificates, redemption of coin associated with work done in a time window only happens if validator presents corresponding TCerts.
+
+# Protocols
+A protocol is a merkle tree documenting modifications on one or multiple tokens. 
+
+## Principles
+### Incremental Computation of Merkle Root
+Both neighborhood and time window protocols are computed at the opening and/or closing of a time window and computation must be very efficient to allow for seamless availability of the Dial.
+
+Because protocols are all merkle trees, they can be computed incrementally if the Dial designs the ordering criteria of each protocol to prevent rebalancing of the merkle tree upon modification or insertion of new elements.
+
+### Protocol as Synchronization Vehicle
+Beside the purpose of documenting changes on tokens, nodes of intermediary protocols are constantly circulated among validators to synchronize the state of changes among each other.
+
+### Multi-Phase Synchronization Scheme
+In many situations, knowledge on the work performed by a validator might be used by another validator to extract illicit value out of the Dial. This would be the case if a group of validators where entrusted with the task to produce the time window protocol. They might forge some tokens, with the purpose of achieving an intended value of the time window hash, thus influencing the layout of the subsequent time window.
+
+The Multi Phase Synchronization Scheme can be applied by a group of validators to implement a sound synchronization.
+- In the first phase, each validator sends the merkle root of his state to all other validators of the group.
+- In following phases, validators synchronize each order state down the tree till diverging leaves are available to all validators.
+
+### Protocol Discovery
+Protocol identifiers are generally made from the underlying entity identifier and the timestamp of the protocol. Beside token, all other entities like time windows, neighborhoods have conventional identifiers, that can be computed by each participant.
+
+## Type of Protocols
+The Dial knows three types of protocols:
+- the token protocol,
+- the neighborhood protocol, and 
+- the time window protocol.
+
+### Token Protocol (TP)
+A token protocol is a merkle tree documenting all certificates produced to secure the state of a token. The token protocol is held by validators as part of the neighborhood protocol. Leaf nodes of the token protocol are hashes of publication certificates. 
+
+Publication certificates are:
+- held by publishers as they will be transferred to validators of the subsequent token neighborhood,
+- held by the controller of the token, as they will be presented to validators with the next declaration to modify that token.
+
+By verifying the inclusion of the controller provided certificate in the merkle tree of the token, the validator can trust and consume information contained in the submitted modification request.
 
 ### Neighborhood Protocol (NP)
-The NP is the merkel tree of the last state of all tokens hosted by the target neighborhood. The neighborhood protocol is produced by publishers of the NHost.
+A neighborhood protocol at a given moment is the merkle tree of the last state of all tokens hosted by the target neighborhood. It is produced in a common effort by all validators of the target neighborhood.
 
-In order to allow for incremental computation of neighborhood protocols, leaf nodes are ordered by (1) the timestamp of the token first publication and (2) the lexicographical order of the token identifier. This way, new tokens are appended at the end of the list and do not trigger a rebalance of the protocol tree.
+To allow for incremental computation of neighborhood protocols, leaf nodes are ordered by (1) the timestamp of the token first publication and (2) the lexicographical order of the token identifier. This way, new tokens are appended at the end of the list and do not trigger a rebalance of the protocol tree.
 
-### Intermediary Neighborhood Protocol (INP)
-The INP is computed during the 57th minute of the time window and contains (1) the state of all unchanged tokens and (2) the state of all changed tokens from the first to the 56th minute. The INP must be sent to the TWHost before the end of the 57th minute.
+Each leaf node contains three values:
+- the token identifier (for new token prefixed with the token insertion date),
+- the hash of the token state
+- the hash of the validator issued certificate
 
-Aspiring publishers of time window TW+1 must register for performancce in TW, before the INP is computed. This list of publishers for TW+1 is available to publishers of each NHost at the time they are computing the INP. The partial list of publishers is sent together with the INP to the TWHost.
+The token protocol can be computed for any given minute. During the minute, each validator:
+- maintains a tree of self-produced certificates (cert tree)
+- maintains a tree with the known last state of each token of the neighborhood (token tree).
+
+At the end of the target minute, each validator shares the merkle root of its cert tree with all other validators. After all validators are in possession of all cert trees, they can synchronize their certificates with each order a no new certificate can be produced upon knowing certificates produced by other validators.
 
 ### Time Window Protocol (TWP)
-The TWP is the merkel tree of all neighborhood protocols hosted by the time window. 
+A time window protocol is the merkle tree of all neighborhood protocols hosted by that time window. 
 
-As the list of neigborhoods of a time window is known in advance, as well as their order, the merkel root of the TWP can be upgraded every time a publication certificate upgrades the NP.
+As the list of neighborhoods of a time window is known in advance, the merkle tree of a time window is built in a parallel and distributed mannner. The coordination algorithm determines which validators collaborates and shares data with other to achieve the fastest route to a time window protocol.
 
-### Intermediary Time Window Protocol (ITWP)
-The ITWP is computed in the 58th minute of the time window and distributed in the 59th minute of the time window. It is used to determine the intermediary time window hash __(ITWH)__, which is the merkel root of the ITWP.
+## Anchor
+### Computing the new Anchor
+Intermediary Neighborhood Protocols (INP) are computed during the 57th minute of the time window and contain (1) the state of all unchanged tokens and (2) the state of all changed tokens from the first to the 56th minute. The INP must be available before the end of the 57th minute.
 
-The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
+Aspiring validators of time window TW+1 must register for performance in TW, before the INP is computed. This list of registered validators for TW+1 is circulated with the INP during the coordinated construction of the intermediary time window protocol in the 58th minute. The identifier of an INP follows the pattern: _INP-YYYYMMDDHH-I_ where _YYYYMMDDHH-I_ is the suffix of the neighborhood. 
 
-After the ITWH of TW if computed, publishers of TWHost can pull the list of publishers of TW+1 and use it to compute the layout of TW+1.
+The Intermediary Time Window Protocol (ITWP) is computed and distributed in the 58th minute of the time window. The identifier of an ITWP follows the pattern: _ITWP-YYYYMMDDHH_ where _YYYYMMDDHH_ is the suffix of the time window. 
 
-### Final Neighborhood Protocol (NP)
-The final neighborhood protocol is computed in the first minute of the subsequent time window by publishers of the respective NHost of the expiring time window. The change date is the last second of the expiring time window.
-- NPs are sent to publishers of the TWHost of the expiring time window for the computation of the final time window protocol.
-- NPs are sent to publishers of their hosting neighborhood in the new time window, in the context of the transfer of responsibility. These publishers will custody this protocol till the end of their own time window. These publishers also verify the protocols and forward them to the corresponding TWHost of the old time window in the new time window.
+The ITWP is used to determine the intermediary time window hash __(ITWH)__, which is the merkle root of the ITWP. The ITWH is available from the 59th minute of the current time window and is used as the anchor of the subsequent time window.
 
-### Final Time Window Protocol (TWP)
-The final time window protocol is computed in the third minute of the subsequent time window by the TWHost (of the old time window) and documented as such.
+After the ITWH of TW is computed, each validator of TW is in possession of the ITWH and the list of validators of TW+1 and can use both information to compute the layout of TW+1.
 
-This TWP is then marked with the timestamp of the first second of the new time window and sent to publishers of the relevant neighborhood in the new time window  for documentation. Publishers of this neighborhood will custody the protocol for the duration of their own time window.
+In the first minute of TW+1, validators of TW start transfer all tokens to relevant validators in TW+1.
 
-- The TWHost of the old time window in the new time window receives a time window protocol from the TWHost of the old ime window in the old time window.
-- The TWHost of the old time window in the new time window also receives the single time window hashes from NHost of the old neighborhoods in the new time window. Publishers of the TWHost of the old time window in the new time window can then use these neighborhood hashes to recompute the TWP and therefore verify the delivered protocol of the old time window.
+Upon receiving all tokens, validators of each neighborhood of TW+1 each verify each token and compute the neighborhood opening time window protocols. The identifier of a opening neighborhood protocol follows the pattern: _ONP-YYYYMMDDHH-I_ where _YYYYMMDDHH-I_ is the suffix of the neighborhood.
 
-The following picture illustrates both a time window protocol and attached neighborhood protocols.
+In a coordinated effort, validators of time window TW compute the opening time window protocol (OTWP). As soon as this is available, each token of TW is sent (together with CNP) by the holding validator to validators of the custodian neighborhood in TW+1. The identifier of an OTWP follows the pattern: _OTWP-YYYYMMDDHH_ where _YYYYMMDDHH_ is the suffix of the time window.
+
+The following picture illustrate both a time window protocol and attached neighborhood protocols.
 
 ![Protocols](./img/../specs/img/dial-protocols.png?raw=true&width=5)
 
 ### Verifying a Token
-In order to validate the a token at the end of a given time window, two partial merkel trees (PMT) are required:
-- The PMT of the protocol neighborhood that hosted the token in the passed time window
-- The PMT of the protocol of the passed time window.
+To validate a token at the end of a given time window, two partial merkle trees (PMT) are required:
+- The PMT of the opening neighborhood protocol hosting the token in the subsequent time window
+- The PMT of the opening time window protocol.
+
 Knowing the identifier of each of these documents, a participant can locate where to download the documents in the current time window.
-
-# The Dial Economy
-Due to it open and permissionless character, the Dial defines a value generation system to address spam and sustainability.
-
-## Value Generation
-Every single service performed by a Dial service provider (e.g. publisher) in the Dial is paid for by the requestor of that service. The price of some fundamental services (like the publication service) is set by the network. The price of other services is left to the discretion of the service provider. A __service intent request__ allows a requestor to collect prices and other execution conditions from different service providers.
-
-## Spam Rsistance
-Spam is the main thread to open and permissionless architectures. The Dial is built on top of a fundamental spam resistance system that makes sure the revenue generated from the publication of a single token is sufficient to cover present and future performance required to validate, maintain and retire that token. 
-
-This is also a reason why each token carries an expiration date. After the expiration date, the token identifier is not known to the Dial and does not appear in the protocol.
-
-In order to protect publishers (or service providers in general), the Dial requires each service request to be accompanied with a payment. Even the price inquiry service (a.k.a service intent request) is a payable service. Recall that the service intent request also returns a binding offer to the requesting party.
-
-The price paid by a party to publish a declaration has a minimum cap, a file size factor, a validation effort factor and time to live factor. This price is generally substantial enough to have a significant impact on the wealth of the party generating spammy declarations.
-
-These three factors (a) payment for intent request, (b) payment for publication and (c) the publisher registration constraint constitute together an effective spam resistance mechanism.
-
-## Sustainability
-Because of the built in expiration date for each token, the dial is designed to not keep bothersome histories. A Dial token is forgotten with the expiration of the token, if the token is not extended by the current controller. As stated above, each Dial token is covered with enough reserves to finance the security of the token till expiration.
-
-The Dial also does not have a treasury. Each token caries it's maintenance budget in the form of attached coins. This maintenance budget is consumed as the token is passed from one time window to another till the token is removed from the log at expiration.
-
-# Monetary Policy
-Each coin in the Dial originates from a combination between a __Proof of Work__ and the __performance__ of a __canonical service__.
-
-## Proof of Work (PoW)
-The PoW is designed to enforce a relation between the value extracted from of a service consumed and the effort performed to legitimate the service request. The more balanced the relationship between the effort performed (input) and the value extracted (output), the lesser probable will a participant try to spam the system.
-
-## Mining Coins out of PoW
-The Dial allows a participant to perform some computation intensive work and use the resulting proof (PoW) to pay for the execution of a service. The service execution process transforms the provided PoW into a coin. This resulting coin is subsequently used in the Dial network as a mean of payment.
-
-## Reputation
-The reputation of a participant is the cumulated amount of PoW performed by that participant so far. This reputation exposes the participant to privileges:
-- the registration as a service provider requires a participant to justify controll over a defined amount of cummulated PoW (called reputation)
-- the amount of PoW required to submit a publication request is an inverse factor of the reputation of a participant. The bigger the reputation of a participant, the lesser is the PoW required from the participant for the submission of a publication request.
-
-The reputation of a participant can also be attached to some operations as a guaranty of not double spending. Speeding up the off chain transaction of token and increasing the annonymity of the overall echosystem.
-
-## Reducing Opportunistic Behavior
-With respect to the open and permissionless character of the Dial, coin production must be designed such as to have the total coin supply reflect the volume of activity performed in the Dial network. With this in mind, the Dial wants to prevent participant (1)  from performing work just with the purpose of increasing the coin supply, (2) from extracting additional value out of the coin production process (e.g. by producing work for service requests directed to service providers known in advance).
-
-In order to prevent opportunistic behavior, the Dial limits the conversion of PoW to coin to services which by their nature do not allow participants to behave oppotunistic. Currently identified services are:
-- The publication service.
-- The coin bundling service.
-
-In this same rationale, the Dial allows a participant to attach it's reputation to an operation as a guaranty of honesty. Misbehavior will then lead to the participant losing this reputation.
