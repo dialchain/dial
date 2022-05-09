@@ -3,6 +3,7 @@ Dial introduces a simple but privacy first, decentralized service protocol. The 
 
 ## Basic Architecture
 The following picture, describes steps associated with moving a message from one endpoint to another.
+
 ![Messaging](../img/dial-messaging.png)
 
 ### Gateway Service
@@ -15,6 +16,10 @@ The proxy service is essential for the implementation of privacy:
 - as it allows group of participants to deploy proper network nodes to reduce the exposure of their end user devices to the rest of the network.
 - as it allows a participant to define the route of a message to the recipient, effectively allowing to hide the origine of the message.
 
+### Data Service
+The data service allows a consumer to store data that can be retrieved by that same consumer at a later point of time.
+
+## Permissionles Services
 Designing a permissionless deployment and consumption of services in the web3 environment is far from being obvious. The perfect trust would be provided if there was a way to have each service request carry a payment, and a way of enforcing service execution upon reception of the payment. 
 
 Some services like the data storage service inherently require the service to be provided over a period of time. If the payment occurs before the end of the storage time period, service provider migh stop provisioning without any accountability, thus taking consumer payment without performing the paid service. If payment occurs at the end, there might be no warranty consumer will pay for the service subscribed, as consumer might simply abandon the data stored with the service provider.
